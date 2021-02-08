@@ -51,6 +51,7 @@ export default {
       }
   },
   mounted() {
+      //TODO axios tabsContent[0]
       axios
       .get('http://localhost:3000/tabsContent')
       .then(response => (this.tabs = response.data));
