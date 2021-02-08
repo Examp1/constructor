@@ -42,17 +42,24 @@
             width: 100px;
             height: 100px;
         }
+        canvas{
+            border: 3px solid #000
+        }
     </style>
     <div class="container">
         <div class="left"></div>
         <div class="right"></div>
         <div class="center"></div>
     </div>
+    <button>2canvas</button>
     <script src="js/html2canvas.js"></script>
     <script>
+        
+    document.querySelector('button').addEventListener('click', (e) => {
         html2canvas(document.querySelector('.container'), {scale: 1.5}).then(function(canvas) {
-        document.body.appendChild(canvas);
+        document.body.appendChild(canvas);});
     });
+    
     </script>
 </body>
 </html>
