@@ -10,6 +10,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    .right  {
+        width: calc(70% - 10px);
+        height: 100vh;
+        background-color: #f0f0f0;
+    }
 </style>

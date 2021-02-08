@@ -19,6 +19,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  .constructor{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
 </style>
