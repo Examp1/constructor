@@ -16,6 +16,7 @@ export default {
 
 <style>
   body{
+    overflow: hidden;
     padding: 0px;
     margin: 0px;
     font-family: sans-serif;
