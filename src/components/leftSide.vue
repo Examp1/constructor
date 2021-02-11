@@ -52,7 +52,7 @@ export default {
   },
   computed: {
       currentTab() {
-          return this.tabs[this.currentTabIndex] 
+        return this.tabs[this.currentTabIndex] 
       },
       // координаты картинки (под курсором)
       dragImgStyle(){
@@ -86,9 +86,8 @@ export default {
       this.decoSrc = this.currentTab[index].src;
       let obj = {
         src: this.decoSrc,
-        //TODO: размеры надо знать перед тем как делать драг&дроп
-        width: 600, // заменить
-        height: 600,// заменить
+        width: this.currentTab[index].img.width,
+        height: this.currentTab[index].img.height,
       }
       e.dataTransfer.setData('obj', JSON.stringify(obj));
     },
@@ -100,6 +99,9 @@ export default {
     // спрятать всё
     onDragEnd(e){
       this.isDrag = false;
+    },
+    changeStatus(tabInd, itemInd){
+      this.$set(this.tabs[tabInd][itemInd], 'isLoading', false);
     }
   },
   mounted() {
@@ -113,7 +115,19 @@ export default {
     //TODO axios tabsContent[0]
     axios
     .get('http://localhost:3000/tabsContent')
-    .then(response => (this.tabs = response.data));
+    .then(response => {
+        this.tabs = response.data;
+        this.tabs.forEach((tab, tabIndex) => {
+          tab.forEach((item, itemIndex) => {
+            item.isLoading = true;
+            item.img = new Image();
+            item.img.src = item.src;
+            item.img.onload = () => {
+              this.changeStatus(tabIndex, itemIndex);
+            }
+          })
+        })
+      });
       // this.tabs = [...info]
   },
 };

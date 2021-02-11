@@ -461,14 +461,14 @@
 
       bodyMove(ev) {
         const stickStartPos = this.stickStartPos;
-
+        // TODO: скейлы
         const newPos = {
           mouseX: ev.pageX || ev.touches[0].pageX,
           mouseY: ev.pageY || ev.touches[0].pageY
         }
         const delta = {
-          x: newPos.mouseX - stickStartPos.mouseX,
-          y: newPos.mouseY - stickStartPos.mouseY
+          x: (newPos.mouseX - stickStartPos.mouseX),
+          y: (newPos.mouseY - stickStartPos.mouseY)
         }
 
         let newcx = stickStartPos.cx + delta.x
@@ -558,11 +558,10 @@
         const stickStartPos = this.stickStartPos;
 
         let delta = new Vector(
-          (ev.pageX || ev.touches[0].pageX) - stickStartPos.mouseX,
-          (ev.pageY || ev.touches[0].pageY) - stickStartPos.mouseY
+          ((ev.pageX || ev.touches[0].pageX) - stickStartPos.mouseX),
+          ((ev.pageY || ev.touches[0].pageY) - stickStartPos.mouseY)
         )
-
-
+        
         if (this.currentStick == 'ro') {
           let up = new Vector(0, -(this.height) / 2 - roStickSize)
           let rotationRad = Vector.rad(stickStartPos.rotation);

@@ -1,6 +1,6 @@
 <template>
     <div class="right" ref="rootDiv" @click.stop="rootClick">
-        <div class="mCanvas" :style="mCanvasStyle" ref="mCan" @mouseleave="hoverItemType = ''" @drop="onDrop" @dragover="allowDrop" @dragleave="onDragover">
+        <div class="mCanvas" :style="mCanvasStyle" ref="mCan" @mouseleave="hoverItemType = ''" @drop="onDrop" @dragover="allowDrop" @dragleave="onDragover" @mousemove="test">
             <div :style="bgStyle" @mouseover="onBgOver" @click="onBgClick"></div>
             <drr v-for="(item,index) in imgItems" :key="index" :ref="`item${index}`"
                 :ind="index"
@@ -169,6 +169,10 @@ export default {
         },
     },
     methods: {
+        test(e){
+            console.log(e.offsetX, e.offsetY);
+            
+        },
         onBgOver(){
             this.hoverItemType = 'bg';
         },
