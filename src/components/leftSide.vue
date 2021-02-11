@@ -7,20 +7,26 @@
       </li>
     </ul>
     <ul class="tab__content">
-      <li v-for="(option, index) in currentTab" :key="index" draggable="true" @dragstart="onDragStart($event, index)" @drag="onDrag" @dragend="onDragEnd">
+      <li v-for="(option, index) in currentTab" :key="index" draggable="true" @dragstart="onDragStart($event, index)" @drag="onDrag" @dragend="onDragEnd" v-images-loaded:on.progress="imageProgress">
         {{ option.name }}
+        {{ option.isLoading }}
         <img :src="option.src" alt="" />
         <!-- <img src="../assets/igor.jpg" alt=""> -->
       </li>
     </ul>
-    
     <div class="dragImgDiv" v-if="isDrag">
       <img :src="decoSrc" :style="dragImgStyle" alt="1" :class="{active: dragOvered}">
     </div>
+    
+    <button @click="toCanvas">to canvas</button>
+    <a href="" class="download">скачать</a>
+
   </div>
 </template>
 
 <script>
+import html2canvas from "html2canvas";
+import imagesLoaded from 'vue-images-loaded'
 import Bus from '../main.js'
 import axios from 'axios'
 export default {
@@ -28,6 +34,7 @@ export default {
     return {
       currentTabIndex: 0,
       tabs: {},
+      tabs2: [],
       tabsH: [
         {
           name: "Шаблон",
@@ -50,6 +57,9 @@ export default {
       dragY: null,
     };
   },
+  directives: {
+        imagesLoaded
+  },
   computed: {
       currentTab() {
         return this.tabs[this.currentTabIndex] 
@@ -71,6 +81,25 @@ export default {
       }
   },
   methods: {
+    toCanvas(){
+        let scale1 = 2048 / document.querySelector('.mCanvas').offsetWidth
+        html2canvas(document.querySelector('.mCanvas'), {scale: scale1}).then(function(canvas) {
+        document.body.appendChild(canvas);
+        const image = document.querySelector('canvas').toDataURL("image/png").replace("image/png", "image/octet-stream");
+        const t = document.querySelector('.download');
+        t.setAttribute('download', 'your picture.png')
+        t.setAttribute('href', image)
+        });
+    },
+    imageProgress(instance, image) {
+        const result = image.isLoaded ? 'loaded' : 'broken';
+        const el = ( instance.elements[0] );
+        if (result == 'loaded') {
+         el.classList.add('loaded')
+        } else {
+          el.classList.add('broken')
+        }
+    },
     tabClick(e, index) {
       this.currentTabIndex = index;
     },
@@ -112,7 +141,7 @@ export default {
     Bus.$on('canvasDropLeave', () => {
       this.dragOvered = false;
     });
-    //TODO axios tabsContent[0]
+
     axios
     .get('http://localhost:3000/tabsContent')
     .then(response => {
@@ -128,7 +157,6 @@ export default {
           })
         })
       });
-      // this.tabs = [...info]
   },
 };
 </script>
@@ -160,6 +188,8 @@ export default {
   flex-direction: column;
   border: 1px solid #000;
   padding: 10px;
+  pointer-events: none;
+  background-color: red;
 }
 .tab__content li:not(:last-of-type) {
   margin-bottom: 20px;
@@ -193,5 +223,9 @@ export default {
 }
 .hide{
   opacity: 0;
+}
+.tab__content li.loaded{
+  pointer-events: unset;
+  background-color: #fff;
 }
 </style>

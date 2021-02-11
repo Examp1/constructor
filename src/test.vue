@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     toCanvas(){
-        html2canvas(document.querySelector('.container_canvas'), {scale: 10}).then(function(canvas) {
+        html2canvas(document.querySelector('.container_canvas'), {scale: 10, width: 2048, height: 1080}).then(function(canvas) {
         document.body.appendChild(canvas);
         const image = document.querySelector('canvas').toDataURL("image/png").replace("image/png", "image/octet-stream");
         const t = document.querySelector('a');

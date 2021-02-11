@@ -170,7 +170,7 @@ export default {
     },
     methods: {
         test(e){
-            console.log(e.offsetX, e.offsetY);
+            // console.log(e.offsetX, e.offsetY);
             
         },
         onBgOver(){
