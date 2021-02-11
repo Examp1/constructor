@@ -21,6 +21,7 @@
        [
         {
             "name": "photo1",
+<<<<<<< HEAD
             "src": "/img/igor.85f23cdb.jpg"
         },
         {
@@ -30,6 +31,17 @@
         {
             "name": "photo3",
             "src": "/img/igor.85f23cdb.jpg"
+=======
+            "src": "/img/igor.jpg"
+        },
+        {
+            "name": "photo2",
+            "src": "/img/igor.jpg"
+        },
+        {
+            "name": "photo3",
+            "src": "/img/igor.jpg"
+>>>>>>> 7e8ab610a645cd0a17c7f7fcb89ec2f8e6e3539a
         }
        ],
        [
