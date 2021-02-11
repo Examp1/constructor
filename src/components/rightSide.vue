@@ -1,6 +1,7 @@
 <template>
     <div class="right" ref="rootDiv" @click.stop="rootClick">
-        <div class="mCanvas" :style="mCanvasStyle" ref="mCan" @mouseleave="hoverItemType = ''" @drop="onDrop" @dragover="allowDrop" @dragleave="onDragover" @mousemove="test">
+        <button @click="test">add</button>
+        <div class="mCanvas" :style="mCanvasStyle" ref="mCan" @mouseleave="hoverItemType = ''" @drop="onDrop" @dragover="allowDrop" @dragleave="onDragover">
             <div :style="bgStyle" @mouseover="onBgOver" @click="onBgClick"></div>
             <drr v-for="(item,index) in imgItems" :key="index" :ref="`item${index}`"
                 :ind="index"
@@ -29,11 +30,11 @@
         <div class="gizmoOverlay" :style="mCanvasStyle">
             <div class="hoverGizmo" :style="hoverGizmoStyle"></div>
             <div class="selectGizmo" :style="selectGizmoStyle">
-                <div class="tl" @mousedown.stop.prevent="gizmoDown('tl', $event)"></div>
-                <div class="tr" @mousedown.stop.prevent="gizmoDown('tr', $event)"></div>
-                <div class="bl" @mousedown.stop.prevent="gizmoDown('bl', $event)"></div>
-                <div class="br" @mousedown.stop.prevent="gizmoDown('br', $event)"></div>
-                <div class="ro" @mousedown.stop.prevent="gizmoDown('ro', $event)"></div>
+                <div class="tl" @mousedown.stop.prevent="gizmoDown('tl', $event)" @touchstart.stop.prevent="gizmoDown('tl', $event)"></div>
+                <div class="tr" @mousedown.stop.prevent="gizmoDown('tr', $event)" @touchstart.stop.prevent="gizmoDown('tr', $event)"></div>
+                <div class="bl" @mousedown.stop.prevent="gizmoDown('bl', $event)" @touchstart.stop.prevent="gizmoDown('bl', $event)"></div>
+                <div class="br" @mousedown.stop.prevent="gizmoDown('br', $event)" @touchstart.stop.prevent="gizmoDown('br', $event)"></div>
+                <div class="ro" @mousedown.stop.prevent="gizmoDown('ro', $event)" @touchstart.stop.prevent="gizmoDown('ro', $event)"></div>
             </div>
         </div>
     </div>
@@ -95,6 +96,7 @@ export default {
             this.hoverItemIndex = ev.data.index;
             this.hoverItemType = 'item';
         });
+        
     },
     computed: {
         percentItemWidth() {
@@ -170,8 +172,21 @@ export default {
     },
     methods: {
         test(e){
-            console.log(e.offsetX, e.offsetY);
-            
+            let obj = {
+                src: 'https://cs8.pikabu.ru/post_img/big/2017/11/20/8/151118095313281056.jpg',
+                width: 300,
+                height: 300,
+                viewportWidth: 0,
+                viewportHeight: 0,
+                top: 100,
+                left: 100,
+                angle: 0
+            }
+            obj.viewportWidth = this.percentItemWidth;
+            obj.viewportHeight = Math.ceil(obj.viewportWidth * obj.height / obj.width);
+            obj.top = obj.top - obj.viewportHeight/2;
+            obj.left = obj.left - obj.viewportWidth/2;
+            this.imgItems.push(obj);
         },
         onBgOver(){
             this.hoverItemType = 'bg';
