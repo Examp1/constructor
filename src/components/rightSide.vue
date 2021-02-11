@@ -1,7 +1,8 @@
 <template>
-    <div class="right" ref="rootDiv" @click.stop="rootClick">
+    <div class="right" ref="rootDiv">
         <button @click="test">add</button>
-        <div class="mCanvas" :style="mCanvasStyle" ref="mCan" @mouseleave="hoverItemType = ''" @drop="onDrop" @dragover="allowDrop" @dragleave="onDragover">
+        <div class="rootClickHandler" @click.stop="rootClick" ref="rootClickHandler"></div>
+        <div class="mCanvas" :style="mCanvasStyle" ref="mCan" :class="{dropOver: isDropOver}" @mouseleave="hoverItemType = ''" @drop="onDrop" @dragover="allowDrop" @dragleave="onDragLeave">
             <div :style="bgStyle" @mouseover="onBgOver" @click="onBgClick"></div>
             <drr v-for="(item,index) in imgItems" :key="index" :ref="`item${index}`"
                 :ind="index"
@@ -16,25 +17,17 @@
                 @mouseover="onItemOver(index)">
                 <img :src="item.src" alt="item" style="width:100%; height:100%">
             </drr>
-            <!-- <div v-for="(item,index) in imgItems"
-                :style="{
-                    transform: `translate(${item.left}px,${item.top}px)`,
-                    width: `${item.viewportWidth}px`,
-                    height: `${item.viewportHeight}px`,
-                    zIndex: index+1
-                }" :key="index" class="imgIttem" @mouseover="onItemOver(index)" @click="onItemClick(index)">
-                <img :src="item.src" alt="item" :style="{width: `${item.viewportWidth}px`,height: `${item.viewportHeight}px`}">
-            </div> -->
-
         </div>
         <div class="gizmoOverlay" :style="mCanvasStyle">
             <div class="hoverGizmo" :style="hoverGizmoStyle"></div>
             <div class="selectGizmo" :style="selectGizmoStyle">
-                <div class="tl" @mousedown.stop.prevent="gizmoDown('tl', $event)" @touchstart.stop.prevent="gizmoDown('tl', $event)"></div>
-                <div class="tr" @mousedown.stop.prevent="gizmoDown('tr', $event)" @touchstart.stop.prevent="gizmoDown('tr', $event)"></div>
-                <div class="bl" @mousedown.stop.prevent="gizmoDown('bl', $event)" @touchstart.stop.prevent="gizmoDown('bl', $event)"></div>
-                <div class="br" @mousedown.stop.prevent="gizmoDown('br', $event)" @touchstart.stop.prevent="gizmoDown('br', $event)"></div>
-                <div class="ro" @mousedown.stop.prevent="gizmoDown('ro', $event)" @touchstart.stop.prevent="gizmoDown('ro', $event)"></div>
+                <template v-if="selectedItemType == 'item'">
+                    <div class="tl" @mousedown.stop.prevent="gizmoDown('tl', $event)" @touchstart.stop.prevent="gizmoDown('tl', $event)"></div>
+                    <div class="tr" @mousedown.stop.prevent="gizmoDown('tr', $event)" @touchstart.stop.prevent="gizmoDown('tr', $event)"></div>
+                    <div class="bl" @mousedown.stop.prevent="gizmoDown('bl', $event)" @touchstart.stop.prevent="gizmoDown('bl', $event)"></div>
+                    <div class="br" @mousedown.stop.prevent="gizmoDown('br', $event)" @touchstart.stop.prevent="gizmoDown('br', $event)"></div>
+                    <div class="ro" @mousedown.stop.prevent="gizmoDown('ro', $event)" @touchstart.stop.prevent="gizmoDown('ro', $event)"></div>
+                </template>
             </div>
         </div>
     </div>
@@ -60,6 +53,8 @@ export default {
             gizmoHoverSticks: null,
             gizmoSticks: null,
             imgVm: null,
+
+            isDropOver: false,
             
             imgItems: [],
         }
@@ -203,39 +198,45 @@ export default {
             this.selectedItemType = 'bg';
         },
         rootClick(e){
-            if(e.target == this.$refs.rootDiv) this.selectedItemType = '';
+            if(e.target == this.$refs.rootClickHandler){
+                this.selectedItemType = '';
+            }
         },
         itemChange(e){
             console.log(e);
-            
         },
         gizmoDown(stick, ev){
             this.imgVm.stickDown(stick, ev)
         },
         onDrop(e){
-            let data = JSON.parse(e.dataTransfer.getData("obj"));
+            let data = JSON.parse(e.dataTransfer.getData("dragInfo"));
+            
             let obj = {
                 src: data.src,
                 width: data.width,
                 height: data.height,
-                viewportWidth: 0,
-                viewportHeight: 0,
+                viewportWidth: data.viewportWidth,
+                viewportHeight: data.viewportHeight,
                 top: e.offsetY,
                 left: e.offsetX,
                 angle: 0
             }
-            obj.viewportWidth = this.percentItemWidth;
-            obj.viewportHeight = Math.ceil(obj.viewportWidth * obj.height / obj.width);
+            console.log(obj);
+            // obj.viewportWidth = this.percentItemWidth;
+            // obj.viewportHeight = Math.ceil(obj.viewportWidth * obj.height / obj.width);
             obj.top = obj.top - obj.viewportHeight/2;
             obj.left = obj.left - obj.viewportWidth/2;
             this.imgItems.push(obj);
+            this.isDropOver = false;
         },
         allowDrop(e){
             e.preventDefault();
             Bus.$emit('canvasDropOvered', {});
+            this.isDropOver = true;
         },
-        onDragover(){
+        onDragLeave(){
             Bus.$emit('canvasDropLeave', {});
+            this.isDropOver = false;
         },
     },
 }
@@ -249,6 +250,14 @@ export default {
         position: relative;
         user-select: none;
     }
+    .rootClickHandler{
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+    }
     .mCanvas{
         background-color: rgba(221, 221, 221, 0.652);
         box-shadow: 0 0 35px 11px #0000001c;
@@ -256,12 +265,19 @@ export default {
         top: 50%;
         left: 50%;
         overflow: hidden;
+        z-index: 10;
+        &.dropOver{
+            .drr{
+                pointer-events: none !important;
+            }
+        }
     }
     .gizmoOverlay{
         position: absolute;
         top: 50%;
         left: 50%;
         pointer-events: none;
+        z-index: 15;
     }
     .imgIttem{
         position: absolute;

@@ -671,11 +671,15 @@
             }
           }
 
-          this.cx = stickStartPos.cx + p.x / 2
-          this.cy = stickStartPos.cy + p.y / 2
-          pn = p.rotate(-phi)
-          this.width = stickStartPos.width + dirX * pn.x
-          this.height = stickStartPos.height + dirY * pn.y
+          let w = stickStartPos.width + dirX * pn.x;
+          let h = stickStartPos.height + dirY * pn.y;
+          if(w > 100 || h > 100){
+            this.cx = stickStartPos.cx + p.x / 2
+            this.cy = stickStartPos.cy + p.y / 2
+            pn = p.rotate(-phi)
+            this.width = w
+            this.height = h
+          }
 
           if (this.resizeHandler)
             this.setRect(this.resizeHandler(this.getRect()))

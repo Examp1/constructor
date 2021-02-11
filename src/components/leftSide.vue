@@ -14,8 +14,8 @@
         <!-- <img src="../assets/igor.jpg" alt=""> -->
       </li>
     </ul>
-    <div class="dragImgDiv" v-if="isDrag">
-      <img :src="decoSrc" :style="dragImgStyle" alt="1" :class="{active: dragOvered}">
+    <div class="dragImgDiv" v-show="isDrag">
+      <img :src="decoSrc" :style="dragImgStyle" alt="1" :class="{active: dragOvered}" ref="dragGhost">
     </div>
     
     <button @click="toCanvas">to canvas</button>
@@ -55,6 +55,7 @@ export default {
       decoSrc: '',
       dragX: null,
       dragY: null,
+      dragInfo: null,
     };
   },
   directives: {
@@ -113,12 +114,24 @@ export default {
       document.body.appendChild(crt);
       e.dataTransfer.setDragImage(crt, 0, 0);
       this.decoSrc = this.currentTab[index].src;
-      let obj = {
+      let dragGhost = this.$refs.dragGhost;
+      this.dragInfo = {
         src: this.decoSrc,
         width: this.currentTab[index].img.width,
         height: this.currentTab[index].img.height,
+        viewportWidth: dragGhost.width,
+        viewportHeight: dragGhost.height,
       }
-      e.dataTransfer.setData('obj', JSON.stringify(obj));
+      let maxS = 100 * 1.5;
+      if(this.dragInfo.width > this.dragInfo.height){
+        this.dragInfo.viewportWidth = maxS;
+        this.dragInfo.viewportHeight = Math.ceil(this.dragInfo.height * maxS / this.dragInfo.width);
+      }
+      else{
+        this.dragInfo.viewportHeight = maxS;
+        this.dragInfo.viewportWidth = Math.ceil(this.dragInfo.width * maxS / this.dragInfo.height);
+      }
+      e.dataTransfer.setData('dragInfo', JSON.stringify(this.dragInfo));
     },
     // во время тоскания, координаты
     onDrag(e){
