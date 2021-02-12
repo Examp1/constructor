@@ -452,20 +452,51 @@
         this.dragStartEmitted = false
         this.startRect = _.cloneDeep(this.getRect())
 
-        this.stickStartPos.mouseX = e.pageX || e.touches[0].pageX
-        this.stickStartPos.mouseY = e.pageY || e.touches[0].pageY
+        let elemOffset = this.getOffset(document.querySelector('.mCanvas'));
+        let tempX = e.pageX || e.touches[0].pageX;
+        let tempY = e.pageY || e.touches[0].pageY;
+        let posX = tempX - elemOffset.x;
+        let posY = tempY - elemOffset.y;
+        
+        // this.stickStartPos.mouseX = e.pageX || e.touches[0].pageX
+        // this.stickStartPos.mouseY = e.pageY || e.touches[0].pageY
+
+        let mul = this.$store.state.origWidth / (this.$store.state.origWidth * this.$store.state.canvasZoom);
+        
+        this.stickStartPos.mouseX = posX * mul
+        this.stickStartPos.mouseY = posY * mul
 
         this.stickStartPos.cx = this.cx
         this.stickStartPos.cy = this.cy
       },
 
+      getOffset( elem ){
+        let rect = elem.getBoundingClientRect();
+        let scrollLeft  = window.pageXOffset || document.documentElement.scrollLeft;
+        let scrollTop   = window.pageYOffset || document.documentElement.scrollTop;
+        return {
+          x: rect.left + scrollLeft,
+          y: rect.top + scrollTop
+        }
+      },
+
       bodyMove(ev) {
         const stickStartPos = this.stickStartPos;
         // TODO: скейлы
+        let elemOffset = this.getOffset(document.querySelector('.mCanvas'));
+        let tempX = ev.pageX || ev.touches[0].pageX;
+        let tempY = ev.pageY || ev.touches[0].pageY;
+        let posX = tempX - elemOffset.x;
+        let posY = tempY - elemOffset.y;
+        let mul = this.$store.state.origWidth / (this.$store.state.origWidth * this.$store.state.canvasZoom);
         const newPos = {
-          mouseX: ev.pageX || ev.touches[0].pageX,
-          mouseY: ev.pageY || ev.touches[0].pageY
+          mouseX: posX * mul,
+          mouseY: posY * mul
         }
+        // const newPos = {
+        //   mouseX: ev.pageX || ev.touches[0].pageX,
+        //   mouseY: ev.pageY || ev.touches[0].pageY
+        // }
         const delta = {
           x: (newPos.mouseX - stickStartPos.mouseX),
           y: (newPos.mouseY - stickStartPos.mouseY)
@@ -556,6 +587,8 @@
 
       stickMove(ev) {
         const stickStartPos = this.stickStartPos;
+        console.log(stickStartPos);
+        
 
         let delta = new Vector(
           ((ev.pageX || ev.touches[0].pageX) - stickStartPos.mouseX),

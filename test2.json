@@ -1,0 +1,65 @@
+{
+    "tabsContent": [
+       [
+        {
+            "name": "sticker1",
+            "src": ""
+        },
+        {
+            "name": "sticker2",
+            "src": ""
+        },
+        {
+            "name": "sticker3",
+            "src": ""
+        }
+       ],
+       [
+        {
+            "name": "photo1",
+
+            "src": "https://wonder-day.com/wp-content/uploads/2020/10/wonder-day-among-us-png-28.png"
+        },
+        {
+            "name": "photo2",
+            "src": "https://static9.depositphotos.com/1004099/1164/i/600/depositphotos_11640933-stock-photo-top-view-of-norway-maple.jpg"
+        },
+        {
+            "name": "photo3",
+            "src": "https://upload.wikimedia.org/wikipedia/ru/1/13/%D0%A2%D0%B8%D0%BC%D0%BE%D0%BD.png"
+        }
+       ],
+       [
+        {
+            "name": "name1",
+            "src": "http://pngimg.com/uploads/fire/fire_PNG6041.png"
+        },
+        {
+            "name": "name2",
+            "src": "https://clipart-db.ru/file_content/rastr/flower_091.png"
+        },
+        {
+            "name": "name3",
+            "src": "https://cs8.pikabu.ru/post_img/2016/02/17/10/145572598117693502.png"
+        },
+        {
+            "name": "name4",
+            "src": "https://pngicon.ru/file/uploads/vinni-pukh-v-png-256x256.png"
+        }
+       ],
+       [
+        {
+            "name": "sticker1",
+            "src": ""
+        },
+        {
+            "name": "sticker2",
+            "src": ""
+        },
+        {
+            "name": "sticker3",
+            "src": ""
+        }
+       ]
+    ]
+}

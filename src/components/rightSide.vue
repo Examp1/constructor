@@ -2,7 +2,7 @@
     <div class="right" ref="rootDiv">
         <button @click="test">add</button>
         <div class="rootClickHandler" @click.stop="rootClick" ref="rootClickHandler"></div>
-        <div class="mCanvas" :style="mCanvasStyle" ref="mCan" :class="{dropOver: isDropOver}" @mouseleave="hoverItemType = ''" @drop="onDrop" @dragover="allowDrop" @dragleave="onDragLeave">
+        <div class="mCanvas" :style="mCanvasStyle"  ref="mCan" :class="{dropOver: isDropOver}" @mouseleave="hoverItemType = ''" @drop="onDrop" @dragover="allowDrop" @dragleave="onDragLeave">
             <div :style="bgStyle" @mouseover="onBgOver" @click="onBgClick"></div>
             <drr v-for="(item,index) in imgItems" :key="index" :ref="`item${index}`"
                 :ind="index"
@@ -26,7 +26,8 @@
                     <div class="tr" @mousedown.stop.prevent="gizmoDown('tr', $event)" @touchstart.stop.prevent="gizmoDown('tr', $event)"></div>
                     <div class="bl" @mousedown.stop.prevent="gizmoDown('bl', $event)" @touchstart.stop.prevent="gizmoDown('bl', $event)"></div>
                     <div class="br" @mousedown.stop.prevent="gizmoDown('br', $event)" @touchstart.stop.prevent="gizmoDown('br', $event)"></div>
-                    <div class="ro" @mousedown.stop.prevent="gizmoDown('ro', $event)" @touchstart.stop.prevent="gizmoDown('ro', $event)"></div>
+                    <div class="ro" @mousedown.stop.prevent="gizmoDown('ro', $event)" @touchstart.stop.prevent="gizmoDown('ro', $event)">rotate</div>
+                    <!-- <div class="move" @mousedown.stop.prevent="gizmoDownMove($event)" @touchstart.stop.prevent="gizmoDownMove($event)">move</div> -->
                 </template>
             </div>
         </div>
@@ -43,7 +44,6 @@ export default {
     data() {
         return {
             canvWidth: 0,
-            mCanvasStyle: {},
             bgStyle: {},
             hoverItemType: '',
             hoverItemIndex: null,
@@ -66,11 +66,10 @@ export default {
         let canW = rD.offsetWidth - margin*2;
         let canH = Math.ceil(canW * 10 / 19); // соотношение 19:10
         this.canvWidth = canW;
-        this.mCanvasStyle = {
-            width: `${canW}px`,
-            height: `${canH}px`,
-            transform: `translate(-50%, -50%)`,
-        }
+        this.$store.commit('SET_ORIG_SIZE', {
+            width: canW,
+            height: canH,
+        })
         this.bgStyle = {
             position: 'absolute',
             top: 0,
@@ -79,7 +78,7 @@ export default {
             right: 0,
             backgroundColor: '#fff',
             zIndex: 0,
-        }
+        };
         Bus.$on('updateGizmo', (ev) => {
             this.selectedItemType = 'item';
             this.selectedItemIndex = ev.data.index;
@@ -92,8 +91,31 @@ export default {
             this.hoverItemType = 'item';
         });
         
+        this.$refs.rootDiv.addEventListener('wheel', (e) => {
+            if(e.ctrlKey){
+                e.preventDefault();
+                let deltaY = -e.deltaY;
+                if(this.$store.state.canvasZoom > 0.3 && deltaY < 0){
+                    this.$store.commit('SET_CURRENT_ZOOM', {
+                        zoom: +(this.$store.state.canvasZoom + deltaY * 0.001).toFixed(2)
+                    });
+                }
+                if(this.$store.state.canvasZoom < 2 && deltaY > 0){
+                    this.$store.commit('SET_CURRENT_ZOOM', {
+                        zoom: +(this.$store.state.canvasZoom + deltaY * 0.001).toFixed(2)
+                    });
+                }
+            }
+        });
     },
     computed: {
+        mCanvasStyle(){
+            return {
+                width: `${this.$store.state.origWidth}px`,
+                height: `${this.$store.state.origHeight}px`,
+                transform: `translate(-50%, -50%) scale(${this.$store.state.canvasZoom})`,
+            }
+        },
         percentItemWidth() {
             return Math.ceil(this.canvWidth * 30 / 100);
         },
@@ -208,9 +230,11 @@ export default {
         gizmoDown(stick, ev){
             this.imgVm.stickDown(stick, ev)
         },
+        gizmoDownMove(ev){
+            this.imgVm.bodyMouseDown(ev)
+        },
         onDrop(e){
             let data = JSON.parse(e.dataTransfer.getData("dragInfo"));
-            
             let obj = {
                 src: data.src,
                 width: data.width,
@@ -221,9 +245,10 @@ export default {
                 left: e.offsetX,
                 angle: 0
             }
-            console.log(obj);
-            // obj.viewportWidth = this.percentItemWidth;
-            // obj.viewportHeight = Math.ceil(obj.viewportWidth * obj.height / obj.width);
+            if(obj.viewportWidth == 0 || obj.viewportHeight == 0){
+                obj.viewportWidth = 300;
+                obj.viewportHeight = 300;
+            }
             obj.top = obj.top - obj.viewportHeight/2;
             obj.left = obj.left - obj.viewportWidth/2;
             this.imgItems.push(obj);
@@ -249,6 +274,7 @@ export default {
         background-color: #f0f0f0;
         position: relative;
         user-select: none;
+        overflow: auto;
     }
     .rootClickHandler{
         position: absolute;
@@ -306,7 +332,7 @@ export default {
             bottom: -2px;
             border: 2px dashed rgb(47, 182, 255);
         }
-        .tl, .tr, .bl, .br, .ro{
+        .tl, .tr, .bl, .br, .ro, .move{
             background-color: rgb(47, 182, 255);
             width: 18px;
             height: 18px;
@@ -338,7 +364,12 @@ export default {
         .ro{
             top: -30px;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(calc(-50% ), -50%);
+        }
+        .move{
+            top: -30px;
+            left: 50%;
+            transform: translate(calc(-50% + 20px), -50%);
         }
     }
 </style>
