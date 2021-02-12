@@ -22,12 +22,12 @@
             <div class="hoverGizmo" :style="hoverGizmoStyle"></div>
             <div class="selectGizmo" :style="selectGizmoStyle">
                 <template v-if="selectedItemType == 'item'">
-                    <div class="tl" @mousedown.stop.prevent="gizmoDown('tl', $event)" @touchstart.stop.prevent="gizmoDown('tl', $event)"></div>
-                    <div class="tr" @mousedown.stop.prevent="gizmoDown('tr', $event)" @touchstart.stop.prevent="gizmoDown('tr', $event)"></div>
-                    <div class="bl" @mousedown.stop.prevent="gizmoDown('bl', $event)" @touchstart.stop.prevent="gizmoDown('bl', $event)"></div>
-                    <div class="br" @mousedown.stop.prevent="gizmoDown('br', $event)" @touchstart.stop.prevent="gizmoDown('br', $event)"></div>
-                    <div class="ro" @mousedown.stop.prevent="gizmoDown('ro', $event)" @touchstart.stop.prevent="gizmoDown('ro', $event)">rotate</div>
-                    <!-- <div class="move" @mousedown.stop.prevent="gizmoDownMove($event)" @touchstart.stop.prevent="gizmoDownMove($event)">move</div> -->
+                    <div class="tl" @mousedown.stop.prevent="gizmoDown('tl', $event)" @touchstart.stop.prevent="gizmoDown('tl', $event)" :style="`transform: translate(-50%, -50%) scale(${gizmoScale})`"></div>
+                    <div class="tr" @mousedown.stop.prevent="gizmoDown('tr', $event)" @touchstart.stop.prevent="gizmoDown('tr', $event)" :style="`transform: translate(50%, -50%) scale(${gizmoScale})`"></div>
+                    <div class="bl" @mousedown.stop.prevent="gizmoDown('bl', $event)" @touchstart.stop.prevent="gizmoDown('bl', $event)" :style="`transform: translate(-50%, 50%) scale(${gizmoScale})`"></div>
+                    <div class="br" @mousedown.stop.prevent="gizmoDown('br', $event)" @touchstart.stop.prevent="gizmoDown('br', $event)" :style="`transform: translate(50%, 50%) scale(${gizmoScale})`"></div>
+                    <div class="ro" @mousedown.stop.prevent="gizmoDown('ro', $event)" @touchstart.stop.prevent="gizmoDown('ro', $event)" :style="`transform: translate(-50%, 0) scale(${gizmoScale})`">rotate</div>
+                    <div class="move" @mousedown.stop.prevent="gizmoDownMove($event)" @touchstart.stop.prevent="gizmoDownMove($event)" :style="`transform: translate(-50%, 0) scale(${gizmoScale})`">move</div>
                 </template>
             </div>
         </div>
@@ -109,6 +109,10 @@ export default {
         });
     },
     computed: {
+        gizmoScale(){
+            // return Math.abs((2 - this.$store.state.canvasZoom));
+            return 1;
+        },
         mCanvasStyle(){
             return {
                 width: `${this.$store.state.origWidth}px`,
@@ -364,12 +368,12 @@ export default {
         .ro{
             top: -30px;
             left: 50%;
-            transform: translate(calc(-50% ), -50%);
+            transform: translate(-50%, 0);
         }
         .move{
-            top: -30px;
+            bottom: -30px;
             left: 50%;
-            transform: translate(calc(-50% + 20px), -50%);
+            transform: translate(-50%, 0);
         }
     }
 </style>

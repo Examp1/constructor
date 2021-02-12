@@ -575,8 +575,16 @@
         this.stickDrag = true;
         this.resized = false
         this.rotated = false
-        this.stickStartPos.mouseX = ev.pageX || ev.touches[0].pageX;
-        this.stickStartPos.mouseY = ev.pageY || ev.touches[0].pageY;
+
+        let elemOffset = this.getOffset(document.querySelector('.mCanvas'));
+        let tempX = ev.pageX || ev.touches[0].pageX;
+        let tempY = ev.pageY || ev.touches[0].pageY;
+        let posX = tempX - elemOffset.x;
+        let posY = tempY - elemOffset.y;
+        let mul = this.$store.state.origWidth / (this.$store.state.origWidth * this.$store.state.canvasZoom);
+
+        this.stickStartPos.mouseX = posX * mul;
+        this.stickStartPos.mouseY = posY * mul;
         this.stickStartPos.cx = this.cx;
         this.stickStartPos.cy = this.cy;
         this.stickStartPos.width = this.width;
@@ -587,13 +595,19 @@
 
       stickMove(ev) {
         const stickStartPos = this.stickStartPos;
-        console.log(stickStartPos);
-        
+
+        let elemOffset = this.getOffset(document.querySelector('.mCanvas'));
+        let tempX = ev.pageX || ev.touches[0].pageX;
+        let tempY = ev.pageY || ev.touches[0].pageY;
+        let posX = tempX - elemOffset.x;
+        let posY = tempY - elemOffset.y;
+        let mul = this.$store.state.origWidth / (this.$store.state.origWidth * this.$store.state.canvasZoom);
 
         let delta = new Vector(
-          ((ev.pageX || ev.touches[0].pageX) - stickStartPos.mouseX),
-          ((ev.pageY || ev.touches[0].pageY) - stickStartPos.mouseY)
+          ((posX * mul) - stickStartPos.mouseX),
+          ((posY * mul) - stickStartPos.mouseY)
         )
+        
         
         if (this.currentStick == 'ro') {
           let up = new Vector(0, -(this.height) / 2 - roStickSize)
