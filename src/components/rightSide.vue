@@ -13,6 +13,7 @@
                 :angle="item.angle"
                 :aspectRatio="true"
                 
+                @change="imgItemChanged($event, index)"
                 @click="onItemClick(index)"
                 @mouseover="onItemOver(index)">
                 <img :src="item.src" alt="item" style="width:100%; height:100%">
@@ -30,6 +31,10 @@
                     <div class="move" @mousedown.stop.prevent="gizmoDownMove($event)" @touchstart.stop.prevent="gizmoDownMove($event)" :style="`transform: translate(-50%, 0) scale(${gizmoScale})`">move</div>
                 </template>
             </div>
+        </div>
+        <div class="orientBtn">
+            <button :disabled="orient == 'g'" @click="changeOrient('g')">Горизонт</button>
+            <button :disabled="orient == 'v'" @click="changeOrient('v')">Вертикаль</button>
         </div>
     </div>
 </template>
@@ -50,6 +55,8 @@ export default {
             selectedItemType: '',
             selectedItemIndex: null,
 
+            orient: 'g',
+
             gizmoHoverSticks: null,
             gizmoSticks: null,
             imgVm: null,
@@ -60,16 +67,7 @@ export default {
         }
     },
     mounted () {
-        let margin = 100;
-        let rD = this.$refs.rootDiv;
-        //TODO: если зона будет уже по высоте - расчитать от высоты
-        let canW = rD.offsetWidth - margin*2;
-        let canH = Math.ceil(canW * 10 / 19); // соотношение 19:10
-        this.canvWidth = canW;
-        this.$store.commit('SET_ORIG_SIZE', {
-            width: canW,
-            height: canH,
-        })
+        this.calculateCanvasSize();
         this.bgStyle = {
             position: 'absolute',
             top: 0,
@@ -120,8 +118,9 @@ export default {
                 transform: `translate(-50%, -50%) scale(${this.$store.state.canvasZoom})`,
             }
         },
+        // todo: delete this
         percentItemWidth() {
-            return Math.ceil(this.canvWidth * 30 / 100);
+            return Math.ceil(this.$store.state.origWidth * 30 / 100);
         },
         hoverGizmoStyle(){
             switch (this.hoverItemType) {
@@ -209,6 +208,25 @@ export default {
             obj.left = obj.left - obj.viewportWidth/2;
             this.imgItems.push(obj);
         },
+        calculateCanvasSize(){
+            let margin = 100;
+            let rD = this.$refs.rootDiv;
+            let canW, canH;
+            if(this.orient == 'g'){
+                //TODO: если зона будет уже по высоте - расчитать от высоты
+                canW = rD.offsetWidth - margin*2;
+                canH = Math.ceil(canW * 10 / 19); // соотношение 19:10
+            }
+            else{ // orient == 'v'
+                canH = rD.offsetHeight - margin*2;
+                canW = Math.ceil(canH * 10 / 19); // соотношение 19:10
+            }
+            this.canvWidth = canW;
+            this.$store.commit('SET_ORIG_SIZE', {
+                width: canW,
+                height: canH,
+            })
+        },
         onBgOver(){
             this.hoverItemType = 'bg';
         },
@@ -228,14 +246,47 @@ export default {
                 this.selectedItemType = '';
             }
         },
-        itemChange(e){
-            console.log(e);
+        imgItemChanged(e, index){
+            console.log(e, index);
+            this.imgItems[index].angle = e.angle;
+            this.imgItems[index].left = e.x - e.w/2;
+            this.imgItems[index].top = e.y - e.h/2;
+            this.imgItems[index].viewportWidth = e.w;
+            this.imgItems[index].viewportHeight = e.h;
         },
         gizmoDown(stick, ev){
             this.imgVm.stickDown(stick, ev)
         },
         gizmoDownMove(ev){
             this.imgVm.bodyMouseDown(ev)
+        },
+        changeOrient(orient){
+            switch (orient) {
+                case 'v':
+                    if(this.orient != 'v'){
+                        this.orient = 'v';
+                        let oldW = this.$store.state.origWidth;
+                        let oldH = this.$store.state.origHeight;
+                        this.calculateCanvasSize();
+                        this.applyOrientTransform(oldW, oldH);
+                    }
+                    break;
+                case 'g':
+                    if(this.orient != 'g'){
+                        this.orient = 'g';
+                        let oldW = this.$store.state.origWidth;
+                        let oldH = this.$store.state.origHeight;
+                        this.calculateCanvasSize();
+                        this.applyOrientTransform(oldW, oldH);
+                    }
+                    break;
+            }
+        },
+        applyOrientTransform(oldW, oldH){
+            this.imgItems.forEach(item => {
+                item.left = item.left * this.$store.state.origWidth / oldW;
+                item.top = item.top * this.$store.state.origHeight / oldH;
+            });
         },
         onDrop(e){
             let data = JSON.parse(e.dataTransfer.getData("dragInfo"));
@@ -374,6 +425,19 @@ export default {
             bottom: -30px;
             left: 50%;
             transform: translate(-50%, 0);
+        }
+    }
+    .orientBtn{
+        position: absolute;
+        z-index: 50;
+        bottom: 30px;
+        left: 50%;
+        transform: translate(-50%, 0);
+        display: flex;
+        button{
+            &+button{
+                margin-left: 15px;
+            }
         }
     }
 </style>
