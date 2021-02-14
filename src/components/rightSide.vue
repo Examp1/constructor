@@ -13,6 +13,7 @@
                 :angle="item.angle"
                 :aspectRatio="true"
                 
+                @contextmenu="onItemContext($event)"
                 @change="imgItemChanged($event, index)"
                 @click="onItemClick(index)"
                 @mouseover="onItemOver(index)">
@@ -31,6 +32,10 @@
                     <div class="move" @mousedown.stop.prevent="gizmoDownMove($event)" @touchstart.stop.prevent="gizmoDownMove($event)" :style="`transform: translate(-50%, 0) scale(${gizmoScale})`">move</div>
                 </template>
             </div>
+        </div>
+        <div v-if="isContext" class="contextMenu" :style="contextMenuStyle">
+            <button @click="changeOrder(0, selectedItemIndex)">В верх очереди</button>
+            <button @click="changeOrder(1, selectedItemIndex)">В низ очереди</button>
         </div>
         <div class="orientBtn">
             <button :disabled="orient == 'g'" @click="changeOrient('g')">Горизонт</button>
@@ -54,12 +59,14 @@ export default {
             hoverItemIndex: null,
             selectedItemType: '',
             selectedItemIndex: null,
+            isContext: false,
 
             orient: 'g',
 
             gizmoHoverSticks: null,
             gizmoSticks: null,
             imgVm: null,
+            contextMenuStyle: {},
 
             isDropOver: false,
             
@@ -247,7 +254,7 @@ export default {
             }
         },
         imgItemChanged(e, index){
-            console.log(e, index);
+            // console.log(e, index);
             this.imgItems[index].angle = e.angle;
             this.imgItems[index].left = e.x - e.w/2;
             this.imgItems[index].top = e.y - e.h/2;
@@ -269,6 +276,7 @@ export default {
                         let oldH = this.$store.state.origHeight;
                         this.calculateCanvasSize();
                         this.applyOrientTransform(oldW, oldH);
+                        this.selectedItemType = '';
                     }
                     break;
                 case 'g':
@@ -278,9 +286,56 @@ export default {
                         let oldH = this.$store.state.origHeight;
                         this.calculateCanvasSize();
                         this.applyOrientTransform(oldW, oldH);
+                        this.selectedItemType = '';
                     }
                     break;
             }
+        },
+        onItemContext(e){
+            if(this.imgItems.length > 1){
+                e.preventDefault();
+                let rootOffset = this.getOffset(this.$refs.rootDiv);
+                let x = e.pageX - rootOffset.x;
+                let y = e.pageY - rootOffset.y;
+                this.contextMenuStyle = {
+                    left: `${x}px`,
+                    top: `${y}px`,
+                };
+                this.isContext = true;
+                document.addEventListener('click', this.contextOutHandler);
+            }
+        },
+        contextOutHandler(e){
+            if(!(e.target.classList.contains('contextMenu') || e.target.closest('.contextMenu'))){
+                this.isContext = false;
+                document.removeEventListener('click', this.contextOutHandler)
+            }
+        },
+        changeOrder(cmd, index){
+            if(this.imgItems.length > 1 && index > -1){
+                switch (cmd) {
+                    case 1:
+                        this.array_move(this.imgItems, index, 0);
+                        this.selectedItemType = 'item';
+                        this.selectedItemIndex = 0;
+                        break;
+                    case 0:
+                        this.array_move(this.imgItems, index, this.imgItems.length-1);
+                        this.selectedItemIndex = this.imgItems.length-1;
+                        this.selectedItemType = 'item';
+                        break;
+                }
+                this.isContext = false;
+            }
+        },
+        array_move(arr, old_index, new_index) {
+            if (new_index >= arr.length) {
+                var k = new_index - arr.length + 1;
+                while (k--) {
+                    arr.push(undefined);
+                }
+            }
+            arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
         },
         applyOrientTransform(oldW, oldH){
             this.imgItems.forEach(item => {
@@ -317,6 +372,15 @@ export default {
         onDragLeave(){
             Bus.$emit('canvasDropLeave', {});
             this.isDropOver = false;
+        },
+        getOffset( elem ){
+            let rect = elem.getBoundingClientRect();
+            let scrollLeft  = window.pageXOffset || document.documentElement.scrollLeft;
+            let scrollTop   = window.pageYOffset || document.documentElement.scrollTop;
+            return {
+                x: rect.left + scrollLeft,
+                y: rect.top + scrollTop
+            }
         },
     },
 }
@@ -439,5 +503,11 @@ export default {
                 margin-left: 15px;
             }
         }
+    }
+    .contextMenu{
+        position: absolute;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
     }
 </style>

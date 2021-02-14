@@ -5,7 +5,8 @@
        @mousedown="bodyMouseDown($event)"
        @touchstart.stop.prevent="bodyMouseDown($event)"
        @click="onClick"
-       @mouseover="emitHover">
+       @mouseover="emitHover"
+       @contextmenu="onContext($event)">
     <slot></slot>
     <!-- <div
       v-for="(stick,index) in sticks" :key="index"
@@ -313,6 +314,11 @@
     },
 
     methods: {
+      onContext(e){
+        this.emitSelected();
+        this.$emit('contextmenu', e)
+      },
+
       getRect() {
         return {
           x: this.cx,
@@ -482,7 +488,6 @@
 
       bodyMove(ev) {
         const stickStartPos = this.stickStartPos;
-        // TODO: скейлы
         let elemOffset = this.getOffset(document.querySelector('.mCanvas'));
         let tempX = ev.pageX || ev.touches[0].pageX;
         let tempY = ev.pageY || ev.touches[0].pageY;
