@@ -1,6 +1,7 @@
 <template>
     <div class="right" ref="rootDiv">
-        <button @click="test">add</button>
+        <!-- <button @click="test">add</button> -->
+        <button @click="onUndo" :disabled="$store.state.states.length == 1" style="position: relative; z-index: 1000">REVERT</button>
         <div class="rootClickHandler" @click.stop="rootClick" ref="rootClickHandler"></div>
         <div class="mCanvas" :style="mCanvasStyle"  ref="mCan" :class="{dropOver: isDropOver}" @mouseleave="hoverItemType = ''" @drop="onDrop" @dragover="allowDrop" @dragleave="onDragLeave">
             <div :style="bgStyle" @mouseover="onBgOver" @click="onBgClick"></div>
@@ -260,6 +261,8 @@ export default {
             this.imgItems[index].top = e.y - e.h/2;
             this.imgItems[index].viewportWidth = e.w;
             this.imgItems[index].viewportHeight = e.h;
+
+            this.pushState();
         },
         gizmoDown(stick, ev){
             this.imgVm.stickDown(stick, ev)
@@ -363,6 +366,7 @@ export default {
             obj.left = obj.left - obj.viewportWidth/2;
             this.imgItems.push(obj);
             this.isDropOver = false;
+            this.pushState();
         },
         allowDrop(e){
             e.preventDefault();
@@ -381,6 +385,18 @@ export default {
                 x: rect.left + scrollLeft,
                 y: rect.top + scrollTop
             }
+        },
+        pushState(){
+            this.$store.commit('PUSH_STATE', {
+                state: {
+                    imgItems: JSON.parse(JSON.stringify(this.imgItems)),
+                }
+            });
+        },
+        onUndo(){
+            this.$store.commit('REVERT_STATE', {});
+            this.imgItems = JSON.parse(JSON.stringify(this.$store.state.states[this.$store.state.states.length-1].imgItems));
+            this.selectedItemType = '';
         },
     },
 }

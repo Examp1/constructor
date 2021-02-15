@@ -14,7 +14,13 @@ const store = new Vuex.Store({
   state: {
     origWidth: 0,
     origHeight: 0,
-    canvasZoom: 1
+    canvasZoom: 1,
+
+    states: [{
+      imgItems: []
+    }],
+    currentStateIndex: 0,
+    maxLength: 14,
   },
   mutations: {
     SET_ORIG_SIZE (state, paylpad) {
@@ -23,6 +29,24 @@ const store = new Vuex.Store({
     },
     SET_CURRENT_ZOOM (state, paylpad) {
       state.canvasZoom = paylpad.zoom;
+    },
+
+    PUSH_STATE(state, payload){
+      if(state.currentStateIndex < state.maxLength){
+        state.states.push(payload.state);
+        state.currentStateIndex++;
+      }
+      else{
+        state.currentStateIndex = state.maxLength;
+        state.states = [...state.states.slice(1), payload.state];
+      }
+    },
+    REVERT_STATE(state){
+      // debugger
+      if(state.currentStateIndex > 0){
+        state.currentStateIndex--;
+        state.states = state.states.slice(0, state.states.length-1);
+      }
     },
   }
 })
