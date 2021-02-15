@@ -78,22 +78,27 @@
         {
             "type": "sticker",
             "name": "sticker1",
-            "src": "/img/template/template1-h.jpg"
+            "src": "/img/stickers/el1.png"
         },
         {
             "type": "sticker",
             "name": "sticker1",
-            "src": "/img/template/template1-h.jpg"
+            "src": "/img/stickers/el2.png"
         },
         {
             "type": "sticker",
-            "name": "sticker1",
-            "src": "/img/template/template1-h.jpg"
+            "name": "sticker3",
+            "src": "/img/stickers/el3.png"
         },
         {
             "type": "sticker",
-            "name": "sticker2",
-            "src": "/img/template/template1-v.jpg"
+            "name": "sticker4",
+            "src": "/img/stickers/el4.png"
+        }
+        {
+            "type": "sticker",
+            "name": "sticker5",
+            "src": "/img/stickers/el5.png"
         }
     ],
     "color": [
