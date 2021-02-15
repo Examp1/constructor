@@ -61,5 +61,88 @@
             "src": "data:image/jpeg;base64,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"
         }
        ]
+    ],
+    "template": [
+        {
+            "type": "template",
+            "name": "template1",
+            "src": "/img/template/template1-h.jpg"
+        },
+        {
+            "type": "template",
+            "name": "template2",
+            "src": "/img/template/template1-v.jpg"
+        }
+    ],
+    "sticker": [
+        {
+            "type": "sticker",
+            "name": "sticker1",
+            "src": "/img/template/template1-h.jpg"
+        },
+        {
+            "type": "sticker",
+            "name": "sticker1",
+            "src": "/img/template/template1-h.jpg"
+        },
+        {
+            "type": "sticker",
+            "name": "sticker1",
+            "src": "/img/template/template1-h.jpg"
+        },
+        {
+            "type": "sticker",
+            "name": "sticker2",
+            "src": "/img/template/template1-v.jpg"
+        }
+    ],
+    "color": [
+        {
+            "type": "color",
+            "name": "color1",
+            "src": "https://cs8.pikabu.ru/post_img/big/2017/11/20/8/151118095313281056.jpg"
+        },
+        {
+            "type": "color",
+            "name": "color1",
+            "src": "https://cs8.pikabu.ru/post_img/big/2017/11/20/8/151118095313281056.jpg"
+        },
+        {
+            "type": "color",
+            "name": "color2",
+            "src": "/img/text/text2.svg"
+        }
+    ],
+    "text": [
+        {
+            "type": "text",
+            "name": "text1",
+            "src": "/img/text/text1.svg"
+        },
+        {
+            "type": "text",
+            "name": "text2",
+            "src": "/img/text/text2.svg"
+        },
+        {
+            "type": "text",
+            "name": "text3",
+            "src": "/img/text/text3.svg"
+        },
+        {
+            "type": "text",
+            "name": "text4",
+            "src": "/img/text/text4.svg"
+        },
+        {
+            "type": "text",
+            "name": "text5",
+            "src": "/img/text/text5.svg"
+        },
+        {
+            "type": "text",
+            "name": "text6",
+            "src": "/img/text/text6.svg"
+        }
     ]
 }

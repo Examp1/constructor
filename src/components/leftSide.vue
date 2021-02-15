@@ -1,13 +1,24 @@
 <template>
   <div class="left">
     <ul class="tab__header">
-        
-      <li v-for="(item, index) in tabsH" :key="index" @click="tabClick($event, index)">
+      <li
+        v-for="(item, index) in tabsH"
+        :key="index"
+        @click="tabClick($event, index)"
+      >
         {{ item.name }}
       </li>
     </ul>
     <ul class="tab__content">
-      <li v-for="(option, index) in currentTab" :key="index" draggable="true" @dragstart="onDragStart($event, index)" @drag="onDrag" @dragend="onDragEnd" v-images-loaded:on.progress="imageProgress">
+      <li
+        v-for="(option, index) in tabs[currentTabIndex]"
+        :key="index"
+        draggable="true"
+        @dragstart="onDragStart($event, index)"
+        @drag="onDrag"
+        @dragend="onDragEnd"
+        v-images-loaded:on.progress="imageProgress"
+      >
         {{ option.name }}
         {{ option.isLoading }}
         <img :src="option.src" alt="" />
@@ -15,98 +26,151 @@
       </li>
     </ul>
     <div class="dragImgDiv" v-show="isDrag">
-      <img :src="decoSrc" :style="dragImgStyle" alt="1" :class="{active: dragOvered}" ref="dragGhost">
+      <img
+        :src="decoSrc"
+        :style="dragImgStyle"
+        alt="1"
+        :class="{ active: dragOvered }"
+        ref="dragGhost"
+      />
     </div>
-    
+
     <button @click="toCanvas">to canvas</button>
     <a href="" class="download">скачать</a>
-
   </div>
 </template>
 
 <script>
 import html2canvas from "html2canvas";
-import imagesLoaded from 'vue-images-loaded'
-import Bus from '../main.js'
-import axios from 'axios'
+import imagesLoaded from "vue-images-loaded";
+import Bus from "../main.js";
+import axios from "axios";
 export default {
   data() {
     return {
       currentTabIndex: 0,
-      tabs: {},
-      tabs2: [],
+      tabs: [[], [], [], []],
       tabsH: [
         {
           name: "Шаблон",
         },
         {
-          name: "Фото",
-        },
-        {
           name: "Текст",
         },
         {
+          name: "Цвет",
+        },
+        {
           name: "Стикер",
+        },
+        {
+          name: "Фото",
         },
       ],
 
       isDrag: false,
       dragOvered: false,
-      decoSrc: '',
+      decoSrc: "",
       dragX: null,
       dragY: null,
       dragInfo: null,
+      url: '',
     };
   },
   directives: {
-        imagesLoaded
+    imagesLoaded,
   },
   computed: {
-      currentTab() {
-        return this.tabs[this.currentTabIndex] 
-      },
-      // координаты картинки (под курсором)
-      dragImgStyle(){
-        if(this.isDrag){
-          return{
-            position: 'absolute',
-            top: `${this.dragY}px`,
-            left: `${this.dragX}px`,
-          }
-        }
-        else{
-          return{
-            display: 'none'
-          }
-        }
+    currentTab() {
+      return this.tabs[this.currentTabIndex];
+    },
+    // координаты картинки (под курсором)
+    dragImgStyle() {
+      if (this.isDrag) {
+        return {
+          position: "absolute",
+          top: `${this.dragY}px`,
+          left: `${this.dragX}px`,
+        };
+      } else {
+        return {
+          display: "none",
+        };
       }
+    },
   },
   methods: {
-    toCanvas(){
-        let scale1 = 2048 / document.querySelector('.mCanvas').offsetWidth
-        html2canvas(document.querySelector('.mCanvas'), {scale: scale1}).then(function(canvas) {
-        document.body.appendChild(canvas);
-        const image = document.querySelector('canvas').toDataURL("image/png").replace("image/png", "image/octet-stream");
-        const t = document.querySelector('.download');
-        t.setAttribute('download', 'your picture.png')
-        t.setAttribute('href', image)
-        });
+    toCanvas() {
+      let scale1 = 2048 / document.querySelector(".mCanvas").offsetWidth;
+      html2canvas(document.querySelector(".mCanvas"), { scale: scale1 }).then(
+        function (canvas) {
+          document.body.appendChild(canvas);
+          const image = document
+            .querySelector("canvas")
+            .toDataURL("image/png")
+            .replace("image/png", "image/octet-stream");
+          const t = document.querySelector(".download");
+          t.setAttribute("download", "your picture.png");
+          t.setAttribute("href", image);
+        }
+      );
     },
     imageProgress(instance, image) {
-        const result = image.isLoaded ? 'loaded' : 'broken';
-        const el = ( instance.elements[0] );
-        if (result == 'loaded') {
-         el.classList.add('loaded')
-        } else {
-          el.classList.add('broken')
-        }
+      const result = image.isLoaded ? "loaded" : "broken";
+      const el = instance.elements[0];
+      if (result == "loaded") {
+        el.classList.add("loaded");
+      } else {
+        el.classList.add("broken");
+      }
     },
     tabClick(e, index) {
+      // debugger
       this.currentTabIndex = index;
+
+      if (index == 0) {
+        if (this.tabs[0].length == 0) {
+          this.url = `http://localhost:3000/template`;
+        }
+      } 
+      else if (index == 1) {
+        if (this.tabs[1].length == 0) {
+          this.url = `http://localhost:3000/text`;
+        }
+      } 
+      else if (index == 2) {
+        if (this.tabs[2].length == 0) {
+          this.url = `http://localhost:3000/color`;
+        }
+      } else if (index == 3) {
+        if (this.tabs[3].length == 0) {
+          this.url = `http://localhost:3000/sticker`;
+        }
+      }
+      else {
+        alert('photo')
+      }
+      console.log(index);
+      
+     if (this.url != '') {
+        axios
+        .get(this.url).then((response) => {
+        this.tabs[index] = response.data;
+        this.$set(this.tabs, this.tabs[index], response.data);
+        this.tabs[index].forEach((item) => {
+          // item.isLoading = true;
+          item.img = new Image();
+          item.img.src = item.src;
+        });
+        
+        this.url = '';
+      });
+      // console.log(this.tabs[index]);
+     }
     },
 
     // начал тянуть
-    onDragStart(e, index){
+    onDragStart(e, index) {
       this.dragOvered = false;
       this.isDrag = true;
       var crt = e.target.cloneNode(true);
@@ -121,55 +185,52 @@ export default {
         height: this.currentTab[index].img.height,
         viewportWidth: dragGhost.width,
         viewportHeight: dragGhost.height,
-      }
+      };
       let maxS = 100 * 1.5;
-      if(this.dragInfo.width > this.dragInfo.height){
+      if (this.dragInfo.width > this.dragInfo.height) {
         this.dragInfo.viewportWidth = maxS;
-        this.dragInfo.viewportHeight = Math.ceil(this.dragInfo.height * maxS / this.dragInfo.width);
-      }
-      else{
+        this.dragInfo.viewportHeight = Math.ceil(
+          (this.dragInfo.height * maxS) / this.dragInfo.width
+        );
+      } else {
         this.dragInfo.viewportHeight = maxS;
-        this.dragInfo.viewportWidth = Math.ceil(this.dragInfo.width * maxS / this.dragInfo.height);
+        this.dragInfo.viewportWidth = Math.ceil(
+          (this.dragInfo.width * maxS) / this.dragInfo.height
+        );
       }
-      e.dataTransfer.setData('dragInfo', JSON.stringify(this.dragInfo));
+      e.dataTransfer.setData("dragInfo", JSON.stringify(this.dragInfo));
     },
     // во время тоскания, координаты
-    onDrag(e){
+    onDrag(e) {
       this.dragX = e.clientX;
       this.dragY = e.clientY;
     },
     // спрятать всё
-    onDragEnd(e){
+    onDragEnd(e) {
       this.isDrag = false;
     },
-    changeStatus(tabInd, itemInd){
-      this.$set(this.tabs[tabInd][itemInd], 'isLoading', false);
-    }
+    // changeStatus(tabInd, itemInd){
+    //   this.$set(this.tabs[tabInd][itemInd], 'isLoading', false);
+    // }
   },
   mounted() {
     // события тоскания картинки над канвасом
-    Bus.$on('canvasDropOvered', () => {
+    Bus.$on("canvasDropOvered", () => {
       this.dragOvered = true;
     });
-    Bus.$on('canvasDropLeave', () => {
+    Bus.$on("canvasDropLeave", () => {
       this.dragOvered = false;
     });
 
-    axios
-    .get('http://localhost:3000/tabsContent')
-    .then(response => {
-        this.tabs = response.data;
-        this.tabs.forEach((tab, tabIndex) => {
-          tab.forEach((item, itemIndex) => {
-            item.isLoading = true;
-            item.img = new Image();
-            item.img.src = item.src;
-            item.img.onload = () => {
-              this.changeStatus(tabIndex, itemIndex);
-            }
-          })
-        })
+    axios.get("http://localhost:3000/template").then((response) => {
+      this.tabs[0] = response.data;
+      this.$set(this.tabs, this.tabs[0], response.data);
+      this.tabs[0].forEach((item) => {
+        // item.isLoading = true;
+        item.img = new Image();
+        item.img.src = item.src;
       });
+    });
   },
 };
 </script>
@@ -178,6 +239,7 @@ export default {
 .left {
   width: calc(30% - 10px);
   height: 100vh;
+  overflow-y: scroll;
   background-color: #f0f0f0;
   padding: 0px 20px;
 }
@@ -190,8 +252,8 @@ export default {
   padding: 10px;
   cursor: pointer;
 }
-.tab__content{
-  *{
+.tab__content {
+  * {
     user-select: none;
   }
 }
@@ -214,7 +276,7 @@ export default {
   -webkit-user-drag: none;
 }
 
-.dragImgDiv{
+.dragImgDiv {
   position: fixed;
   z-index: 1010;
   top: 0;
@@ -222,22 +284,22 @@ export default {
   left: 0;
   bottom: 0;
   pointer-events: none;
-  img{
+  img {
     max-width: 100px;
     max-height: 100px;
     transform: translate(-50%, -50%);
     user-select: none;
     transition: transform 0.3s ease;
     opacity: 0.7;
-    &.active{
+    &.active {
       transform: translate(-50%, -50%) scale(1.5);
     }
   }
 }
-.hide{
+.hide {
   opacity: 0;
 }
-.tab__content li.loaded{
+.tab__content li.loaded {
   pointer-events: unset;
   background-color: #fff;
 }
