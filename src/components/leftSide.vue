@@ -55,13 +55,13 @@ export default {
           name: "Шаблон",
         },
         {
-          name: "Текст",
+          name: "Стикер",
         },
         {
           name: "Цвет",
         },
         {
-          name: "Стикер",
+          name: "Текст",
         },
         {
           name: "Фото",
@@ -128,45 +128,45 @@ export default {
       // debugger
       this.currentTabIndex = index;
 
-      if (index == 0) {
-        if (this.tabs[0].length == 0) {
-          this.url = `http://localhost:3000/template`;
-        }
-      } 
-      else if (index == 1) {
-        if (this.tabs[1].length == 0) {
-          this.url = `http://localhost:3000/text`;
-        }
-      } 
-      else if (index == 2) {
-        if (this.tabs[2].length == 0) {
-          this.url = `http://localhost:3000/color`;
-        }
-      } else if (index == 3) {
-        if (this.tabs[3].length == 0) {
-          this.url = `http://localhost:3000/sticker`;
-        }
-      }
-      else {
-        alert('photo')
-      }
-      console.log(index);
+    //   if (index == 0) {
+    //     if (this.tabs[0].length == 0) {
+    //       this.url = `http://localhost:3000/template`;
+    //     }
+    //   } 
+    //   else if (index == 1) {
+    //     if (this.tabs[1].length == 0) {
+    //       this.url = `http://localhost:3000/text`;
+    //     }
+    //   } 
+    //   else if (index == 2) {
+    //     if (this.tabs[2].length == 0) {
+    //       this.url = `http://localhost:3000/color`;
+    //     }
+    //   } else if (index == 3) {
+    //     if (this.tabs[3].length == 0) {
+    //       this.url = `http://localhost:3000/sticker`;
+    //     }
+    //   }
+    //   else {
+    //     alert('photo')
+    //   }
+    //   console.log(index);
       
-     if (this.url != '') {
-        axios
-        .get(this.url).then((response) => {
-        this.tabs[index] = response.data;
-        this.$set(this.tabs, this.tabs[index], response.data);
-        this.tabs[index].forEach((item) => {
-          // item.isLoading = true;
-          item.img = new Image();
-          item.img.src = item.src;
-        });
+    //  if (this.url != '') {
+    //     axios
+    //     .get(this.url).then((response) => {
+    //     this.tabs[index] = response.data;
+    //     this.$set(this.tabs, this.tabs[index], response.data);
+    //     this.tabs[index].forEach((item) => {
+    //       // item.isLoading = true;
+    //       item.img = new Image();
+    //       item.img.src = item.src;
+    //     });
         
-        this.url = '';
-      });
-      // console.log(this.tabs[index]);
-     }
+    //     this.url = '';
+    //   });
+    //   // console.log(this.tabs[index]);
+    //  }
     },
 
     // начал тянуть
@@ -222,13 +222,14 @@ export default {
       this.dragOvered = false;
     });
 
-    axios.get("http://localhost:3000/template").then((response) => {
-      this.tabs[0] = response.data;
-      this.$set(this.tabs, this.tabs[0], response.data);
-      this.tabs[0].forEach((item) => {
+    axios.get("http://localhost:3000/tabsContent").then((response) => {
+      this.tabs = response.data;
+      this.tabs.forEach((tab) => {
         // item.isLoading = true;
-        item.img = new Image();
-        item.img.src = item.src;
+        tab.forEach(item => {
+          item.img = new Image();
+          item.img.src = item.src;
+        })
       });
     });
   },
