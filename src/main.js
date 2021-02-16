@@ -17,7 +17,9 @@ const store = new Vuex.Store({
     canvasZoom: 1,
 
     states: [{
-      imgItems: []
+      imgItems: [],
+      orient: 'h',
+      bgSrc: '',
     }],
     currentStateIndex: 0,
     maxLength: 14,

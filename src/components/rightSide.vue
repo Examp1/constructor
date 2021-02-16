@@ -35,11 +35,11 @@
             </div>
         </div>
         <div v-if="isContext" class="contextMenu" :style="contextMenuStyle">
-            <button @click="changeOrder(0, selectedItemIndex)">В верх очереди</button>
-            <button @click="changeOrder(1, selectedItemIndex)">В низ очереди</button>
+            <button @click="changeOrder(0, selectedItemIndex)">На передний план</button>
+            <button @click="changeOrder(1, selectedItemIndex)">На задний план</button>
         </div>
         <div class="orientBtn">
-            <button :disabled="orient == 'g'" @click="changeOrient('g')">Горизонт</button>
+            <button :disabled="orient == 'h'" @click="changeOrient('h')">Горизонт</button>
             <button :disabled="orient == 'v'" @click="changeOrient('v')">Вертикаль</button>
         </div>
     </div>
@@ -55,14 +55,14 @@ export default {
     data() {
         return {
             canvWidth: 0,
-            bgStyle: {},
+            bgSrc: '',
             hoverItemType: '',
             hoverItemIndex: null,
             selectedItemType: '',
             selectedItemIndex: null,
             isContext: false,
 
-            orient: 'g',
+            orient: 'h',
 
             gizmoHoverSticks: null,
             gizmoSticks: null,
@@ -76,15 +76,6 @@ export default {
     },
     mounted () {
         this.calculateCanvasSize();
-        this.bgStyle = {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            backgroundColor: '#fff',
-            zIndex: 0,
-        };
         Bus.$on('updateGizmo', (ev) => {
             this.selectedItemType = 'item';
             this.selectedItemIndex = ev.data.index;
@@ -115,6 +106,33 @@ export default {
         });
     },
     computed: {
+        bgStyle(){
+            if(this.bgSrc == ''){
+                return {
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                    backgroundColor: '#fff',
+                    zIndex: 0,
+                }
+            }
+            else{
+                return {
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    zIndex: 0,
+                    right: 0,
+                    backgroundImage: `url(${this.bgSrc})`,
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                }
+            }
+        },
         gizmoScale(){
             // return Math.abs((2 - this.$store.state.canvasZoom));
             return 1;
@@ -220,7 +238,7 @@ export default {
             let margin = 100;
             let rD = this.$refs.rootDiv;
             let canW, canH;
-            if(this.orient == 'g'){
+            if(this.orient == 'h'){
                 //TODO: если зона будет уже по высоте - расчитать от высоты
                 canW = rD.offsetWidth - margin*2;
                 canH = Math.ceil(canW * 10 / 19); // соотношение 19:10
@@ -270,7 +288,7 @@ export default {
         gizmoDownMove(ev){
             this.imgVm.bodyMouseDown(ev)
         },
-        changeOrient(orient){
+        changeOrient(orient, save = true){
             switch (orient) {
                 case 'v':
                     if(this.orient != 'v'){
@@ -280,16 +298,20 @@ export default {
                         this.calculateCanvasSize();
                         this.applyOrientTransform(oldW, oldH);
                         this.selectedItemType = '';
+                        if(save)
+                            this.pushState();
                     }
                     break;
-                case 'g':
-                    if(this.orient != 'g'){
-                        this.orient = 'g';
+                case 'h':
+                    if(this.orient != 'h'){
+                        this.orient = 'h';
                         let oldW = this.$store.state.origWidth;
                         let oldH = this.$store.state.origHeight;
                         this.calculateCanvasSize();
                         this.applyOrientTransform(oldW, oldH);
                         this.selectedItemType = '';
+                        if(save)
+                            this.pushState();
                     }
                     break;
             }
@@ -321,11 +343,13 @@ export default {
                         this.array_move(this.imgItems, index, 0);
                         this.selectedItemType = 'item';
                         this.selectedItemIndex = 0;
+                        this.pushState();
                         break;
                     case 0:
                         this.array_move(this.imgItems, index, this.imgItems.length-1);
                         this.selectedItemIndex = this.imgItems.length-1;
                         this.selectedItemType = 'item';
+                        this.pushState();
                         break;
                 }
                 this.isContext = false;
@@ -348,25 +372,47 @@ export default {
         },
         onDrop(e){
             let data = JSON.parse(e.dataTransfer.getData("dragInfo"));
-            let obj = {
-                src: data.src,
-                width: data.width,
-                height: data.height,
-                viewportWidth: data.viewportWidth,
-                viewportHeight: data.viewportHeight,
-                top: e.offsetY,
-                left: e.offsetX,
-                angle: 0
+            if(data.type == 'sticker' || data.type == 'text'){
+                let obj = {
+                    src: data.src,
+                    width: data.width,
+                    height: data.height,
+                    viewportWidth: data.viewportWidth,
+                    viewportHeight: data.viewportHeight,
+                    top: e.offsetY,
+                    left: e.offsetX,
+                    angle: 0
+                }
+                if(obj.viewportWidth == 0 || obj.viewportHeight == 0){
+                    obj.viewportWidth = 300;
+                    obj.viewportHeight = 300;
+                }
+                obj.top = obj.top - obj.viewportHeight/2;
+                obj.left = obj.left - obj.viewportWidth/2;
+                this.imgItems.push(obj);
+                this.pushState();
             }
-            if(obj.viewportWidth == 0 || obj.viewportHeight == 0){
-                obj.viewportWidth = 300;
-                obj.viewportHeight = 300;
+            else if(data.type == 'template'){
+                this.changeOrient(data.orient, false);
+                this.bgSrc = data.bgSrc;
+                let tempTexts = [];
+                data.texts.forEach( txtItem => {
+                    let obj = {};
+                    obj.src = txtItem.src;
+                    obj.width = txtItem.orWidth;
+                    obj.height = txtItem.orHeight;
+                    obj.angle = 0;
+                    obj.viewportWidth =  this.$store.state.origWidth * txtItem.width / 100;
+                    obj.viewportHeight = txtItem.orHeight * obj.viewportWidth / txtItem.orWidth;
+                    obj.left = (this.$store.state.origWidth * txtItem.pos.x / 100) - obj.viewportWidth/2;
+                    obj.top = (this.$store.state.origHeight * txtItem.pos.y / 100) - obj.viewportHeight/2;
+                    tempTexts.push(obj);
+                })
+                // Очищать при применении шаблона?
+                this.imgItems = [...tempTexts];
+                this.pushState();
             }
-            obj.top = obj.top - obj.viewportHeight/2;
-            obj.left = obj.left - obj.viewportWidth/2;
-            this.imgItems.push(obj);
             this.isDropOver = false;
-            this.pushState();
         },
         allowDrop(e){
             e.preventDefault();
@@ -390,12 +436,40 @@ export default {
             this.$store.commit('PUSH_STATE', {
                 state: {
                     imgItems: JSON.parse(JSON.stringify(this.imgItems)),
+                    orient: this.orient,
                 }
             });
         },
         onUndo(){
             this.$store.commit('REVERT_STATE', {});
-            this.imgItems = JSON.parse(JSON.stringify(this.$store.state.states[this.$store.state.states.length-1].imgItems));
+            let st = JSON.parse(JSON.stringify(this.$store.state.states[this.$store.state.states.length-1]));
+            let orient = st.orient;
+            if(this.orient != orient){
+                switch (orient) {
+                    case 'v':
+                        if(this.orient != 'v'){
+                            this.orient = 'v';
+                            let oldW = this.$store.state.origWidth;
+                            let oldH = this.$store.state.origHeight;
+                            this.calculateCanvasSize();
+                            this.applyOrientTransform(oldW, oldH);
+                            this.selectedItemType = '';
+                        }
+                        break;
+                    case 'h':
+                        if(this.orient != 'h'){
+                            this.orient = 'h';
+                            let oldW = this.$store.state.origWidth;
+                            let oldH = this.$store.state.origHeight;
+                            this.calculateCanvasSize();
+                            this.applyOrientTransform(oldW, oldH);
+                            this.selectedItemType = '';
+                        }
+                        break;
+                }
+            }
+            this.imgItems = st.imgItems;
+            this.bgSrc = st.bgSrc;
             this.selectedItemType = '';
         },
     },

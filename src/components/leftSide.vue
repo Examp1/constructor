@@ -14,7 +14,7 @@
         v-for="(option, index) in tabs[currentTabIndex]"
         :key="index"
         draggable="true"
-        @dragstart="onDragStart($event, index)"
+        @dragstart="onDragStart($event, index, option.type)"
         @drag="onDrag"
         @dragend="onDragEnd"
         v-images-loaded:on.progress="imageProgress"
@@ -170,35 +170,70 @@ export default {
     },
 
     // начал тянуть
-    onDragStart(e, index) {
-      this.dragOvered = false;
-      this.isDrag = true;
-      var crt = e.target.cloneNode(true);
-      crt.style.display = "none";
-      document.body.appendChild(crt);
-      e.dataTransfer.setDragImage(crt, 0, 0);
-      this.decoSrc = this.currentTab[index].src;
-      let dragGhost = this.$refs.dragGhost;
-      this.dragInfo = {
-        src: this.decoSrc,
-        width: this.currentTab[index].img.width,
-        height: this.currentTab[index].img.height,
-        viewportWidth: dragGhost.width,
-        viewportHeight: dragGhost.height,
-      };
-      let maxS = 100 * 1.5;
-      if (this.dragInfo.width > this.dragInfo.height) {
-        this.dragInfo.viewportWidth = maxS;
-        this.dragInfo.viewportHeight = Math.ceil(
-          (this.dragInfo.height * maxS) / this.dragInfo.width
-        );
-      } else {
-        this.dragInfo.viewportHeight = maxS;
-        this.dragInfo.viewportWidth = Math.ceil(
-          (this.dragInfo.width * maxS) / this.dragInfo.height
-        );
+    onDragStart(e, index, type) {
+      if(type == 'sticker' || type == 'text'){
+        this.dragOvered = false;
+        this.isDrag = true;
+        var crt = e.target.cloneNode(true);
+        crt.style.display = "none";
+        document.body.appendChild(crt);
+        e.dataTransfer.setDragImage(crt, 0, 0);
+        this.decoSrc = this.currentTab[index].src;
+        let dragGhost = this.$refs.dragGhost;
+        this.dragInfo = {
+          type: type,
+          src: this.decoSrc,
+          width: this.currentTab[index].img.width,
+          height: this.currentTab[index].img.height,
+          viewportWidth: dragGhost.width,
+          viewportHeight: dragGhost.height,
+        };
+        let maxS = 100 * 1.5;
+        if (this.dragInfo.width > this.dragInfo.height) {
+          this.dragInfo.viewportWidth = maxS;
+          this.dragInfo.viewportHeight = Math.ceil(
+            (this.dragInfo.height * maxS) / this.dragInfo.width
+          );
+        } else {
+          this.dragInfo.viewportHeight = maxS;
+          this.dragInfo.viewportWidth = Math.ceil(
+            (this.dragInfo.width * maxS) / this.dragInfo.height
+          );
+        }
+        e.dataTransfer.setData("dragInfo", JSON.stringify(this.dragInfo));
       }
-      e.dataTransfer.setData("dragInfo", JSON.stringify(this.dragInfo));
+      else if(type == 'template'){
+        this.dragOvered = false;
+        this.isDrag = true;
+        var crt = e.target.cloneNode(true);
+        crt.style.display = "none";
+        document.body.appendChild(crt);
+        e.dataTransfer.setDragImage(crt, 0, 0);
+        this.decoSrc = this.currentTab[index].src;
+        let dragGhost = this.$refs.dragGhost;
+        let curItem = this.tabs[0][index];
+        let txtObjs = [];
+        curItem.props.textItems.forEach(txtItem => {
+          let _txtObj = this.tabs[3].find( item => item.name == txtItem.name);
+          if(_txtObj){
+            let pushItem = {...txtItem};
+            pushItem.src = _txtObj.src;
+            pushItem.orWidth = _txtObj.img.width;
+            pushItem.orHeight = _txtObj.img.height;
+            txtObjs.push(pushItem);
+          }
+          else
+            alert("Текстовый спрайт из шаблона не найден");
+        });
+        this.dragInfo = {
+          type: type,
+          orient: curItem.orient,
+          bgSrc: curItem.bg,
+          texts: txtObjs,
+        };
+        e.dataTransfer.setData("dragInfo", JSON.stringify(this.dragInfo));
+        // console.log(this.dragInfo);
+      }
     },
     // во время тоскания, координаты
     onDrag(e) {
