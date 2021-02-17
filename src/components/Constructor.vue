@@ -7,7 +7,7 @@
         </div>
         <nav>
           <ul class="nav__menu">
-            <li>
+            <li @click="onUndoClick" :class="{disabled: $store.state.states.length == 1}">
                 <i class="ic-icon_5"></i>
             </li>
             <li>
@@ -32,12 +32,18 @@
 
 import leftSide from './leftSide.vue'
 import rightSide from './rightSide.vue'
+import Bus from '../main'
 
 export default {
   name: 'constructor',
   components: {
     leftSide,
     rightSide
+  },
+  methods: {
+    onUndoClick() {
+      Bus.$emit('canvasUndo', {});
+    }
   },
 }
 </script>
@@ -75,6 +81,10 @@ export default {
         cursor: pointer;
         &:not(:last-of-type) {
           margin-right: 10px;
+        }
+        &.disabled{
+          cursor: default;
+          opacity: 0.5;
         }
       }
     }

@@ -1,7 +1,7 @@
 <template>
     <div class="right" ref="rootDiv">
         <!-- <button @click="test">add</button> -->
-        <button @click="onUndo" :disabled="$store.state.states.length == 1" style="position: relative; z-index: 1000">REVERT</button>
+        <!-- <button @click="onUndo" :disabled="$store.state.states.length == 1" style="position: relative; z-index: 1000">REVERT</button> -->
         <div class="rootClickHandler" @click.stop="rootClick" ref="rootClickHandler"></div>
         <div class="mCanvas" :style="mCanvasStyle"  ref="mCan" :class="{dropOver: isDropOver}" @mouseleave="hoverItemType = ''" @drop="onDrop" @dragover="allowDrop" @dragleave="onDragLeave">
             <div :style="bgStyle" @mouseover="onBgOver" @click="onBgClick"></div>
@@ -87,6 +87,9 @@ export default {
             this.hoverItemIndex = ev.data.index;
             this.hoverItemType = 'item';
         });
+        Bus.$on('canvasUndo', () => {
+            this.onUndo();
+        });
         
         this.$refs.rootDiv.addEventListener('wheel', (e) => {
             if(e.ctrlKey){
@@ -145,23 +148,23 @@ export default {
             }
         },
         // todo: delete this
-        percentItemWidth() {
-            return Math.ceil(this.$store.state.origWidth * 30 / 100);
-        },
+        // percentItemWidth() {
+        //     return Math.ceil(this.$store.state.origWidth * 30 / 100);
+        // },
         hoverGizmoStyle(){
             switch (this.hoverItemType) {
-                case 'bg':
-                    if(this.selectedItemType != 'bg')
-                        return {
-                            top: `0px`,
-                            left: `0px`,
-                            width: `100%`,
-                            height: `100%`,
-                        }
-                    else
-                        return {
-                            display: 'none'
-                        }
+                // case 'bg':
+                //     if(this.selectedItemType != 'bg')
+                //         return {
+                //             top: `0px`,
+                //             left: `0px`,
+                //             width: `100%`,
+                //             height: `100%`,
+                //         }
+                //     else
+                //         return {
+                //             display: 'none'
+                //         }
                 case 'item':
                     if(this.selectedItemType == 'item'){
                         if(this.hoverItemIndex != this.selectedItemIndex)
@@ -194,13 +197,13 @@ export default {
         },
         selectGizmoStyle(){
             switch (this.selectedItemType) {
-                case 'bg':
-                    return {
-                        top: `0px`,
-                        left: `0px`,
-                        width: `100%`,
-                        height: `100%`,
-                    }
+                // case 'bg':
+                //     return {
+                //         top: `0px`,
+                //         left: `0px`,
+                //         width: `100%`,
+                //         height: `100%`,
+                //     }
                 case 'item':
                     return {
                         top: `${this.gizmoSticks.top-this.gizmoSticks.height/2}px`,
@@ -317,6 +320,7 @@ export default {
             }
         },
         onItemContext(e){
+            debugger
             if(this.imgItems.length > 1){
                 e.preventDefault();
                 let rootOffset = this.getOffset(this.$refs.rootDiv);

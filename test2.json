@@ -73,17 +73,32 @@
             {
                 "type": "color",
                 "name": "color1",
-                "src": "https://cs8.pikabu.ru/post_img/big/2017/11/20/8/151118095313281056.jpg"
-            },
-            {
-                "type": "color",
-                "name": "color1",
-                "src": "https://cs8.pikabu.ru/post_img/big/2017/11/20/8/151118095313281056.jpg"
+                "color": "#a1d7de"
             },
             {
                 "type": "color",
                 "name": "color2",
-                "src": "/img/text/text2.svg"
+                "color": "#f8b8b0"
+            },
+            {
+                "type": "color",
+                "name": "color3",
+                "color": "#bdb4d1"
+            },
+            {
+                "type": "color",
+                "name": "color4",
+                "color": "#addfb4"
+            },
+            {
+                "type": "color",
+                "name": "color5",
+                "color": "#ffefa7"
+            },
+            {
+                "type": "color",
+                "name": "color6",
+                "color": "#9dd6cb"
             }
         ],
         [
