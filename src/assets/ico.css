@@ -1,0 +1,99 @@
+@font-face {
+  font-family: 'privat';
+  src:  url('fonts/privat.eot?245caq');
+  src:  url('fonts/privat.eot?245caq#iefix') format('embedded-opentype'),
+    url('fonts/privat.woff2?245caq') format('woff2'),
+    url('fonts/privat.ttf?245caq') format('truetype'),
+    url('fonts/privat.woff?245caq') format('woff'),
+    url('fonts/privat.svg?245caq#privat') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+i {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'privat' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ic-icon_fb:before {
+  content: "\e900";
+  color: #fff;
+}
+.ic-icon_logo:before {
+  content: "\e901";
+  color: #fff;
+}
+.ic-icon_watermark:before {
+  content: "\e902";
+  color: #fff;
+}
+.ic-icon_1:before {
+  content: "\e903";
+  color: #fff;
+}
+.ic-icon_2:before {
+  content: "\e904";
+  color: #5abb0c;
+}
+.ic-icon_3:before {
+  content: "\e905";
+  color: #5abb0c;
+}
+.ic-icon_4 .path1:before {
+  content: "\e906";
+  color: rgb(255, 255, 255);
+}
+.ic-icon_4 .path2:before {
+  content: "\e907";
+  margin-left: -1em;
+  color: rgb(30, 109, 207);
+}
+.ic-icon_5:before {
+  content: "\e908";
+  color: #fff;
+}
+.ic-icon_6 .path1:before {
+  content: "\e909";
+  color: rgb(255, 255, 255);
+}
+.ic-icon_6 .path2:before {
+  content: "\e90a";
+  margin-left: -1em;
+  color: rgb(30, 109, 207);
+}
+.ic-icon_6 .path3:before {
+  content: "\e90b";
+  margin-left: -1em;
+  color: rgb(30, 109, 207);
+}
+.ic-icon_7:before {
+  content: "\e90c";
+  color: #fff;
+}
+.ic-icon_8:before {
+  content: "\e90d";
+  color: #5abb0c;
+}
+.ic-icon_9:before {
+  content: "\e90e";
+  color: #fff;
+}
+.ic-icon_10:before {
+  content: "\e90f";
+  color: #5abb0c;
+}
+.ic-icon_11:before {
+  content: "\e910";
+  color: #5abb0c;
+}

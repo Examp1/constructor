@@ -478,7 +478,7 @@ export default {
 
 <style scoped lang="scss">
     .right  {
-        width: calc(70% - 10px);
+        width: calc(100% - 490px);
         height: 100vh;
         background-color: #f0f0f0;
         position: relative;

@@ -5,7 +5,9 @@
         v-for="(item, index) in tabsH"
         :key="index"
         @click="tabClick($event, index)"
+        :class="{ active: item.active}"
       >
+        <i :class="item.icon"></i>
         {{ item.name }}
       </li>
     </ul>
@@ -35,8 +37,8 @@
       />
     </div>
 
-    <button @click="toCanvas">to canvas</button>
-    <a href="" class="download">скачать</a>
+    <!-- <button @click="toCanvas">to canvas</button>
+    <a href="" class="download">скачать</a> -->
   </div>
 </template>
 
@@ -49,22 +51,32 @@ export default {
   data() {
     return {
       currentTabIndex: 0,
-      tabs: [[], [], [], []],
+      tabs: [[]],
       tabsH: [
         {
           name: "Шаблон",
+          active: false,
+          icon: 'ic-icon_11'
         },
         {
-          name: "Стикер",
+          name: "Елементи",
+          active: false,
+          icon: 'ic-icon_2'
         },
         {
           name: "Цвет",
+          active: false,
+          icon: 'ic-icon_3'
         },
         {
           name: "Текст",
+          active: false,
+          icon: 'ic-icon_8'
         },
         {
           name: "Фото",
+          active: false,
+          icon: 'ic-icon_10'
         },
       ],
 
@@ -127,8 +139,10 @@ export default {
     tabClick(e, index) {
       // debugger
       this.currentTabIndex = index;
+      this.tabsH.forEach(item => item.active = false);
+      this.tabsH[index].active = true;
 
-    //   if (index == 0) {
+    //   if (index  == 0) {
     //     if (this.tabs[0].length == 0) {
     //       this.url = `http://localhost:3000/template`;
     //     }
@@ -249,6 +263,7 @@ export default {
     // }
   },
   mounted() {
+    this.tabsH[0].active = true;
     // события тоскания картинки над канвасом
     Bus.$on("canvasDropOvered", () => {
       this.dragOvered = true;
@@ -273,34 +288,64 @@ export default {
 
 <style scoped lang="scss">
 .left {
-  width: calc(30% - 10px);
+  width: calc(500px - 10px);
   height: 100vh;
-  overflow-y: scroll;
-  background-color: #f0f0f0;
-  padding: 0px 20px;
+  background-color: #fff;
+  display: flex;
 }
 .tab__header {
   display: flex;
-  justify-content: space-evenly;
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0px;  
+  background-color: #e7e7e7;
 }
 .tab__header li {
-  background-color: #ccc;
+  background-color: #e7e7e7;
   padding: 10px;
   cursor: pointer;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  &.active{
+    background-color: #fff;
+  }
+  i{
+    margin-bottom: 6px;
+    font-size: 40px;
+  }
 }
 .tab__content {
+  width: 100%;
+  margin-top: 0px;
+  padding: 20px 20px 40px 20px;
+  overflow-y: scroll;
+  height: calc(100% - 50px);
   * {
     user-select: none;
   }
+  &::-webkit-scrollbar-track {border-radius: 4px;}
+  &::-webkit-scrollbar {width: 6px; background: #e7e7e7;}
+  &::-webkit-scrollbar-thumb {background: #d1d1d1;}
+  li{
+    transition: .3s;
+    &:hover{
+      box-shadow: 0px 0px 1px 1px #80bb30
+    }
+  }
+  
 }
 .tab__content li {
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  border: 1px solid #000;
   padding: 10px;
   pointer-events: none;
-  background-color: red;
+  background-color: #f1f1f1;
 }
 .tab__content li:not(:last-of-type) {
   margin-bottom: 20px;
@@ -337,6 +382,5 @@ export default {
 }
 .tab__content li.loaded {
   pointer-events: unset;
-  background-color: #fff;
 }
 </style>
