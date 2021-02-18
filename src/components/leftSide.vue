@@ -11,7 +11,7 @@
         {{ item.name }}
       </li>
     </ul>
-    <ul class="tab__content">
+    <ul class="tab__content" v-if="currentTabIndex != 4">
       <li
         v-for="(option, index) in tabs[currentTabIndex]"
         :key="index"
@@ -26,6 +26,10 @@
         <img :src="option.src" alt="" />
         <!-- <img src="../assets/igor.jpg" alt=""> -->
       </li>
+    </ul>
+    <ul class="tab__content" v-if="currentTabIndex == 4">
+      <input type="file" hidden id="fileinput1" @change="onPhotoSelect">
+      <label for="fileinput1" style="background-color: #fafafa; cursor:pointer">Click to select photo</label>
     </ul>
     <div class="dragImgDiv" v-show="isDrag">
       <img
@@ -261,6 +265,29 @@ export default {
     // changeStatus(tabInd, itemInd){
     //   this.$set(this.tabs[tabInd][itemInd], 'isLoading', false);
     // }
+
+    onPhotoSelect(e){
+      let file = e.target.files[0];
+      let fr = new FileReader();
+      fr.readAsDataURL(file);
+      fr.onload = (e) => {
+        // console.log(fr.result);
+        this.$store.commit('SER_ORIG_PHOTO', {
+          photo: fr.result
+        });
+        // let img = new Image();
+        // img.src = fr.result;
+        // img.onload = () => {
+        //   this.$store.commit('SER_ORIG_PHOTO', {
+        //     photo: img
+        //   });
+        // }
+      };
+      fr.onerror = (e) => {
+        alert('Image load error. See Console!');
+        console.warn(e);
+      }
+    }
   },
   mounted() {
     this.tabsH[0].active = true;

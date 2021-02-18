@@ -25,6 +25,10 @@
       </header>
       <left-side></left-side>
       <right-side></right-side>
+
+      <div class="modal_wrap" v-if="$store.state.modalPhotoCropper">
+        <photo-cropper></photo-cropper>
+      </div>
   </div>
 </template>
 
@@ -32,13 +36,15 @@
 
 import leftSide from './leftSide.vue'
 import rightSide from './rightSide.vue'
+import photoCropper from './photoCropper.vue'
 import Bus from '../main'
 
 export default {
   name: 'constructor',
   components: {
     leftSide,
-    rightSide
+    rightSide,
+    photoCropper
   },
   methods: {
     onUndoClick() {
@@ -100,5 +106,18 @@ export default {
   .constructor{
     display: flex;
     flex-wrap: wrap;
+  }
+
+  .modal_wrap{
+    position: fixed;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.364);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
