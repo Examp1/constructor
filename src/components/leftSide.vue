@@ -5,7 +5,7 @@
         v-for="(item, index) in tabsH"
         :key="index"
         @click="tabClick($event, index)"
-        :class="{ active: item.active}"
+        :class="{ active: item.active }"
       >
         <i :class="item.icon"></i>
         {{ item.name }}
@@ -21,15 +21,23 @@
         @dragend="onDragEnd"
         v-images-loaded:on.progress="imageProgress"
       >
-        {{ option.name }}
-        {{ option.isLoading }}
-        <img :src="option.src" alt="" />
         <!-- <img src="../assets/igor.jpg" alt=""> -->
+        <template v-if="!isColor">
+          {{ option.name }}
+          {{ option.isLoading }}
+          <img :src="option.src" alt="" />
+        </template>
+        <template v-else>
+          {{ option.color }}
+          <div :style="{backgroundColor: option.color}"></div>
+        </template>
       </li>
     </ul>
     <ul class="tab__content" v-if="currentTabIndex == 4">
-      <input type="file" hidden id="fileinput1" @change="onPhotoSelect">
-      <label for="fileinput1" style="background-color: #fafafa; cursor:pointer">Click to select photo</label>
+      <input type="file" hidden id="fileinput1" @change="onPhotoSelect" />
+      <label for="fileinput1" style="background-color: #fafafa; cursor: pointer"
+        >Click to select photo</label
+      >
     </ul>
     <div class="dragImgDiv" v-show="isDrag">
       <img
@@ -41,7 +49,7 @@
       />
     </div>
 
-     <!-- <button @click="toCanvas">to canvas</button>
+    <!-- <button @click="toCanvas">to canvas</button>
     <a href="" class="download">скачать</a> -->
   </div>
 </template>
@@ -53,34 +61,34 @@ import axios from "axios";
 export default {
   data() {
     return {
-      ogeee: '',
+      ogeee: "",
       currentTabIndex: 0,
       tabs: [[]],
       tabsH: [
         {
           name: "Шаблон",
           active: false,
-          icon: 'ic-icon_11'
+          icon: "ic-icon_11",
         },
         {
           name: "Елементи",
           active: false,
-          icon: 'ic-icon_2'
+          icon: "ic-icon_2",
         },
         {
           name: "Цвет",
           active: false,
-          icon: 'ic-icon_3'
+          icon: "ic-icon_3",
         },
         {
           name: "Текст",
           active: false,
-          icon: 'ic-icon_8'
+          icon: "ic-icon_8",
         },
         {
           name: "Фото",
           active: false,
-          icon: 'ic-icon_10'
+          icon: "ic-icon_10",
         },
       ],
 
@@ -90,7 +98,8 @@ export default {
       dragX: null,
       dragY: null,
       dragInfo: null,
-      url: '',
+      url: "",
+      isColor: false,
     };
   },
   directives: {
@@ -143,53 +152,58 @@ export default {
     tabClick(e, index) {
       // debugger
       this.currentTabIndex = index;
-      this.tabsH.forEach(item => item.active = false);
+      this.tabsH.forEach((item) => (item.active = false));
       this.tabsH[index].active = true;
+      // if (index == 2) {
+      //   this.isColor = true;
+      // } else {
+      //   this.isColor = true;
+      // }
+      index == 2 ? (this.isColor = true) : (this.isColor = false);
+      //   if (index  == 0) {
+      //     if (this.tabs[0].length == 0) {
+      //       this.url = `http://localhost:3000/template`;
+      //     }
+      //   }
+      //   else if (index == 1) {
+      //     if (this.tabs[1].length == 0) {
+      //       this.url = `http://localhost:3000/text`;
+      //     }
+      //   }
+      //   else if (index == 2) {
+      //     if (this.tabs[2].length == 0) {
+      //       this.url = `http://localhost:3000/color`;
+      //     }
+      //   } else if (index == 3) {
+      //     if (this.tabs[3].length == 0) {
+      //       this.url = `http://localhost:3000/sticker`;
+      //     }
+      //   }
+      //   else {
+      //     alert('photo')
+      //   }
+      //   console.log(index);
 
-    //   if (index  == 0) {
-    //     if (this.tabs[0].length == 0) {
-    //       this.url = `http://localhost:3000/template`;
-    //     }
-    //   } 
-    //   else if (index == 1) {
-    //     if (this.tabs[1].length == 0) {
-    //       this.url = `http://localhost:3000/text`;
-    //     }
-    //   } 
-    //   else if (index == 2) {
-    //     if (this.tabs[2].length == 0) {
-    //       this.url = `http://localhost:3000/color`;
-    //     }
-    //   } else if (index == 3) {
-    //     if (this.tabs[3].length == 0) {
-    //       this.url = `http://localhost:3000/sticker`;
-    //     }
-    //   }
-    //   else {
-    //     alert('photo')
-    //   }
-    //   console.log(index);
-      
-    //  if (this.url != '') {
-    //     axios
-    //     .get(this.url).then((response) => {
-    //     this.tabs[index] = response.data;
-    //     this.$set(this.tabs, this.tabs[index], response.data);
-    //     this.tabs[index].forEach((item) => {
-    //       // item.isLoading = true;
-    //       item.img = new Image();
-    //       item.img.src = item.src;
-    //     });
-        
-    //     this.url = '';
-    //   });
-    //   // console.log(this.tabs[index]);
-    //  }
+      //  if (this.url != '') {
+      //     axios
+      //     .get(this.url).then((response) => {
+      //     this.tabs[index] = response.data;
+      //     this.$set(this.tabs, this.tabs[index], response.data);
+      //     this.tabs[index].forEach((item) => {
+      //       // item.isLoading = true;
+      //       item.img = new Image();
+      //       item.img.src = item.src;
+      //     });
+
+      //     this.url = '';
+      //   });
+      //   // console.log(this.tabs[index]);
+      //  }
     },
 
     // начал тянуть
     onDragStart(e, index, type) {
-      if(type == 'sticker' || type == 'text'){
+      if (type == "sticker" || type == "text") {
         this.dragOvered = false;
         this.isDrag = true;
         var crt = e.target.cloneNode(true);
@@ -219,8 +233,7 @@ export default {
           );
         }
         e.dataTransfer.setData("dragInfo", JSON.stringify(this.dragInfo));
-      }
-      else if(type == 'template'){
+      } else if (type == "template") {
         this.dragOvered = false;
         this.isDrag = true;
         var crt = e.target.cloneNode(true);
@@ -231,17 +244,15 @@ export default {
         let dragGhost = this.$refs.dragGhost;
         let curItem = this.tabs[0][index];
         let txtObjs = [];
-        curItem.props.textItems.forEach(txtItem => {
-          let _txtObj = this.tabs[3].find( item => item.name == txtItem.name);
-          if(_txtObj){
-            let pushItem = {...txtItem};
+        curItem.props.textItems.forEach((txtItem) => {
+          let _txtObj = this.tabs[3].find((item) => item.name == txtItem.name);
+          if (_txtObj) {
+            let pushItem = { ...txtItem };
             pushItem.src = _txtObj.src;
             pushItem.orWidth = _txtObj.img.width;
             pushItem.orHeight = _txtObj.img.height;
             txtObjs.push(pushItem);
-          }
-          else
-            alert("Текстовый спрайт из шаблона не найден");
+          } else alert("Текстовый спрайт из шаблона не найден");
         });
         this.dragInfo = {
           type: type,
@@ -266,14 +277,14 @@ export default {
     //   this.$set(this.tabs[tabInd][itemInd], 'isLoading', false);
     // }
 
-    onPhotoSelect(e){
+    onPhotoSelect(e) {
       let file = e.target.files[0];
       let fr = new FileReader();
       fr.readAsDataURL(file);
       fr.onload = (e) => {
         // console.log(fr.result);
-        this.$store.commit('SER_ORIG_PHOTO', {
-          photo: fr.result
+        this.$store.commit("SER_ORIG_PHOTO", {
+          photo: fr.result,
         });
         // let img = new Image();
         // img.src = fr.result;
@@ -284,10 +295,10 @@ export default {
         // }
       };
       fr.onerror = (e) => {
-        alert('Image load error. See Console!');
+        alert("Image load error. See Console!");
         console.warn(e);
-      }
-    }
+      };
+    },
   },
   mounted() {
     this.tabsH[0].active = true;
@@ -303,10 +314,10 @@ export default {
       this.tabs = response.data;
       this.tabs.forEach((tab) => {
         // item.isLoading = true;
-        tab.forEach(item => {
+        tab.forEach((item) => {
           item.img = new Image();
           item.img.src = item.src;
-        })
+        });
       });
     });
   },
@@ -316,7 +327,7 @@ export default {
 <style scoped lang="scss">
 .left {
   width: calc(500px - 10px);
-  height: 100vh;
+  height: calc(100vh - 81px);
   background-color: #fff;
   display: flex;
 }
@@ -325,7 +336,7 @@ export default {
   width: 120px;
   display: flex;
   flex-direction: column;
-  margin-top: 0px;  
+  margin: 0px;
   background-color: #e7e7e7;
 }
 .tab__header li {
@@ -338,10 +349,10 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  &.active{
+  &.active {
     background-color: #fff;
   }
-  i{
+  i {
     margin-bottom: 6px;
     font-size: 40px;
   }
@@ -351,20 +362,33 @@ export default {
   margin-top: 0px;
   padding: 20px 20px 40px 20px;
   overflow-y: scroll;
-  height: calc(100% - 50px);
+  height: 100%;
   * {
     user-select: none;
   }
-  &::-webkit-scrollbar-track {border-radius: 4px;}
-  &::-webkit-scrollbar {width: 6px; background: #e7e7e7;}
-  &::-webkit-scrollbar-thumb {background: #d1d1d1;}
-  li{
-    transition: .3s;
-    &:hover{
-      box-shadow: 0px 0px 1px 1px #80bb30
+  &::-webkit-scrollbar-track {
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar {
+    width: 6px;
+    background: #e7e7e7;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #d1d1d1;
+  }
+  li {
+    transition: 0.3s;
+    height: 150px;
+    display: block;
+    div{
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    &:hover {
+      box-shadow: 0px 0px 1px 1px #80bb30;
     }
   }
-  
 }
 .tab__content li {
   cursor: pointer;
