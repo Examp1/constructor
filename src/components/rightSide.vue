@@ -248,7 +248,7 @@ export default {
             }
             else{ // orient == 'v'
                 canH = rD.offsetHeight - margin*2;
-                canW = Math.ceil(canH * 10 / 19); // соотношение 19:10
+                canW = Math.ceil(canH * 83 / 120); // соотношение 120:83
             }
             this.canvWidth = canW;
             this.$store.commit('SET_ORIG_SIZE', {
@@ -320,7 +320,7 @@ export default {
             }
         },
         onItemContext(e){
-            debugger
+            // debugger
             if(this.imgItems.length > 1){
                 e.preventDefault();
                 let rootOffset = this.getOffset(this.$refs.rootDiv);
@@ -441,6 +441,7 @@ export default {
                 state: {
                     imgItems: JSON.parse(JSON.stringify(this.imgItems)),
                     orient: this.orient,
+                    bgSrc: this.bgSrc,
                 }
             });
         },
@@ -483,7 +484,7 @@ export default {
 <style scoped lang="scss">
     .right  {
         width: calc(100% - 490px);
-        height: 100vh;
+        height: calc(100vh - 81px);
         background-color: #f0f0f0;
         position: relative;
         user-select: none;

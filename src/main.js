@@ -23,6 +23,10 @@ const store = new Vuex.Store({
     }],
     currentStateIndex: 0,
     maxLength: 14,
+
+    photoOriginal: null,
+
+    modalPhotoCropper: false,
   },
   mutations: {
     SET_ORIG_SIZE (state, paylpad) {
@@ -49,6 +53,11 @@ const store = new Vuex.Store({
         state.currentStateIndex--;
         state.states = state.states.slice(0, state.states.length-1);
       }
+    },
+
+    SER_ORIG_PHOTO(state, payload){
+      state.photoOriginal = payload.photo;
+      state.modalPhotoCropper = true;
     },
   }
 })
