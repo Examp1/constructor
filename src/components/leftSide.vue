@@ -37,19 +37,19 @@
       />
     </div>
 
-    <!-- <button @click="toCanvas">to canvas</button>
+     <!-- <button @click="toCanvas">to canvas</button>
     <a href="" class="download">скачать</a> -->
   </div>
 </template>
 
 <script>
-import html2canvas from "html2canvas";
 import imagesLoaded from "vue-images-loaded";
 import Bus from "../main.js";
 import axios from "axios";
 export default {
   data() {
     return {
+      ogeee: '',
       currentTabIndex: 0,
       tabs: [[]],
       tabsH: [
@@ -112,21 +112,21 @@ export default {
     },
   },
   methods: {
-    toCanvas() {
-      let scale1 = 2048 / document.querySelector(".mCanvas").offsetWidth;
-      html2canvas(document.querySelector(".mCanvas"), { scale: scale1 }).then(
-        function (canvas) {
-          document.body.appendChild(canvas);
-          const image = document
-            .querySelector("canvas")
-            .toDataURL("image/png")
-            .replace("image/png", "image/octet-stream");
-          const t = document.querySelector(".download");
-          t.setAttribute("download", "your picture.png");
-          t.setAttribute("href", image);
-        }
-      );
-    },
+    // toCanvas() {
+    //   let scale1 = 2048 / document.querySelector(".mCanvas").offsetWidth;
+    //   html2canvas(document.querySelector(".mCanvas"), { scale: scale1 }).then(
+    //     function (canvas) {
+    //       // document.body.appendChild(canvas);
+    //       const image = canvas
+    //         .toDataURL("image/png")
+    //         .replace("image/png", "image/octet-stream");
+    //         console.log(image);
+    //       const t = document.querySelector(".download");
+    //       t.setAttribute("download", "your picture.png");
+    //       t.setAttribute("href", image);
+    //     }
+    //   );
+    // },
     imageProgress(instance, image) {
       const result = image.isLoaded ? "loaded" : "broken";
       const el = instance.elements[0];
