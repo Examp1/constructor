@@ -90,6 +90,26 @@ export default {
         Bus.$on('canvasUndo', () => {
             this.onUndo();
         });
+        Bus.$on('onCropedImgAdd', () => {
+            let obj = {
+                src: this.$store.state.cropedBase64,
+                width: 600,
+                height: 600,
+                viewportWidth: 100,
+                viewportHeight: 100,
+                top: this.$store.state.origHeight / 2,
+                left: this.$store.state.origWidth / 2,
+                angle: 0
+            }
+            if(obj.viewportWidth == 0 || obj.viewportHeight == 0){
+                obj.viewportWidth = 300;
+                obj.viewportHeight = 300;
+            }
+            obj.top = obj.top - obj.viewportHeight/2;
+            obj.left = obj.left - obj.viewportWidth/2;
+            this.imgItems.push(obj);
+            this.pushState();
+        });
         
         this.$refs.rootDiv.addEventListener('wheel', (e) => {
             if(e.ctrlKey){

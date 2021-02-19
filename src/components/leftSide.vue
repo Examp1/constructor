@@ -34,7 +34,7 @@
       </li>
     </ul>
     <ul class="tab__content" v-if="currentTabIndex == 4">
-      <input type="file" hidden id="fileinput1" @change="onPhotoSelect" />
+      <input type="file" hidden id="fileinput1" @change="onPhotoSelect" accept="image/jpeg,image/png"/>
       <label for="fileinput1" style="background-color: #fafafa; cursor: pointer"
         >Click to select photo</label
       >
@@ -283,16 +283,31 @@ export default {
       fr.readAsDataURL(file);
       fr.onload = (e) => {
         // console.log(fr.result);
-        this.$store.commit("SER_ORIG_PHOTO", {
-          photo: fr.result,
-        });
-        // let img = new Image();
-        // img.src = fr.result;
-        // img.onload = () => {
-        //   this.$store.commit('SER_ORIG_PHOTO', {
-        //     photo: img
-        //   });
-        // }
+        // this.$store.commit("SER_ORIG_PHOTO", {
+        //   photo: fr.result,
+        // });
+        let img = new Image();
+        img.src = fr.result.replace("image/png", "image/octet-stream").replace("image/jpeg", "image/octet-stream");
+        img.onload = () => {
+          let c = document.createElement('canvas');
+          if(img.width > img.height){
+            c.width = 1000;
+            c.height = +(1000 * img.height / img.width).toFixed(1);
+          }
+          else{
+            c.height = 1000;
+            c.width = +(1000 * img.width / img.height).toFixed(1);
+          }
+          c.getContext('2d').drawImage(img, 0, 0, img.width, img.height,  0,0, c.width, c.height);
+          let minImgSrc = c.toDataURL('image/jpeg', 0.85);
+          let minImg = new Image();
+          minImg.src = minImgSrc;
+          minImg.onload = () => {
+            this.$store.commit('SER_ORIG_PHOTO', {
+              photo: minImg
+            });
+          }
+        }
       };
       fr.onerror = (e) => {
         alert("Image load error. See Console!");

@@ -25,6 +25,7 @@ const store = new Vuex.Store({
     maxLength: 14,
 
     photoOriginal: null,
+    cropedBase64: null,
 
     modalPhotoCropper: false,
   },
@@ -59,6 +60,17 @@ const store = new Vuex.Store({
       state.photoOriginal = payload.photo;
       state.modalPhotoCropper = true;
     },
+    SET_CROPED_PHOTO(state, payload){
+      state.cropedBase64 = payload.photo;
+      state.modalPhotoCropper = false;
+      state.photoOriginal = null;
+    },
+  },
+  actions: {
+    CANSEL_CROP ({ commit, state}) {
+      state.photoOriginal = null;
+      state.modalPhotoCropper = false;
+    }
   }
 })
 
