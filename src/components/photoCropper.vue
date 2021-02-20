@@ -99,7 +99,7 @@ export default {
             let cWidthPercent = this.vSize.w * 100 / owz;
             let cWidth = Math.floor(this.oW * cWidthPercent / 100);
             
-            console.log(startX, startY, cWidth);
+            // console.log(startX, startY, cWidth);
 
             let c = document.createElement('canvas')
             c.width = 600;

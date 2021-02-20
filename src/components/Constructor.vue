@@ -13,13 +13,15 @@
           >
             <i class="ic-icon_5"></i>
           </li>
-          <li>
+          <li :class="{ disabled: !$store.state.isSelectedItem}"
+              @click="onCopyClick">
             <i class="ic-icon_7"></i>
           </li>
-          <li>
+          <li :class="{ disabled: !$store.state.isSelectedItem}"
+              @click="onDeleteClick">
             <i class="ic-icon_9"></i>
           </li>
-          <li>
+          <li v-if="$store.state.canCrop">
             <a
               href="#"
               @click.prevent="toCanvas"
@@ -28,7 +30,7 @@
               >download</a
             >
           </li>
-          <li>поділитися <i class="ic-icon_fb"></i></li>
+          <li v-if="$store.state.canCrop">поділитися <i class="ic-icon_fb"></i></li>
         </ul>
       </nav>
     </header>
@@ -58,6 +60,12 @@ export default {
   methods: {
     onUndoClick() {
       Bus.$emit("canvasUndo", {});
+    },
+    onCopyClick(){
+      Bus.$emit("canvasCopy", {});
+    },
+    onDeleteClick(){
+      Bus.$emit("canvasDelete", {});
     },
     toCanvas() {
       setTimeout(() => {

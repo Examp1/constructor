@@ -17,6 +17,7 @@
         :key="index"
         draggable="true"
         @dragstart="onDragStart($event, index, option.type)"
+        @click="onItemClick($event, index, option.type)"
         @drag="onDrag"
         @dragend="onDragEnd"
         v-images-loaded:on.progress="imageProgress"
@@ -41,6 +42,7 @@
     </ul>
     <div class="dragImgDiv" v-show="isDrag">
       <img
+        v-if="isImg"
         :src="decoSrc"
         :style="dragImgStyle"
         alt="1"
@@ -100,6 +102,7 @@ export default {
       dragInfo: null,
       url: "",
       isColor: false,
+      isImg: true,
     };
   },
   directives: {
@@ -201,9 +204,61 @@ export default {
       //  }
     },
 
+    // кликнул
+    onItemClick(e, index, type){
+      if (type == "sticker" || type == "text") {
+        let decoSrc = this.currentTab[index].src;
+        let dragInfo = {
+          type: type,
+          src: decoSrc,
+          width: this.currentTab[index].img.width,
+          height: this.currentTab[index].img.height,
+          viewportWidth: 0,
+          viewportHeight: 0,
+        };
+        let maxS = 100 * 2;
+        if (dragInfo.width > dragInfo.height) {
+          dragInfo.viewportWidth = maxS;
+          dragInfo.viewportHeight = Math.ceil(
+            (dragInfo.height * maxS) / dragInfo.width
+          );
+        } else {
+          dragInfo.viewportHeight = maxS;
+          dragInfo.viewportWidth = Math.ceil(
+            (dragInfo.width * maxS) / dragInfo.height
+          );
+        }
+        Bus.$emit('addElementByClick', dragInfo);
+      } else if (type == "template") {
+        let curItem = this.tabs[0][index];
+        let txtObjs = [];
+        curItem.props.textItems.forEach((txtItem) => {
+          let _txtObj = this.tabs[3].find((item) => item.name == txtItem.name);
+          if (_txtObj) {
+            let pushItem = { ...txtItem };
+            pushItem.src = _txtObj.src;
+            pushItem.orWidth = _txtObj.img.width;
+            pushItem.orHeight = _txtObj.img.height;
+            txtObjs.push(pushItem);
+          } else alert("Текстовый спрайт из шаблона не найден");
+        });
+        let dragInfo = {
+          type: type,
+          group: this.currentTab[index].group,
+          orient: curItem.orient,
+          bgSrc: curItem.bg,
+          texts: txtObjs,
+        };
+        Bus.$emit('setTemplateByClick', dragInfo);
+      } else if(type == "color"){
+        let curItem = this.tabs[this.currentTabIndex][index];
+        Bus.$emit('setBgColorByClick', curItem.color);
+      }
+    },
     // начал тянуть
     onDragStart(e, index, type) {
       if (type == "sticker" || type == "text") {
+        this.isImg = true;
         this.dragOvered = false;
         this.isDrag = true;
         var crt = e.target.cloneNode(true);
@@ -234,6 +289,7 @@ export default {
         }
         e.dataTransfer.setData("dragInfo", JSON.stringify(this.dragInfo));
       } else if (type == "template") {
+        this.isImg = true;
         this.dragOvered = false;
         this.isDrag = true;
         var crt = e.target.cloneNode(true);
@@ -241,7 +297,7 @@ export default {
         document.body.appendChild(crt);
         e.dataTransfer.setDragImage(crt, 0, 0);
         this.decoSrc = this.currentTab[index].src;
-        let dragGhost = this.$refs.dragGhost;
+        // let dragGhost = this.$refs.dragGhost;
         let curItem = this.tabs[0][index];
         let txtObjs = [];
         curItem.props.textItems.forEach((txtItem) => {
@@ -256,12 +312,24 @@ export default {
         });
         this.dragInfo = {
           type: type,
+          group: this.currentTab[index].group,
           orient: curItem.orient,
           bgSrc: curItem.bg,
           texts: txtObjs,
         };
         e.dataTransfer.setData("dragInfo", JSON.stringify(this.dragInfo));
-        // console.log(this.dragInfo);
+      } else if(type == "color"){
+        let curItem = this.tabs[this.currentTabIndex][index];
+        this.isImg = false;
+        this.hexVal = curItem.color;
+        this.dragOvered = false;
+        this.isDrag = true;
+      
+        this.dragInfo = {
+          type: type,
+          color: curItem.color,
+        };
+        e.dataTransfer.setData("dragInfo", JSON.stringify(this.dragInfo));
       }
     },
     // во время тоскания, координаты
@@ -327,6 +395,9 @@ export default {
 
     axios.get("http://localhost:3000/tabsContent").then((response) => {
       this.tabs = response.data;
+      this.$store.commit('SET_TEMPLATES', {
+        templates: this.tabs[0]
+      });
       this.tabs.forEach((tab) => {
         // item.isLoading = true;
         tab.forEach((item) => {

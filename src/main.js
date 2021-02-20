@@ -19,7 +19,7 @@ const store = new Vuex.Store({
     states: [{
       imgItems: [],
       orient: 'h',
-      bgSrc: '',
+      bgSrc: '#a1d7de',
     }],
     currentStateIndex: 0,
     maxLength: 14,
@@ -27,7 +27,11 @@ const store = new Vuex.Store({
     photoOriginal: null,
     cropedBase64: null,
 
+    templates: [],
+
+    isSelectedItem: false,
     modalPhotoCropper: false,
+    canCrop: false,
   },
   mutations: {
     SET_ORIG_SIZE (state, paylpad) {
@@ -64,6 +68,16 @@ const store = new Vuex.Store({
       state.cropedBase64 = payload.photo;
       state.modalPhotoCropper = false;
       state.photoOriginal = null;
+    },
+
+    SET_IS_SELECTED(state, payload){
+      state.isSelectedItem = payload.val;
+    },
+    SET_TEMPLATES(state, payload){
+      state.templates = payload.templates;
+    },
+    SET_CAN_CROP(state, payload){
+      state.canCrop = payload.val;
     },
   },
   actions: {
