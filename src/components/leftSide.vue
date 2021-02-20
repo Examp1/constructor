@@ -11,7 +11,7 @@
         {{ item.name }}
       </li>
     </ul>
-    <ul class="tab__content" v-if="currentTabIndex != 4">
+    <ul class="tab__content" v-if="currentTabIndex != 4" :class="{ color: isColor }">
       <li
         v-for="(option, index) in tabs[currentTabIndex]"
         :key="index"
@@ -517,7 +517,7 @@ export default {
 .hide {
   opacity: 0;
 }
-.tab__content li.loaded {
+.tab__content li.loaded, .color li {
   pointer-events: unset;
 }
 </style>
