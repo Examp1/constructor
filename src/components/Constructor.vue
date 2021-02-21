@@ -27,7 +27,7 @@
               @click.prevent="toCanvas"
               class="download"
               download="your picture.png"
-              >download</a
+              >завантажити </a
             >
           </li>
           <li v-if="$store.state.canCrop">поділитися <i class="ic-icon_fb"></i></li>
@@ -109,6 +109,7 @@ header {
   align-items: center;
   ul {
     display: flex;
+    align-items: center
   }
   a:not(.logo, .download) {
     color: #fff;
@@ -142,7 +143,6 @@ header {
   display: flex;
   flex-wrap: wrap;
 }
-
 .modal_wrap {
   position: fixed;
   z-index: 100;
@@ -154,5 +154,24 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.nav__menu li i{
+  font-size: 23px;
+  margin-right: 45px;
+}
+.nav__menu li:not(:last-of-type){
+  margin-right: 45px;
+}
+.nav__menu li:last-of-type{
+  display: flex;
+  align-items: center;
+  i{
+    margin-right: 0px;
+    margin-left: 10px;
+  }
+}
+.download{
+  color: #fff;
+  text-decoration: none;
 }
 </style>

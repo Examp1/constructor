@@ -624,7 +624,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style    scoped lang="scss">
     .right  {
         width: calc(100% - 490px);
         height: calc(100vh - 81px);
@@ -745,9 +745,19 @@ export default {
         left: 50%;
         transform: translate(-50%, 0);
         display: flex;
-        button{
-            &+button{
+        button{ 
+            padding: 10px 20px;
+            background-color: #fff;
+            border-radius: 4px; 
+            border: none;
+            cursor: pointer;
+            outline: none;
+            & + button{
                 margin-left: 15px;
+            }
+            &:active{
+                color: #fff;
+                background-color: #80bb30;
             }
         }
     }
@@ -756,5 +766,20 @@ export default {
         z-index: 100;
         display: flex;
         flex-direction: column;
+         button{ 
+            padding: 10px 20px;
+            background-color: #fff;
+            border-radius: 4px; 
+            border: none;
+            cursor: pointer;
+            outline: none;
+            & + button{
+                margin-top: 5px;
+            }
+            &:active{
+                color: #fff;
+                background-color: #80bb30;
+            }
+        }
     }
 </style>
