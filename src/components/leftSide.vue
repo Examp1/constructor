@@ -215,7 +215,9 @@ export default {
           viewportWidth: 0,
           viewportHeight: 0,
         };
-        let maxS = 100 * 2;
+        let minSide = this.$store.state.origWidth > this.$store.state.origHeight ? this.$store.state.origHeight : this.$store.state.origWidth;
+        let maxS = minSide * 0.3;
+        // let maxS = 100 * 2;
         if (dragInfo.width > dragInfo.height) {
           dragInfo.viewportWidth = maxS;
           dragInfo.viewportHeight = Math.ceil(
@@ -393,7 +395,8 @@ export default {
       this.dragOvered = false;
     });
 
-    axios.get("http://localhost:3000/tabsContent").then((response) => {
+    // axios.get("http://localhost:3000/tabsContent").then((response) => {
+    axios.get("http://192.168.0.102:4000/tabsContent").then((response) => {
       this.tabs = response.data;
       this.$store.commit('SET_TEMPLATES', {
         templates: this.tabs[0]
@@ -458,12 +461,32 @@ export default {
       display: none;
     }
   }
+  &.active{
+    position: relative;
+    &:before{
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 10px;
+      border-radius: 5px 0 0 5px;
+      background-color: #75ae26;
+      @media (max-width: 567px) {
+        height: 5px;
+        width: 100%;
+        transform: translate(0, -100%);
+        z-index: 100;
+        border-radius: 3px 3px 0 0;
+      }
+    }
+  }
 }
 .tab__content {
   width: 100%;
   margin-top: 0px;
   padding: 20px 20px 40px 20px;
-  overflow-y: scroll;
+  overflow-y: overlay;
   height: 100%;
   position: relative;
   @media (max-width: 567px) {
@@ -510,6 +533,7 @@ export default {
   }
 }
 .tab__content li {
+  position: relative;
   cursor: pointer;
   display: flex;
   flex-direction: column;

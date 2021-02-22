@@ -2,10 +2,15 @@ import Vue from 'vue'
 import App from './App.vue'
 import { ReactiveRefs } from 'vue-reactive-refs'
 import Vuex from 'vuex'
+import { VueHammer } from 'vue2-hammer';
 
 Vue.config.productionTip = false;
 Vue.use(ReactiveRefs);
 Vue.use(Vuex)
+VueHammer.config.press = {
+  time: 250
+};
+Vue.use(VueHammer);
 
 export default new Vue();
 
@@ -16,6 +21,7 @@ const store = new Vuex.Store({
     origHeight: 0,
     canvasZoom: 1,
     maxSize: 100,
+    minSize: 100,
 
     states: [{
       imgItems: [],
@@ -61,7 +67,8 @@ const store = new Vuex.Store({
       }
     },
     SET_MAXSIZE(state, payload){
-      state.maxSize = payload.val
+      state.maxSize = payload.val;
+      state.minSize = payload.val * 0.1;
     },
 
     SER_ORIG_PHOTO(state, payload){

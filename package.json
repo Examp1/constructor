@@ -17,6 +17,7 @@
     "vue": "^2.6.12",
     "vue-images-loaded": "^1.1.2",
     "vue-reactive-refs": "0.0.2",
+    "vue2-hammer": "^2.1.2",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

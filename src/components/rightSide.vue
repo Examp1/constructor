@@ -1,7 +1,7 @@
 <template>
-    <div class="right" ref="rootDiv">
-        <!-- <button @click="test">add</button> -->
-        <!-- <button @click="onUndo" :disabled="$store.state.states.length == 1" style="position: relative; z-index: 1000">REVERT</button> -->
+    <div class="right" ref="rootDiv"
+        v-hammer:pinch="onPinch"
+        v-hammer:pinchstart="onPinchStart">
         <div class="rootClickHandler" @click.stop="rootClick" ref="rootClickHandler"></div>
         <div class="mCanvas" :style="mCanvasStyle"  ref="mCan" :class="{dropOver: isDropOver}" @mouseleave="hoverItemType = ''" @drop="onDrop" @dragover="allowDrop" @dragleave="onDragLeave">
             <div :style="bgStyle" @mouseover="onBgOver" @click="onBgClick"></div>
@@ -15,12 +15,14 @@
                 :aspectRatio="true"
                 
                 @contextmenu="onItemContext($event)"
+                v-hammer:press="onPress"
                 @change="imgItemChanged($event, index)"
                 @click="onItemClick(index)"
+                @touchstart.stop.prevent="onItemClick(index)"
                 @mouseover="onItemOver(index)">
                 <img :src="item.src" alt="item" style="width:100%; height:100%">
             </drr>
-            <img src="/img/icon_watermark.svg" alt="wt" class="waterm">
+            <img src="/img/icon_watermark.svg" alt="wt" class="waterm" :style="watermStyle">
         </div>
         <div class="gizmoOverlay" :style="mCanvasStyle">
             <div class="hoverGizmo" :style="hoverGizmoStyle"></div>
@@ -66,6 +68,7 @@ export default {
             selectedItemType: '',
             selectedItemIndex: null,
             isContext: false,
+            sceneLastScale: '',
 
             orient: 'h',
 
@@ -221,6 +224,17 @@ export default {
         }, 500);
     },
     computed: {
+        watermStyle(){
+            return {
+                position: 'absolute',
+                top: `${this.$store.state.origWidth * 0.02}px`,
+                right: `${this.$store.state.origWidth * 0.02}px`,
+                width: `${this.$store.state.origWidth * 0.05}px`,
+                zIndex: '1000',
+                opacity: '0.5',
+                pointerEvents: 'none',
+            }
+        },
         bgStyle(){
             if(/^#([a-fA-F0-9]){3}$|[a-fA-F0-9]{6}$/.test(this.bgSrc)){
                 return {
@@ -454,7 +468,7 @@ export default {
             }
         },
         onItemContext(e){
-            // debugger
+            debugger
             if(this.imgItems.length > 1){
                 e.preventDefault();
                 let rootOffset = this.getOffset(this.$refs.rootDiv);
@@ -467,6 +481,32 @@ export default {
                 this.isContext = true;
                 document.addEventListener('click', this.contextOutHandler);
             }
+        },
+        onPress(e){
+            if(this.imgItems.length > 1){
+                let rootOffset = this.getOffset(this.$refs.rootDiv);
+                let x = e.center.x - rootOffset.x;
+                let y = e.center.y - rootOffset.y;
+                this.contextMenuStyle = {
+                    left: `${x}px`,
+                    top: `${y}px`,
+                };
+                this.isContext = true;
+                document.addEventListener('click', this.contextOutHandler);
+            }
+        },
+        onPinchStart(e){
+            this.sceneLastScale = this.$store.state.canvasZoom;
+            console.log('start ', this.sceneLastScale);
+            
+        },
+        onPinch(e){
+            let zoom = this.sceneLastScale * e.scale;
+            if(zoom < 0.3) zoom = 0.3;
+            if(zoom > 2) zoom = 2;
+            this.$store.commit('SET_CURRENT_ZOOM', {
+                zoom: zoom
+            });
         },
         contextOutHandler(e){
             if(!(e.target.classList.contains('contextMenu') || e.target.closest('.contextMenu'))){
