@@ -24,20 +24,19 @@
       >
         <!-- <img src="../assets/igor.jpg" alt=""> -->
         <template v-if="!isColor">
-          {{ option.name }}
-          {{ option.isLoading }}
+          <!-- {{ option.name }}
+          {{ option.isLoading }} -->
           <img :src="option.src" alt="" />
         </template>
         <template v-else>
-          {{ option.color }}
+          <!-- {{ option.color }} -->
           <div :style="{backgroundColor: option.color}"></div>
         </template>
       </li>
     </ul>
     <ul class="tab__content" v-if="currentTabIndex == 4">
       <input type="file" hidden id="fileinput1" @change="onPhotoSelect" accept="image/jpeg,image/png"/>
-      <label for="fileinput1" style="background-color: #fafafa; cursor: pointer"
-        >Click to select photo</label
+      <label for="fileinput1">Click to select photo</label
       >
     </ul>
     <div class="dragImgDiv" v-show="isDrag">
@@ -346,6 +345,7 @@ export default {
     // }
 
     onPhotoSelect(e) {
+      debugger
       let file = e.target.files[0];
       let fr = new FileReader();
       fr.readAsDataURL(file);
@@ -413,9 +413,15 @@ export default {
 <style scoped lang="scss">
 .left {
   width: calc(500px - 10px);
-  height: calc(100vh - 81px);
+  height: calc(100vh - 88px);
   background-color: #fff;
   display: flex;
+  @media (max-width: 567px) {
+    width: 100%;
+    height: calc(50vh);
+    order: 3;
+    flex-direction: column;
+  }
 }
 .tab__header {
   display: flex;
@@ -424,6 +430,10 @@ export default {
   flex-direction: column;
   margin: 0px;
   background-color: #e7e7e7;
+  @media (max-width: 567px) {
+    flex-direction: row;
+    width: 100%;
+  }
 }
 .tab__header li {
   background-color: #e7e7e7;
@@ -442,6 +452,12 @@ export default {
     margin-bottom: 6px;
     font-size: 40px;
   }
+  @media (max-width: 567px) {
+    height: 32px;
+    i{
+      display: none;
+    }
+  }
 }
 .tab__content {
   width: 100%;
@@ -449,6 +465,12 @@ export default {
   padding: 20px 20px 40px 20px;
   overflow-y: scroll;
   height: 100%;
+  position: relative;
+  @media (max-width: 567px) {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
   * {
     user-select: none;
   }
@@ -475,6 +497,17 @@ export default {
       box-shadow: 0px 0px 1px 1px #80bb30;
     }
   }
+  label{
+    display: inline-block;
+    padding: 10px 16px;
+    color: #fff;
+    background-color: #74ae26;
+    font-size: 12px;
+    border: none;
+    outline: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
 }
 .tab__content li {
   cursor: pointer;
@@ -483,14 +516,22 @@ export default {
   padding: 10px;
   pointer-events: none;
   background-color: #f1f1f1;
+  @media (max-width: 567px) {
+    position: relative;
+    width: 33%;
+  }
 }
 .tab__content li:not(:last-of-type) {
   margin-bottom: 20px;
 }
 .tab__content li img {
-  width: 200px;
-  height: 100px;
-  object-fit: contain;
+  max-width: 90%;
+  max-height: 90%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  // object-fit: contain;
   -webkit-user-drag: none;
 }
 

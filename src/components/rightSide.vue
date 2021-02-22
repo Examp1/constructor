@@ -30,8 +30,12 @@
                     <div class="tr" @mousedown.stop.prevent="gizmoDown('tr', $event)" @touchstart.stop.prevent="gizmoDown('tr', $event)" :style="`transform: translate(50%, -50%) scale(${gizmoScale})`"></div>
                     <div class="bl" @mousedown.stop.prevent="gizmoDown('bl', $event)" @touchstart.stop.prevent="gizmoDown('bl', $event)" :style="`transform: translate(-50%, 50%) scale(${gizmoScale})`"></div>
                     <div class="br" @mousedown.stop.prevent="gizmoDown('br', $event)" @touchstart.stop.prevent="gizmoDown('br', $event)" :style="`transform: translate(50%, 50%) scale(${gizmoScale})`"></div>
-                    <div class="ro" @mousedown.stop.prevent="gizmoDown('ro', $event)" @touchstart.stop.prevent="gizmoDown('ro', $event)" :style="`transform: translate(-50%, 0) scale(${gizmoScale})`">rotate</div>
-                    <div class="move" @mousedown.stop.prevent="gizmoDownMove($event)" @touchstart.stop.prevent="gizmoDownMove($event)" :style="`transform: translate(-50%, 0) scale(${gizmoScale})`">move</div>
+                    <div class="ro" @mousedown.stop.prevent="gizmoDown('ro', $event)" @touchstart.stop.prevent="gizmoDown('ro', $event)" :style="`transform: translate(-50%, 0) scale(${gizmoScale})`">
+                        <i class="ic-icon_6"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                    </div>
+                    <div class="move" @mousedown.stop.prevent="gizmoDownMove($event)" @touchstart.stop.prevent="gizmoDownMove($event)" :style="`transform: translate(-50%, 0) scale(${gizmoScale})`">
+                        <i class="ic-icon_4"><span class="path1"></span><span class="path2"></span></i>
+                    </div>
                 </template>
             </div>
         </div>
@@ -114,6 +118,7 @@ export default {
             this.$store.commit('SET_CAN_CROP', {
                 val: this.imgItems.length > 1
             });
+            
             this.pushState();
         });
         Bus.$on('addElementByClick', (dragInfo) => {
@@ -211,6 +216,9 @@ export default {
                 }
             }
         });
+        setTimeout(() => {
+            this.calculateMaxSize();
+        }, 500);
     },
     computed: {
         bgStyle(){
@@ -333,8 +341,21 @@ export default {
         },
     },
     methods: {
+        calculateMaxSize(){
+            if(this.orient == 'h'){
+                let l = +this.$refs.mCan.style.height.replace('px', '') * 0.9;
+                this.$store.commit('SET_MAXSIZE', {
+                    val: l
+                });
+            } else{
+                let l = this.$refs.mCan.style.width.replace('px', '') * 0.9;
+                this.$store.commit('SET_MAXSIZE', {
+                    val: l
+                });
+            }
+        },
         calculateCanvasSize(){
-            let margin = 100;
+            let margin = 20;
             let rD = this.$refs.rootDiv;
             let canW, canH;
             if(this.orient == 'h'){
@@ -574,6 +595,9 @@ export default {
             }
         },
         pushState(){
+            setTimeout(() => {
+                this.calculateMaxSize();
+            }, 500);
             this.$store.commit('PUSH_STATE', {
                 state: {
                     imgItems: JSON.parse(JSON.stringify(this.imgItems)),
@@ -627,11 +651,16 @@ export default {
 <style    scoped lang="scss">
     .right  {
         width: calc(100% - 490px);
-        height: calc(100vh - 81px);
+        height: calc(100vh - 88px);
         background-color: #f0f0f0;
         position: relative;
         user-select: none;
         overflow: auto;
+        @media (max-width: 567px) {
+            width: 100%;
+            height: calc(50vh - 66px);
+            order: 2;
+        }
     }
     .rootClickHandler{
         position: absolute;
@@ -682,13 +711,21 @@ export default {
         position: absolute;
         z-index: 1000;
         pointer-events: none;
-        box-shadow: 0 0 0 2px rgb(131, 255, 100) inset;
+        box-shadow: 0 0 0 1px #1e6dcf inset;
     }
     .selectGizmo{
         position: absolute;
         z-index: 1001;
         box-sizing: content-box;
         pointer-events: none;
+        .ic-icon_6,
+        .ic-icon_4{
+            font-size: 25px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
         &:before{
             content: '';
             position: absolute;
@@ -696,12 +733,12 @@ export default {
             left: -2px;
             right: -2px;
             bottom: -2px;
-            border: 2px dashed rgb(47, 182, 255);
+            border: 1px dashed #1e6dcf;
         }
         .tl, .tr, .bl, .br, .ro, .move{
-            background-color: rgb(47, 182, 255);
-            width: 18px;
-            height: 18px;
+            background-color: #1e6dcf;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
             position: absolute;
             pointer-events: auto;
@@ -747,17 +784,18 @@ export default {
         display: flex;
         button{ 
             padding: 10px 20px;
-            background-color: #fff;
             border-radius: 4px; 
             border: none;
             cursor: pointer;
             outline: none;
+            color: #fff;
+            background-color: #80bb30;
             & + button{
                 margin-left: 15px;
             }
-            &:active{
-                color: #fff;
-                background-color: #80bb30;
+            &:disabled{
+                background-color: #fff;
+                color: #979797;
             }
         }
     }

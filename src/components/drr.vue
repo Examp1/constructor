@@ -725,7 +725,7 @@
 
           let w = stickStartPos.width + dirX * pn.x;
           let h = stickStartPos.height + dirY * pn.y;
-          if(w > 100 || h > 100){
+          if((w > 100 || h > 100) && (w < this.$store.state.maxSize || h < this.$store.state.maxSize)){
             this.cx = stickStartPos.cx + p.x / 2
             this.cy = stickStartPos.cy + p.y / 2
             pn = p.rotate(-phi)

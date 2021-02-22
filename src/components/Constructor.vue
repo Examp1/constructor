@@ -2,8 +2,10 @@
   <div class="constructor">
     <header>
       <div class="l">
-        <a href="#" class="logo"><img src="/img/logo.png" alt="" /></a>
+        <a href="#" class="logo desk"><img src="/img/logo.png" alt="" /></a>
+        <a href="#" class="logo mob"><img src="/img/pb_logo.svg" alt="" /></a>
         <a href="#">#ДаруюВесну</a>
+        <div class="burger"><div></div></div>
       </div>
       <nav>
         <ul class="nav__menu">
@@ -99,6 +101,9 @@ export default {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  @media (max-width: 567px) {
+    flex-direction: column;
+  }
 }
 header {
   background: #80bb30;
@@ -107,6 +112,9 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media (max-width: 567px) {
+    padding: 0px 0px;
+  }
   ul {
     display: flex;
     align-items: center
@@ -116,6 +124,14 @@ header {
     font-size: 43px;
     text-decoration: none;
     font-weight: 600;
+    @media (max-width: 567px) {
+      font-size: 18px;
+    }
+  }
+  nav{
+    @media (max-width: 567px) {
+      display: none;
+    }
   }
   .nav__menu {
     li {
@@ -134,8 +150,61 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    @media (max-width: 567px) {
+      width: 100%;
+    }
+    .mob{
+      display: none;
+      img{
+        width: 67px;
+      }
+      @media (max-width: 567px) {
+        display: block;
+      }
+    }
+    .desk{
+      @media (max-width: 567px) {
+        display: none;
+      }
+    }
     a:first-of-type {
       margin-right: 200px;
+    }
+    .burger{
+      width: 26px;
+      height: 20px;
+      margin-right: 20px;
+      position: relative;
+      &:before{
+        content: '';
+        width: 26px;
+        height: 3px;
+        border-radius: 2px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+      }
+      &:after{
+        content: '';
+        width: 26px;
+        height: 3px;
+        border-radius: 2px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background-color: #fff;
+      }
+      div{
+        width: 26px;
+        height: 3px;
+        background: #fff;
+        border-radius: 2px;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translate(0, -50%);
+      }
     }
   }
 }

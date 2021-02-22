@@ -15,6 +15,7 @@ const store = new Vuex.Store({
     origWidth: 0,
     origHeight: 0,
     canvasZoom: 1,
+    maxSize: 100,
 
     states: [{
       imgItems: [],
@@ -58,6 +59,9 @@ const store = new Vuex.Store({
         state.currentStateIndex--;
         state.states = state.states.slice(0, state.states.length-1);
       }
+    },
+    SET_MAXSIZE(state, payload){
+      state.maxSize = payload.val
     },
 
     SER_ORIG_PHOTO(state, payload){
