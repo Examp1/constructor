@@ -43,6 +43,52 @@
     <div class="modal_wrap" v-if="$store.state.modalPhotoCropper">
       <photo-cropper></photo-cropper>
     </div>
+    <!-- ориентация  -->
+    <!-- <div class="modal_wrap">
+        <div class="modal__content">
+         <p class="title">
+            Увага!
+         </p>
+          <p class="descr">
+            При зміні формату на даному етапі роботи положення всі
+          </p>
+          <a href="#" class="btn">Добре</a>
+        </div>
+    </div> -->
+    <!-- предупреждение фб -->
+    <!-- <div class="modal_wrap">
+        <div class="modal__content">
+         <p class="title">
+            Увага!
+         </p>
+          <p class="descr">
+            Перевір, як твій дизайн буде відображатись  у “Faceboo
+          </p>
+          <a href="#" class="btn">Добре</a>
+        </div>
+    </div> -->
+    <!-- step -->
+    <div class="modal_wrap">
+        <div class="modal__content">
+         <p class="title green">
+            #ДаруюВесну на раз-два-три!
+         </p>
+         <div class="text">
+            <p class="descr">
+           1. Створи унікальну листівку. 
+          </p>
+          <p class="descr">
+            2. Поділися нею у соцмережах. 
+          </p>
+          <p class="descr">
+            3. Розмісти у тексті публікації хештег 
+            #ДаруюВесну та відмічай трьох 
+            друзів, кому ти передаєш естафету весни!
+          </p>
+         </div>
+          <a href="#" class="btn">Добре</a>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -249,5 +295,41 @@ header {
 .download{
   color: #fff;
   text-decoration: none;
+}
+.modal__content{
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px 40px 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 2px #666;
+  font-family: serif;
+  max-width: 500px;
+  text-align: center;
+  .title{
+    font-family: 'Geometria-Bold';
+    font-size: 26px;
+    margin-bottom: 10px;
+    &.green{
+      color: #74ae26;
+    }
+  }
+  .descr{
+    font-family: 'Geometria';
+    font-size: 22px;
+    margin-top: 0px;
+  }
+  .btn{
+    background-color: #74ae26;
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-family: 'Geometria';
+  }
+  .text{
+    text-align: left;
+  }
 }
 </style>
