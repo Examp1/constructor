@@ -23,8 +23,7 @@
               @click="onDeleteClick">
             <i class="ic-icon_9"></i>
           </li>
-          <!-- <li v-if="$store.state.canCrop"> -->
-          <li>
+          <li v-if="$store.state.canCrop">
             <a
               href="#"
               @click.prevent="toCanvas"
@@ -182,6 +181,10 @@ header {
       height: 20px;
       margin-right: 20px;
       position: relative;
+      display: none;
+      @media (max-width: 1024px) {
+        display: block;
+      }
       &:before{
         content: '';
         width: 26px;

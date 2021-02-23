@@ -4,7 +4,7 @@
       <li
         v-for="(item, index) in tabsH"
         :key="index"
-        @click="tabClick($event, index)"
+        @click="tabClick($event, index, item.name)"
         :class="{ active: item.active }"
       >
         <i :class="item.icon"></i>
@@ -34,11 +34,7 @@
         </template>
       </li>
     </ul>
-    <ul class="tab__content" v-if="currentTabIndex == 4">
-      <input type="file" hidden id="fileinput1" @change="onPhotoSelect" accept="image/jpeg,image/png"/>
-      <label for="fileinput1">Click to select photo</label
-      >
-    </ul>
+    <input type="file" hidden id="fileinput1" @change="onPhotoSelect" accept="image/jpeg,image/png"/>
     <div class="dragImgDiv" v-show="isDrag">
       <img
         v-if="isImg"
@@ -50,8 +46,23 @@
       />
     </div>
 
-    <!-- <button @click="toCanvas">to canvas</button>
-    <a href="" class="download">скачать</a> -->
+    <div class="mobcontrolbtns">
+      <span
+        @click="onUndoClick"
+        :class="{ disabled: $store.state.states.length == 1 }"
+      >
+        <i class="ic-icon_5"></i>
+      </span>
+      <span :class="{ disabled: !$store.state.isSelectedItem}"
+          @click="onCopyClick">
+        <i class="ic-icon_7"></i>
+      </span>
+      <span :class="{ disabled: !$store.state.isSelectedItem}"
+          @click="onDeleteClick">
+        <i class="ic-icon_9"></i>
+      </span>
+    </div>
+    <p class="copyright">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt tempore mollitia quaerat necessitatibus ad suscipit!</p>
   </div>
 </template>
 
@@ -142,6 +153,15 @@ export default {
     //     }
     //   );
     // },
+    onUndoClick() {
+      Bus.$emit("canvasUndo", {});
+    },
+    onCopyClick(){
+      Bus.$emit("canvasCopy", {});
+    },
+    onDeleteClick(){
+      Bus.$emit("canvasDelete", {});
+    },
     imageProgress(instance, image) {
       const result = image.isLoaded ? "loaded" : "broken";
       const el = instance.elements[0];
@@ -151,8 +171,11 @@ export default {
         el.classList.add("broken");
       }
     },
-    tabClick(e, index) {
-      // debugger
+    tabClick(e, index, name) {
+      if(name == 'Фото'){
+        document.querySelector('#fileinput1').click();
+        return
+      }
       this.currentTabIndex = index;
       this.tabsH.forEach((item) => (item.active = false));
       this.tabsH[index].active = true;
@@ -347,15 +370,10 @@ export default {
     // }
 
     onPhotoSelect(e) {
-      debugger
       let file = e.target.files[0];
       let fr = new FileReader();
       fr.readAsDataURL(file);
       fr.onload = (e) => {
-        // console.log(fr.result);
-        // this.$store.commit("SER_ORIG_PHOTO", {
-        //   photo: fr.result,
-        // });
         let img = new Image();
         img.src = fr.result.replace("image/png", "image/octet-stream").replace("image/jpeg", "image/octet-stream");
         img.onload = () => {
@@ -377,6 +395,7 @@ export default {
               photo: minImg
             });
           }
+          document.querySelector('#fileinput1').value=null;
         }
       };
       fr.onerror = (e) => {
@@ -493,6 +512,8 @@ export default {
     display: flex;
     align-items: flex-start;
     flex-wrap: wrap;
+    margin: 0;
+    padding: 20px 20px 20px 20px;
   }
   * {
     user-select: none;
@@ -542,11 +563,16 @@ export default {
   background-color: #f1f1f1;
   @media (max-width: 1024px) {
     position: relative;
-    width: 33%;
+    width: calc(33% - 10px);
+    margin: 0 5px;
+    height: 95px;
   }
 }
 .tab__content li:not(:last-of-type) {
   margin-bottom: 20px;
+  @media (max-width: 1024px) {
+    margin-bottom: 5px;
+  }
 }
 .tab__content li img {
   max-width: 90%;
@@ -584,5 +610,28 @@ export default {
 }
 .tab__content li.loaded, .color li {
   pointer-events: unset;
+}
+.mobcontrolbtns{
+  display: flex;
+  background-color: #77b128;
+  justify-content: center;
+  padding: 10px 0;
+  span{
+    margin: 0 10px;
+    i{
+      font-size: 21px;
+    }
+    &.disabled{
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+}
+.copyright {
+  font-size: 10px;
+  color: rgb(163, 163, 163);
+  line-height: 1.2;
+  text-align: center;
+  padding: 0 20px;
 }
 </style>

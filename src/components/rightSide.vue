@@ -169,7 +169,8 @@ export default {
         });
         Bus.$on('setBgColorByClick', (color) => {
             this.bgSrc = color;
-            this.imgItems = [];
+            if(this.isTemplate)
+                this.imgItems = [];
             this.$store.commit('SET_CAN_CROP', {
                 val: this.imgItems.length > 1
             });
@@ -610,6 +611,8 @@ export default {
                 }
                 else if(data.type == 'color'){
                     this.bgSrc = data.color;
+                    if(this.isTemplate)
+                        this.imgItems = [];
                     this.imgItems = [];
                     this.$store.commit('SET_CAN_CROP', {
                         val: this.imgItems.length > 1
@@ -831,6 +834,9 @@ export default {
         left: 50%;
         transform: translate(-50%, 0);
         display: flex;
+        @media (max-width: 1024px) {
+            bottom: 10px;
+        }
         button{ 
             padding: 10px 20px;
             border-radius: 4px; 
