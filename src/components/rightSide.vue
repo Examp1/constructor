@@ -61,6 +61,7 @@ export default {
     },
     data() {
         return {
+
             canvWidth: 0,
             bgSrc: '#a1d7de',
             hoverItemType: '',
@@ -276,11 +277,19 @@ export default {
             return 1;
         },
         mCanvasStyle(){
-            return {
-                width: `${this.$store.state.origWidth}px`,
-                height: `${this.$store.state.origHeight}px`,
-                transform: `translate(-50%, -50%) scale(${this.$store.state.canvasZoom})`,
-            }
+            if(!this.$store.state.isRender)
+                return {
+                    width: `${this.$store.state.origWidth}px`,
+                    height: `${this.$store.state.origHeight}px`,
+                    transform: `translate(-50%, -50%) scale(${this.$store.state.canvasZoom})`,
+                    top: `50%`,
+                    left: `50%`,
+                }
+            else
+                return {
+                    width: `${this.$store.state.origWidth}px`,
+                    height: `${this.$store.state.origHeight}px`,
+                }
         },
         // todo: delete this
         // percentItemWidth() {
@@ -712,10 +721,10 @@ export default {
     }
     .mCanvas{
         background-color: rgba(221, 221, 221, 0.652);
-        box-shadow: 0 0 35px 11px #0000001c;
+        // box-shadow: 0 0 35px 11px #0000001c;
         position: absolute;
-        top: 50%;
-        left: 50%;
+        // top: 50%;
+        // left: 50%;
         overflow: hidden;
         z-index: 10;
         &.dropOver{

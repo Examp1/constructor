@@ -23,6 +23,8 @@ const store = new Vuex.Store({
     maxSize: 100,
     minSize: 100,
 
+    isRender: false,
+
     states: [{
       imgItems: [],
       orient: 'h',
@@ -89,6 +91,9 @@ const store = new Vuex.Store({
     },
     SET_CAN_CROP(state, payload){
       state.canCrop = payload.val;
+    },
+    SET_ISRENDER(state, payload){
+      state.isRender = payload.val;
     },
   },
   actions: {

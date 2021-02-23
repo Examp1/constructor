@@ -71,9 +71,12 @@ export default {
       Bus.$emit("canvasDelete", {});
     },
     toCanvas() {
+      this.$store.commit('SET_ISRENDER', {
+        val: true
+      });
       setTimeout(() => {
         let scale1 = 2048 / document.querySelector(".mCanvas").offsetWidth;
-        html2canvas(document.querySelector(".mCanvas"), { scale: 1 }).then(
+        html2canvas(document.querySelector(".mCanvas"), { scale: scale1 }).then(
           (canvas) => {
             const image = canvas
               .toDataURL("image/png")
@@ -84,6 +87,9 @@ export default {
             document.body.appendChild(el);
             el.click();
             document.body.removeChild(el);
+            this.$store.commit('SET_ISRENDER', {
+              val: false
+            });
           }
         );
       }, 500);
