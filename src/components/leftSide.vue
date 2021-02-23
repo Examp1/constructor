@@ -395,8 +395,8 @@ export default {
       this.dragOvered = false;
     });
 
-    // axios.get("http://localhost:3000/tabsContent").then((response) => {
-    axios.get("http://192.168.0.102:4000/tabsContent").then((response) => {
+    axios.get("http://localhost:3000/tabsContent").then((response) => {
+    // axios.get("http://192.168.0.102:4000/tabsContent").then((response) => {
       this.tabs = response.data;
       this.$store.commit('SET_TEMPLATES', {
         templates: this.tabs[0]
@@ -419,7 +419,7 @@ export default {
   height: calc(100vh - 88px);
   background-color: #fff;
   display: flex;
-  @media (max-width: 567px) {
+  @media (max-width: 1024px) {
     width: 100%;
     height: calc(50vh);
     order: 3;
@@ -433,7 +433,7 @@ export default {
   flex-direction: column;
   margin: 0px;
   background-color: #e7e7e7;
-  @media (max-width: 567px) {
+  @media (max-width: 1024px) {
     flex-direction: row;
     width: 100%;
   }
@@ -455,7 +455,7 @@ export default {
     margin-bottom: 6px;
     font-size: 40px;
   }
-  @media (max-width: 567px) {
+  @media (max-width: 1024px) {
     height: 32px;
     i{
       display: none;
@@ -472,7 +472,7 @@ export default {
       width: 10px;
       border-radius: 5px 0 0 5px;
       background-color: #75ae26;
-      @media (max-width: 567px) {
+      @media (max-width: 1024px) {
         height: 5px;
         width: 100%;
         transform: translate(0, -100%);
@@ -489,7 +489,7 @@ export default {
   overflow-y: overlay;
   height: 100%;
   position: relative;
-  @media (max-width: 567px) {
+  @media (max-width: 1024px) {
     display: flex;
     align-items: flex-start;
     flex-wrap: wrap;
@@ -540,7 +540,7 @@ export default {
   padding: 10px;
   pointer-events: none;
   background-color: #f1f1f1;
-  @media (max-width: 567px) {
+  @media (max-width: 1024px) {
     position: relative;
     width: 33%;
   }

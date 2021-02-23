@@ -357,12 +357,12 @@ export default {
     methods: {
         calculateMaxSize(){
             if(this.orient == 'h'){
-                let l = +this.$refs.mCan.style.height.replace('px', '') * 0.9;
+                let l = +this.$refs.mCan.style.height.replace('px', '') * 0.7;
                 this.$store.commit('SET_MAXSIZE', {
                     val: l
                 });
             } else{
-                let l = this.$refs.mCan.style.width.replace('px', '') * 0.9;
+                let l = this.$refs.mCan.style.width.replace('px', '') * 0.7;
                 this.$store.commit('SET_MAXSIZE', {
                     val: l
                 });
@@ -696,7 +696,7 @@ export default {
         position: relative;
         user-select: none;
         overflow: auto;
-        @media (max-width: 567px) {
+        @media (max-width: 1024px) {
             width: 100%;
             height: calc(50vh - 66px);
             order: 2;

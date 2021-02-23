@@ -23,7 +23,8 @@
               @click="onDeleteClick">
             <i class="ic-icon_9"></i>
           </li>
-          <li v-if="$store.state.canCrop">
+          <!-- <li v-if="$store.state.canCrop"> -->
+          <li>
             <a
               href="#"
               @click.prevent="toCanvas"
@@ -72,7 +73,7 @@ export default {
     toCanvas() {
       setTimeout(() => {
         let scale1 = 2048 / document.querySelector(".mCanvas").offsetWidth;
-        html2canvas(document.querySelector(".mCanvas"), { scale: scale1 }).then(
+        html2canvas(document.querySelector(".mCanvas"), { scale: 1 }).then(
           (canvas) => {
             const image = canvas
               .toDataURL("image/png")
@@ -101,7 +102,7 @@ export default {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  @media (max-width: 567px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
   }
 }
@@ -112,7 +113,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media (max-width: 567px) {
+  @media (max-width: 1024px) {
     padding: 0px 0px;
   }
   ul {
@@ -124,12 +125,12 @@ header {
     font-size: 43px;
     text-decoration: none;
     font-weight: 600;
-    @media (max-width: 567px) {
+    @media (max-width: 1024px) {
       font-size: 18px;
     }
   }
   nav{
-    @media (max-width: 567px) {
+    @media (max-width: 1024px) {
       display: none;
     }
   }
@@ -150,7 +151,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    @media (max-width: 567px) {
+    @media (max-width: 1024px) {
       width: 100%;
     }
     .mob{
@@ -158,12 +159,12 @@ header {
       img{
         width: 67px;
       }
-      @media (max-width: 567px) {
+      @media (max-width: 1024px) {
         display: block;
       }
     }
     .desk{
-      @media (max-width: 567px) {
+      @media (max-width: 1024px) {
         display: none;
       }
     }
