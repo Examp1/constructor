@@ -26,6 +26,12 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ic-minus:before {
+  content: "\e911";
+}
+.ic-plus:before {
+  content: "\e912";
+}
 .ic-icon_fb:before {
   content: "\e900";
   color: #fff;

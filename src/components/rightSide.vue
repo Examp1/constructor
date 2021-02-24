@@ -1,7 +1,7 @@
 <template>
-    <div class="right" ref="rootDiv">
-        <!-- <button @click="test">add</button> -->
-        <!-- <button @click="onUndo" :disabled="$store.state.states.length == 1" style="position: relative; z-index: 1000">REVERT</button> -->
+    <div class="right" ref="rootDiv"
+        v-hammer:pinch="onPinch"
+        v-hammer:pinchstart="onPinchStart">
         <div class="rootClickHandler" @click.stop="rootClick" ref="rootClickHandler"></div>
         <div class="mCanvas" :style="mCanvasStyle"  ref="mCan" :class="{dropOver: isDropOver}" @mouseleave="hoverItemType = ''" @drop="onDrop" @dragover="allowDrop" @dragleave="onDragLeave">
             <div :style="bgStyle" @mouseover="onBgOver" @click="onBgClick"></div>
@@ -15,12 +15,14 @@
                 :aspectRatio="true"
                 
                 @contextmenu="onItemContext($event)"
+                v-hammer:press="onPress"
                 @change="imgItemChanged($event, index)"
                 @click="onItemClick(index)"
+                @touchstart.stop.prevent="onItemClick(index)"
                 @mouseover="onItemOver(index)">
                 <img :src="item.src" alt="item" style="width:100%; height:100%">
             </drr>
-            <img src="/img/icon_watermark.svg" alt="wt" class="waterm">
+            <img src="/img/icon_watermark.svg" alt="wt" class="waterm" :style="watermStyle">
         </div>
         <div class="gizmoOverlay" :style="mCanvasStyle">
             <div class="hoverGizmo" :style="hoverGizmoStyle"></div>
@@ -30,8 +32,12 @@
                     <div class="tr" @mousedown.stop.prevent="gizmoDown('tr', $event)" @touchstart.stop.prevent="gizmoDown('tr', $event)" :style="`transform: translate(50%, -50%) scale(${gizmoScale})`"></div>
                     <div class="bl" @mousedown.stop.prevent="gizmoDown('bl', $event)" @touchstart.stop.prevent="gizmoDown('bl', $event)" :style="`transform: translate(-50%, 50%) scale(${gizmoScale})`"></div>
                     <div class="br" @mousedown.stop.prevent="gizmoDown('br', $event)" @touchstart.stop.prevent="gizmoDown('br', $event)" :style="`transform: translate(50%, 50%) scale(${gizmoScale})`"></div>
-                    <div class="ro" @mousedown.stop.prevent="gizmoDown('ro', $event)" @touchstart.stop.prevent="gizmoDown('ro', $event)" :style="`transform: translate(-50%, 0) scale(${gizmoScale})`">rotate</div>
-                    <div class="move" @mousedown.stop.prevent="gizmoDownMove($event)" @touchstart.stop.prevent="gizmoDownMove($event)" :style="`transform: translate(-50%, 0) scale(${gizmoScale})`">move</div>
+                    <div class="ro" @mousedown.stop.prevent="gizmoDown('ro', $event)" @touchstart.stop.prevent="gizmoDown('ro', $event)" :style="`transform: translate(-50%, 0) scale(${gizmoScale})`">
+                        <i class="ic-icon_6"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                    </div>
+                    <div class="move" @mousedown.stop.prevent="gizmoDownMove($event)" @touchstart.stop.prevent="gizmoDownMove($event)" :style="`transform: translate(-50%, 0) scale(${gizmoScale})`">
+                        <i class="ic-icon_4"><span class="path1"></span><span class="path2"></span></i>
+                    </div>
                 </template>
             </div>
         </div>
@@ -55,6 +61,7 @@ export default {
     },
     data() {
         return {
+
             canvWidth: 0,
             bgSrc: '#a1d7de',
             hoverItemType: '',
@@ -62,6 +69,7 @@ export default {
             selectedItemType: '',
             selectedItemIndex: null,
             isContext: false,
+            sceneLastScale: '',
 
             orient: 'h',
 
@@ -114,6 +122,7 @@ export default {
             this.$store.commit('SET_CAN_CROP', {
                 val: this.imgItems.length > 1
             });
+            
             this.pushState();
         });
         Bus.$on('addElementByClick', (dragInfo) => {
@@ -160,7 +169,8 @@ export default {
         });
         Bus.$on('setBgColorByClick', (color) => {
             this.bgSrc = color;
-            this.imgItems = [];
+            if(this.isTemplate)
+                this.imgItems = [];
             this.$store.commit('SET_CAN_CROP', {
                 val: this.imgItems.length > 1
             });
@@ -211,8 +221,22 @@ export default {
                 }
             }
         });
+        setTimeout(() => {
+            this.calculateMaxSize();
+        }, 500);
     },
     computed: {
+        watermStyle(){
+            return {
+                position: 'absolute',
+                top: `${this.$store.state.origWidth * 0.02}px`,
+                right: `${this.$store.state.origWidth * 0.02}px`,
+                width: `${this.$store.state.origWidth * 0.05}px`,
+                zIndex: '1000',
+                opacity: '0.5',
+                pointerEvents: 'none',
+            }
+        },
         bgStyle(){
             if(/^#([a-fA-F0-9]){3}$|[a-fA-F0-9]{6}$/.test(this.bgSrc)){
                 return {
@@ -254,11 +278,19 @@ export default {
             return 1;
         },
         mCanvasStyle(){
-            return {
-                width: `${this.$store.state.origWidth}px`,
-                height: `${this.$store.state.origHeight}px`,
-                transform: `translate(-50%, -50%) scale(${this.$store.state.canvasZoom})`,
-            }
+            if(!this.$store.state.isRender)
+                return {
+                    width: `${this.$store.state.origWidth}px`,
+                    height: `${this.$store.state.origHeight}px`,
+                    transform: `translate(-50%, -50%) scale(${this.$store.state.canvasZoom})`,
+                    top: `50%`,
+                    left: `50%`,
+                }
+            else
+                return {
+                    width: `${this.$store.state.origWidth}px`,
+                    height: `${this.$store.state.origHeight}px`,
+                }
         },
         // todo: delete this
         // percentItemWidth() {
@@ -333,8 +365,21 @@ export default {
         },
     },
     methods: {
+        calculateMaxSize(){
+            if(this.orient == 'h'){
+                let l = +this.$refs.mCan.style.height.replace('px', '') * 0.7;
+                this.$store.commit('SET_MAXSIZE', {
+                    val: l
+                });
+            } else{
+                let l = this.$refs.mCan.style.width.replace('px', '') * 0.7;
+                this.$store.commit('SET_MAXSIZE', {
+                    val: l
+                });
+            }
+        },
         calculateCanvasSize(){
-            let margin = 100;
+            let margin = 20;
             let rD = this.$refs.rootDiv;
             let canW, canH;
             if(this.orient == 'h'){
@@ -433,7 +478,7 @@ export default {
             }
         },
         onItemContext(e){
-            // debugger
+            debugger
             if(this.imgItems.length > 1){
                 e.preventDefault();
                 let rootOffset = this.getOffset(this.$refs.rootDiv);
@@ -446,6 +491,32 @@ export default {
                 this.isContext = true;
                 document.addEventListener('click', this.contextOutHandler);
             }
+        },
+        onPress(e){
+            if(this.imgItems.length > 1){
+                let rootOffset = this.getOffset(this.$refs.rootDiv);
+                let x = e.center.x - rootOffset.x;
+                let y = e.center.y - rootOffset.y;
+                this.contextMenuStyle = {
+                    left: `${x}px`,
+                    top: `${y}px`,
+                };
+                this.isContext = true;
+                document.addEventListener('click', this.contextOutHandler);
+            }
+        },
+        onPinchStart(e){
+            this.sceneLastScale = this.$store.state.canvasZoom;
+            console.log('start ', this.sceneLastScale);
+            
+        },
+        onPinch(e){
+            let zoom = this.sceneLastScale * e.scale;
+            if(zoom < 0.3) zoom = 0.3;
+            if(zoom > 2) zoom = 2;
+            this.$store.commit('SET_CURRENT_ZOOM', {
+                zoom: zoom
+            });
         },
         contextOutHandler(e){
             if(!(e.target.classList.contains('contextMenu') || e.target.closest('.contextMenu'))){
@@ -540,6 +611,8 @@ export default {
                 }
                 else if(data.type == 'color'){
                     this.bgSrc = data.color;
+                    if(this.isTemplate)
+                        this.imgItems = [];
                     this.imgItems = [];
                     this.$store.commit('SET_CAN_CROP', {
                         val: this.imgItems.length > 1
@@ -574,6 +647,9 @@ export default {
             }
         },
         pushState(){
+            setTimeout(() => {
+                this.calculateMaxSize();
+            }, 500);
             this.$store.commit('PUSH_STATE', {
                 state: {
                     imgItems: JSON.parse(JSON.stringify(this.imgItems)),
@@ -627,11 +703,16 @@ export default {
 <style    scoped lang="scss">
     .right  {
         width: calc(100% - 490px);
-        height: calc(100vh - 81px);
+        height: calc(100vh - 88px);
         background-color: #f0f0f0;
         position: relative;
         user-select: none;
         overflow: auto;
+        @media (max-width: 1024px) {
+            width: 100%;
+            height: calc(50vh - 66px);
+            order: 2;
+        }
     }
     .rootClickHandler{
         position: absolute;
@@ -643,10 +724,10 @@ export default {
     }
     .mCanvas{
         background-color: rgba(221, 221, 221, 0.652);
-        box-shadow: 0 0 35px 11px #0000001c;
+        // box-shadow: 0 0 35px 11px #0000001c;
         position: absolute;
-        top: 50%;
-        left: 50%;
+        // top: 50%;
+        // left: 50%;
         overflow: hidden;
         z-index: 10;
         &.dropOver{
@@ -682,13 +763,21 @@ export default {
         position: absolute;
         z-index: 1000;
         pointer-events: none;
-        box-shadow: 0 0 0 2px rgb(131, 255, 100) inset;
+        box-shadow: 0 0 0 1px #1e6dcf inset;
     }
     .selectGizmo{
         position: absolute;
         z-index: 1001;
         box-sizing: content-box;
         pointer-events: none;
+        .ic-icon_6,
+        .ic-icon_4{
+            font-size: 25px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
         &:before{
             content: '';
             position: absolute;
@@ -696,12 +785,12 @@ export default {
             left: -2px;
             right: -2px;
             bottom: -2px;
-            border: 2px dashed rgb(47, 182, 255);
+            border: 1px dashed #1e6dcf;
         }
         .tl, .tr, .bl, .br, .ro, .move{
-            background-color: rgb(47, 182, 255);
-            width: 18px;
-            height: 18px;
+            background-color: #1e6dcf;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
             position: absolute;
             pointer-events: auto;
@@ -745,19 +834,23 @@ export default {
         left: 50%;
         transform: translate(-50%, 0);
         display: flex;
+        @media (max-width: 1024px) {
+            bottom: 10px;
+        }
         button{ 
             padding: 10px 20px;
-            background-color: #fff;
             border-radius: 4px; 
             border: none;
             cursor: pointer;
             outline: none;
+            color: #fff;
+            background-color: #80bb30;
             & + button{
                 margin-left: 15px;
             }
-            &:active{
-                color: #fff;
-                background-color: #80bb30;
+            &:disabled{
+                background-color: #fff;
+                color: #979797;
             }
         }
     }

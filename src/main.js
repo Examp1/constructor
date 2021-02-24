@@ -2,10 +2,15 @@ import Vue from 'vue'
 import App from './App.vue'
 import { ReactiveRefs } from 'vue-reactive-refs'
 import Vuex from 'vuex'
+import { VueHammer } from 'vue2-hammer';
 
 Vue.config.productionTip = false;
 Vue.use(ReactiveRefs);
 Vue.use(Vuex)
+VueHammer.config.press = {
+  time: 250
+};
+Vue.use(VueHammer);
 
 export default new Vue();
 
@@ -15,6 +20,10 @@ const store = new Vuex.Store({
     origWidth: 0,
     origHeight: 0,
     canvasZoom: 1,
+    maxSize: 100,
+    minSize: 100,
+
+    isRender: false,
 
     states: [{
       imgItems: [],
@@ -59,6 +68,10 @@ const store = new Vuex.Store({
         state.states = state.states.slice(0, state.states.length-1);
       }
     },
+    SET_MAXSIZE(state, payload){
+      state.maxSize = payload.val;
+      state.minSize = payload.val * 0.1;
+    },
 
     SER_ORIG_PHOTO(state, payload){
       state.photoOriginal = payload.photo;
@@ -78,6 +91,9 @@ const store = new Vuex.Store({
     },
     SET_CAN_CROP(state, payload){
       state.canCrop = payload.val;
+    },
+    SET_ISRENDER(state, payload){
+      state.isRender = payload.val;
     },
   },
   actions: {

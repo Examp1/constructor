@@ -7,7 +7,9 @@
             <img :src="img" alt="1" :style="imgStyle" ref="srcImg">
         </div>
         <div class="zoom">
+            <img src="/img/minus.svg" alt="1">
             <input type="range" v-model="zoom" :min="minZoom" max="4" step="0.01">
+            <img src="/img/plus.svg" alt="1">
         </div>
         <div class="btns">
             <button @click="onCanselBtn">отмена</button>
@@ -204,6 +206,8 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
+
+        padding: 33px 10px;
         .cropbody{
             // незя менять размеры зоны с кропом
             width: 200px;
@@ -246,8 +250,31 @@ export default {
             }
         }
         .zoom{
+            display: flex;
+            align-items: center;
+            margin: 35px 0 25px;
+            img{
+                width: 11px;
+            }
             input{
                 width: 305px;
+                margin: 0 10px ;
+            }
+        }
+        .btns{
+            button{
+                padding: 10px 16px;
+                color: #9d9d9d;
+                font-size: 12px;
+                border: none;
+                outline: none;
+                border-radius: 3px;
+                cursor: pointer;
+                & + button{
+                    margin-left: 15px;
+                    background-color: #74ae26;
+                    color: #fff;
+                }
             }
         }
     }
