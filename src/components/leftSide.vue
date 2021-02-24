@@ -393,7 +393,7 @@ export default {
       this.dragOvered = false;
     });
 
-    axios.get("http://localhost:3000/tabsContent").then((response) => {
+    axios.post("/get-data").then((response) => {
       this.tabs = response.data;
       this.$store.commit('SET_TEMPLATES', {
         templates: this.tabs[0]

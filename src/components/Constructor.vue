@@ -30,7 +30,7 @@
               >завантажити </a
             >
           </li>
-          <li v-if="$store.state.canCrop">поділитися <i class="ic-icon_fb"></i></li>
+          <li v-if="$store.state.canCrop" @click="shareFB()">поділитися <i class="ic-icon_fb"></i></li>
         </ul>
       </nav>
     </header>
@@ -49,6 +49,7 @@ import leftSide from "./leftSide.vue";
 import rightSide from "./rightSide.vue";
 import photoCropper from "./photoCropper.vue";
 import Bus from "../main";
+import axios from "axios";
 
 export default {
   name: "constructor",
@@ -85,6 +86,55 @@ export default {
         );
       }, 500);
     },
+    shareFB(){
+
+      let winWidth = 500;
+      let winHeight = 600;
+
+      let winTop = (screen.height / 2) - (winHeight / 2);
+      let winLeft = (screen.width / 2) - (winWidth / 2);
+
+      let w = window.open('/preloader', 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
+
+        let dataURLtoFile = function(dataurl, filename) {
+        let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, {type:mime});
+      }
+
+      setTimeout(() => {
+        let scale1 = 2048 / document.querySelector(".mCanvas").offsetWidth;
+        html2canvas(document.querySelector(".mCanvas"), { scale: scale1 }).then(
+                (canvas) => {
+                  const pictureBase64 = canvas
+                          .toDataURL("image/png");
+
+                  let orient = 'h';
+                  if(this.$store.state.origHeight > this.$store.state.origWidth){
+                    orient = 'v';
+                  }
+
+                  let data = new FormData();
+                  data.append('file',dataURLtoFile(pictureBase64,'temp.png'));
+                  data.append('orient',orient);
+
+                  axios.post('/share-fb', data)
+                    .then(response => {
+                      if (history.pushState) {
+                        let baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                        let newUrl = baseUrl + '?hash=' + response.data.hash;
+                        history.pushState(null, null, newUrl);
+                      }
+
+                      w.location.href = response.data.redirect;
+                    });
+                }
+        );
+      }, 500);
+    }
   },
 };
 </script>
