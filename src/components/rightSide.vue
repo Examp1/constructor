@@ -77,6 +77,13 @@ export default {
             isContext: false,
             sceneLastScale: '',
 
+            cx: 0,
+            cy: 0,
+            sceneMoveXStart: null,
+            sceneMoveYStart: null,
+            lastScenePosX: null,
+            lastScenePosY: null,
+
             orient: 'h',
 
             gizmoHoverSticks: null,
@@ -271,8 +278,8 @@ export default {
                     width: `${this.$store.state.origWidth}px`,
                     height: `${this.$store.state.origHeight}px`,
                     transform: `translate(-50%, -50%) scale(${this.$store.state.canvasZoom})`,
-                    top: `50%`,
-                    left: `50%`,
+                    top: `calc(50% + ${this.cy}px)`,
+                    left: `calc(50% + ${this.cx}px)`,
                 }
             else
                 return {
@@ -481,24 +488,29 @@ export default {
             }
         },
         onPress(e){
-            if(this.imgItems.length > 1){
-                let rootOffset = this.getOffset(this.$refs.rootDiv);
-                let x = e.center.x - rootOffset.x;
-                let y = e.center.y - rootOffset.y;
-                this.contextMenuStyle = {
-                    left: `${x}px`,
-                    top: `${y}px`,
-                };
-                this.isContext = true;
-                document.addEventListener('click', this.contextOutHandler);
-            }
+            if(e.pointerType == "touch")
+                if(this.imgItems.length > 1){
+                    let rootOffset = this.getOffset(this.$refs.rootDiv);
+                    let x = e.center.x - rootOffset.x;
+                    let y = e.center.y - rootOffset.y;
+                    this.contextMenuStyle = {
+                        left: `${x}px`,
+                        top: `${y}px`,
+                    };
+                    this.isContext = true;
+                    document.addEventListener('click', this.contextOutHandler);
+                }
         },
         onPinchStart(e){
+            this.sceneMoveXStart = e.deltaX;
+            this.sceneMoveYStart = e.deltaY;
+            this.lastScenePosX = this.cx;
+            this.lastScenePosY = this.cy;
             this.sceneLastScale = this.$store.state.canvasZoom;
-            console.log('start ', this.sceneLastScale);
-            
         },
         onPinch(e){
+            this.cx = this.lastScenePosX - (this.sceneMoveXStart - e.deltaX);
+            this.cy = this.lastScenePosY - (this.sceneMoveYStart - e.deltaY);
             let zoom = this.sceneLastScale * e.scale;
             if(zoom < 0.3) zoom = 0.3;
             if(zoom > 2) zoom = 2;
@@ -690,6 +702,7 @@ export default {
         position: relative;
         user-select: none;
         overflow: auto;
+        overflow: hidden;
         @media (max-width: 1024px) {
             width: 100%;
             height: calc(50vh - 66px);
