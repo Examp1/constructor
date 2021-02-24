@@ -1,6 +1,6 @@
 <template>
   <div class="left">
-    <ul class="tab__header">
+    <ul class="tab__header" :class="{mobnotclicked: mobFirstClick}">
       <li
         v-for="(item, index) in tabsH"
         :key="index"
@@ -11,7 +11,7 @@
         {{ item.name }}
       </li>
     </ul>
-    <ul class="tab__content" v-if="currentTabIndex != 4" :class="{ color: isColor }">
+    <ul class="tab__content" v-if="currentTabIndex != 4" :class="{ color: isColor, mobnotclicked: mobFirstClick }">
       <li
         v-for="(option, index) in tabs[currentTabIndex]"
         :key="index"
@@ -33,7 +33,18 @@
           <div :style="{backgroundColor: option.color}"></div>
         </template>
       </li>
+
     </ul>
+    <div class="firstview" :class="{mobnotclicked: mobFirstClick}">
+      <div
+        v-for="(item, index) in tabsH"
+        :key="index"
+        @click="tabFirstClick($event, index, item.name)"
+        :class="{ active: item.active }">
+        <i :class="item.icon"></i>
+        {{ item.name }}
+      </div>
+    </div>
     <input type="file" hidden id="fileinput1" @change="onPhotoSelect" accept="image/jpeg,image/png"/>
     <div class="dragImgDiv" v-show="isDrag">
       <img
@@ -47,6 +58,18 @@
     </div>
 
     <div class="mobcontrolbtns">
+      <div class="shareActions" v-if="mobmenu">
+        <div v-if="$store.state.canCrop">
+          <a
+            href="#"
+            @click.prevent="toCanvas"
+            class="download"
+            download="your picture.png"
+            >завантажити </a
+          >
+        </div>
+        <div v-if="$store.state.canCrop">поділитися <i class="ic-icon_fb"></i></div>
+      </div>
       <span
         @click="onUndoClick"
         :class="{ disabled: $store.state.states.length == 1 }"
@@ -62,7 +85,9 @@
         <i class="ic-icon_9"></i>
       </span>
     </div>
-    <p class="copyright">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt tempore mollitia quaerat necessitatibus ad suscipit!</p>
+    <p class="copyright">АТ КБ «ПриватБанк». Ліцензія НБУ № 22 від 05.10.2011 р.
+      Реєстраційний № 92 в Державному реєстрі банків
+    </p>
   </div>
 </template>
 
@@ -113,6 +138,8 @@ export default {
       url: "",
       isColor: false,
       isImg: true,
+      mobFirstClick: true,
+      mobmenu: false,
     };
   },
   directives: {
@@ -170,6 +197,10 @@ export default {
       } else {
         el.classList.add("broken");
       }
+    },
+    tabFirstClick(e, index, name){
+      this.currentTabIndex = index;
+      this.mobFirstClick = false;
     },
     tabClick(e, index, name) {
       if(name == 'Фото'){
@@ -413,6 +444,9 @@ export default {
     Bus.$on("canvasDropLeave", () => {
       this.dragOvered = false;
     });
+    Bus.$on("burgerSwitch", () => {
+      this.mobmenu = !this.mobmenu;
+    });
 
     axios.get("http://localhost:3000/tabsContent").then((response) => {
     // axios.get("http://192.168.0.102:4000/tabsContent").then((response) => {
@@ -438,6 +472,7 @@ export default {
   height: calc(100vh - 88px);
   background-color: #fff;
   display: flex;
+  position: relative;
   @media (max-width: 1024px) {
     width: 100%;
     height: calc(50vh);
@@ -455,7 +490,11 @@ export default {
   @media (max-width: 1024px) {
     flex-direction: row;
     width: 100%;
+    &.mobnotclicked{
+      display: none !important;
+    }
   }
+
 }
 .tab__header li {
   background-color: #e7e7e7;
@@ -467,6 +506,11 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-size: 14px;
+  color: rgb(95, 95, 95);
+  line-height: 1.2;
+  text-align: right;
+
   &.active {
     background-color: #fff;
   }
@@ -514,6 +558,9 @@ export default {
     flex-wrap: wrap;
     margin: 0;
     padding: 20px 20px 20px 20px;
+    &.mobnotclicked{
+      display: none !important;
+    }
   }
   * {
     user-select: none;
@@ -551,6 +598,33 @@ export default {
     outline: none;
     border-radius: 3px;
     cursor: pointer;
+  }
+}
+.firstview{
+  flex-grow: 1;
+  background-color: #fff;
+  display: none;
+  @media (max-width: 1024px) {
+    &.mobnotclicked{
+      display: flex !important;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  &>div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+    color: rgb(95, 95, 95);
+    line-height: 1.2;
+    text-align: right;
+    margin: 10px 25px;
+    i{
+      font-size: 40px;
+      margin-bottom: 11px;
+    }
   }
 }
 .tab__content li {
@@ -612,10 +686,14 @@ export default {
   pointer-events: unset;
 }
 .mobcontrolbtns{
-  display: flex;
   background-color: #77b128;
   justify-content: center;
   padding: 10px 0;
+  display: none;
+  position: relative;
+  @media (max-width: 1024px) {
+    display: flex;
+  }
   span{
     margin: 0 10px;
     i{
@@ -626,6 +704,34 @@ export default {
       pointer-events: none;
     }
   }
+  .shareActions{
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(0, -100%);
+    background-color: #77b128;
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+
+    *{
+      font-size: 14px;
+      font-family: "Geometria";
+      color: rgb(255, 255, 255);
+      text-transform: uppercase;
+      line-height: 1.2;
+      text-align: right;
+      text-decoration: none;
+    }
+    i{
+      margin-left: 8px;
+    }
+
+    &>div{
+      padding: 10px 0;
+      display: flex;
+      justify-content: center;
+    }
+  }
 }
 .copyright {
   font-size: 10px;
@@ -633,5 +739,9 @@ export default {
   line-height: 1.2;
   text-align: center;
   padding: 0 20px;
+  display: none;
+  @media (max-width: 1024px) {
+    display: flex;
+  }
 }
 </style>

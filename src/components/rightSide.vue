@@ -46,8 +46,14 @@
             <button @click="changeOrder(1, selectedItemIndex)">На задний план</button>
         </div>
         <div class="orientBtn">
-            <button :disabled="orient == 'h'" @click="changeOrient('h')">Горизонт</button>
-            <button :disabled="orient == 'v'" @click="changeOrient('v')">Вертикаль</button>
+            <button :disabled="orient == 'h'" @click="changeOrient('h')">
+                <span>Горизонт</span>
+                <svg id="Слой_1" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 21"><defs></defs><path class="cls-1" d="M14.75,3.57l2.78.69A.44.44,0,0,0,18,4a.3.3,0,0,0,0-.1.44.44,0,0,0-.32-.53L15.91,3a4.08,4.08,0,0,1,4.3-.38A3.91,3.91,0,0,1,22.32,6.8a.44.44,0,0,0,.36.51h.08a.45.45,0,0,0,.4-.24.56.56,0,0,0,0-.12,4.88,4.88,0,0,0-5.65-5.63A5,5,0,0,0,15.84,2L16.39.7a.44.44,0,0,0-.23-.58.45.45,0,0,0-.58.23L14.44,2.94a.4.4,0,0,0,0,.37A.42.42,0,0,0,14.75,3.57Zm.05-.21Z"/><path class="cls-1" d="M13.1,8.1V0H0V21H25V8.1ZM11.8,1.28V19.72H1.3V1.28Zm1.3,8.1H23.67V19.72H13.1Z"/></svg>
+            </button>
+            <button :disabled="orient == 'v'" @click="changeOrient('v')">
+                <span>Вертикаль</span>
+                <svg id="Слой_1" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 21"><defs></defs><path class="cls-1" d="M14.7,2.28A.46.46,0,0,0,15,2.19,4,4,0,0,1,19.8,2a4,4,0,0,1,1.71,3.9L20.23,4.54a.41.41,0,0,0-.31-.14.42.42,0,0,0-.32.11l-.07.08a.42.42,0,0,0,0,.54l1.94,2.08a.46.46,0,0,0,.31.14h0a.51.51,0,0,0,.36-.17L24,5a.43.43,0,0,0-.07-.61.45.45,0,0,0-.63.07l-.85,1.07a4.64,4.64,0,0,0-.26-1.77h0A4.78,4.78,0,0,0,20.3,1.28a5,5,0,0,0-5.84.23.24.24,0,0,0-.08.09.42.42,0,0,0,0,.52A.43.43,0,0,0,14.7,2.28Z"/><path class="cls-1" d="M13.1,8.1V0H0V21H25V8.1ZM3.68,19.72H1.3V1.28H11.8V8.1H3.68Zm1.3,0V9.38H23.7V19.72Z"/></svg>
+            </button>
         </div>
     </div>
 </template>
@@ -119,9 +125,6 @@ export default {
             obj.top = obj.top - obj.viewportHeight/2;
             obj.left = obj.left - obj.viewportWidth/2;
             this.imgItems.push(obj);
-            this.$store.commit('SET_CAN_CROP', {
-                val: this.imgItems.length > 1
-            });
             
             this.pushState();
         });
@@ -137,9 +140,6 @@ export default {
                 angle: 0
             }
             this.imgItems.push(obj);
-            this.$store.commit('SET_CAN_CROP', {
-                val: this.imgItems.length > 1
-            });
             this.pushState();
         });
         Bus.$on('setTemplateByClick', (dragInfo) => {
@@ -160,9 +160,6 @@ export default {
             })
             // Очищать при применении шаблона?
             this.imgItems = [...tempTexts];
-            this.$store.commit('SET_CAN_CROP', {
-                val: this.imgItems.length > 1
-            });
             this.isTemplate = true;
             this.templateGroup = dragInfo.group;
             this.pushState();
@@ -171,9 +168,6 @@ export default {
             this.bgSrc = color;
             if(this.isTemplate)
                 this.imgItems = [];
-            this.$store.commit('SET_CAN_CROP', {
-                val: this.imgItems.length > 1
-            });
             this.isTemplate = false;
             this.pushState();
         });
@@ -183,9 +177,6 @@ export default {
                 newItem.left = this.$store.state.origWidth/2 - newItem.viewportWidth / 2;
                 newItem.top  = this.$store.state.origHeight/2 - newItem.viewportHeight / 2;
                 this.imgItems.push(newItem);
-                this.$store.commit('SET_CAN_CROP', {
-                    val: this.imgItems.length > 1
-                });
                 this.pushState();
             }
         });
@@ -194,9 +185,6 @@ export default {
                 let array = this.imgItems;
                 array.splice(this.selectedItemIndex, 1);
                 this.imgItems = array;
-                this.$store.commit('SET_CAN_CROP', {
-                    val: this.imgItems.length > 1
-                });
                 this.pushState();
                 this.selectedItemType = '';
                 this.$store.commit('SET_IS_SELECTED', {
@@ -579,9 +567,6 @@ export default {
                     obj.top = obj.top - obj.viewportHeight/2;
                     obj.left = obj.left - obj.viewportWidth/2;
                     this.imgItems.push(obj);
-                    this.$store.commit('SET_CAN_CROP', {
-                        val: this.imgItems.length > 1
-                    });
                     this.pushState();
                 }
                 else if(data.type == 'template'){
@@ -602,9 +587,6 @@ export default {
                     })
                     // Очищать при применении шаблона?
                     this.imgItems = [...tempTexts];
-                    this.$store.commit('SET_CAN_CROP', {
-                        val: this.imgItems.length > 1
-                    });
                     this.isTemplate = true;
                     this.templateGroup = data.group;
                     this.pushState();
@@ -614,9 +596,6 @@ export default {
                     if(this.isTemplate)
                         this.imgItems = [];
                     this.imgItems = [];
-                    this.$store.commit('SET_CAN_CROP', {
-                        val: this.imgItems.length > 1
-                    });
                     this.isTemplate = false;
                     this.pushState();
                 }
@@ -647,6 +626,9 @@ export default {
             }
         },
         pushState(){
+            this.$store.commit('SET_CAN_CROP', {
+                val: this.imgItems.length > 0
+            });
             setTimeout(() => {
                 this.calculateMaxSize();
             }, 500);
@@ -688,7 +670,7 @@ export default {
             }
             this.imgItems = st.imgItems;
             this.$store.commit('SET_CAN_CROP', {
-                val: this.imgItems.length > 1
+                val: this.imgItems.length > 0
             });
             this.bgSrc = st.bgSrc;
             this.selectedItemType = '';
@@ -845,12 +827,35 @@ export default {
             outline: none;
             color: #fff;
             background-color: #80bb30;
+            @media (max-width: 1024px) {
+                padding: 10px;
+            }
             & + button{
                 margin-left: 15px;
+            }
+            &>span{
+                @media (max-width: 1024px) {
+                    display: none;
+                }
+            }
+            svg{
+                display: none;
+                width: 22px;
+                @media (max-width: 1024px) {
+                    display: block;
+                }
+                *{
+                    fill:#fff;
+                }
             }
             &:disabled{
                 background-color: #fff;
                 color: #979797;
+                svg{
+                    *{
+                        fill:#74ae26;
+                    }
+                }
             }
         }
     }

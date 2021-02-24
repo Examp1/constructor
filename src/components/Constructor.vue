@@ -5,7 +5,7 @@
         <a href="#" class="logo desk"><img src="/img/logo.png" alt="" /></a>
         <a href="#" class="logo mob"><img src="/img/pb_logo.svg" alt="" /></a>
         <a href="#">#ДаруюВесну</a>
-        <div class="burger"><div></div></div>
+        <div class="burger" @click="burgerSwitch"><div></div></div>
       </div>
       <nav>
         <ul class="nav__menu">
@@ -67,7 +67,7 @@
         </div>
     </div> -->
     <!-- step -->
-    <div class="modal_wrap">
+    <!-- <div class="modal_wrap">
         <div class="modal__content">
          <p class="title green">
             #ДаруюВесну на раз-два-три!
@@ -87,7 +87,7 @@
          </div>
           <a href="#" class="btn">Добре</a>
         </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -106,6 +106,9 @@ export default {
     photoCropper,
   },
   methods: {
+    burgerSwitch(){
+      Bus.$emit('burgerSwitch', {});
+    },
     onUndoClick() {
       Bus.$emit("canvasUndo", {});
     },
@@ -146,7 +149,6 @@ export default {
 <style scoped lang="scss">
 @import "../assets/ico.css";
 * {
-  font-family: sans-serif;
   box-sizing: border-box;
 }
 .constructor {
