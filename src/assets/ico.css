@@ -26,6 +26,12 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ic-vert:before {
+  content: "\e913";
+}
+.ic-hriz:before {
+  content: "\e914";
+}
 .ic-minus:before {
   content: "\e911";
 }
