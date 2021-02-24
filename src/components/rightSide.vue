@@ -361,17 +361,12 @@ export default {
     },
     methods: {
         calculateMaxSize(){
-            if(this.orient == 'h'){
-                let l = +this.$refs.mCan.style.height.replace('px', '') * 0.7;
-                this.$store.commit('SET_MAXSIZE', {
-                    val: l
-                });
-            } else{
-                let l = this.$refs.mCan.style.width.replace('px', '') * 0.7;
-                this.$store.commit('SET_MAXSIZE', {
-                    val: l
-                });
-            }
+            let h = +this.$refs.mCan.style.height.replace('px', '') * 0.8;
+            let w = this.$refs.mCan.style.width.replace('px', '') * 0.8;
+            this.$store.commit('SET_MAXSIZE', {
+                w: w,
+                h: h,
+            });
         },
         calculateCanvasSize(){
             let margin = 20;
@@ -450,8 +445,14 @@ export default {
                             this.bgSrc = t.bg;
                         }
                         this.selectedItemType = '';
-                        if(save)
-                            this.pushState();
+                        if(save){
+                            setTimeout(() => {
+                                this.calculateMaxSize();
+                                Bus.$emit('recalcSize', {});
+                                this.pushState();
+                                
+                            }, 100);
+                        }
                     }
                     break;
                 case 'h':
@@ -466,8 +467,14 @@ export default {
                             this.bgSrc = t.bg;
                         }
                         this.selectedItemType = '';
-                        if(save)
-                            this.pushState();
+                        if(save){
+                            setTimeout(() => {
+                                this.calculateMaxSize();
+                                Bus.$emit('recalcSize', {});
+                                this.pushState();
+                                
+                            }, 100);
+                        }
                     }
                     break;
             }

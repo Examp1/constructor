@@ -299,6 +299,8 @@
           cancelHandles[i].setAttribute('data-drag-cancel', this._uid);
         }
       }
+
+      Bus.$on('recalcSize', this.onRecalcSize);
     },
 
     beforeDestroy: function () {
@@ -314,6 +316,25 @@
     },
 
     methods: {
+      onRecalcSize(){
+        let w = this.width;
+        let h = this.height;
+
+        if(w > this.$store.state.maxWSize || h > this.$store.state.maxHSize){
+          if(w > h){
+            let oldw = w;
+            w = this.$store.state.maxWSize - 1;
+            h = w * h / oldw;
+          } else{
+            let oldh = h;
+            h = this.$store.state.maxHSize - 1;
+            w = h * w / oldh;
+          }
+        }
+        this.width = w
+        this.height = h
+      },
+
       onContext(e){
         this.emitSelected();
         this.$emit('contextmenu', e)
@@ -726,7 +747,7 @@
 
           let w = stickStartPos.width + dirX * pn.x;
           let h = stickStartPos.height + dirY * pn.y;
-          if((w > this.$store.state.minSize || h > this.$store.state.minSize) && (w < this.$store.state.maxSize || h < this.$store.state.maxSize)){
+          if((w > this.$store.state.minWSize && h > this.$store.state.minHSize) && (w < this.$store.state.maxWSize && h < this.$store.state.maxHSize)){
             this.cx = stickStartPos.cx + p.x / 2
             this.cy = stickStartPos.cy + p.y / 2
             pn = p.rotate(-phi)
