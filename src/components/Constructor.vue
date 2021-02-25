@@ -1,6 +1,6 @@
 <template>
   <div class="constructor">
-    <header>
+    <header :class="{bluur: isModal}">
       <div class="l">
         <a href="#" class="logo desk"><img src="/img/logo.png" alt="" /></a>
         <a href="#" class="logo mob"><img src="/img/pb_logo.svg" alt="" /></a>
@@ -36,8 +36,8 @@
         </ul>
       </nav>
     </header>
-    <left-side></left-side>
-    <right-side></right-side>
+    <left-side :class="{bluur: isModal}"></left-side>
+    <right-side :class="{bluur: isModal}"></right-side>
 
     <div class="modal_wrap" v-if="isModal">
       <photo-cropper v-if="$store.state.modalPhotoCropper"></photo-cropper>
@@ -110,6 +110,7 @@ export default {
   },
   mounted () {
     this.$store.commit('SET_FIRSTSTEPMODAL', {val: true});
+    Bus.$on('toCanvas', this.toCanvas);
   },
   methods: {
     burgerSwitch(){
@@ -184,6 +185,9 @@ export default {
 @import "../assets/ico.css";
 * {
   box-sizing: border-box;
+}
+.bluur{
+  filter: blur(3px);
 }
 .constructor {
   width: 100%;
@@ -310,7 +314,7 @@ header {
 .modal_wrap {
   position: fixed;
   z-index: 100;
-  background-color: rgba(0, 0, 0, 0.364);
+  // background-color: rgba(0, 0, 0, 0.364);
   top: 0;
   bottom: 0;
   left: 0;
@@ -345,7 +349,7 @@ header {
   flex-direction: column;
   padding: 10px 40px 30px 40px;
   border-radius: 10px;
-  box-shadow: 0px 0px 10px 2px #666;
+  box-shadow: 0px 0px 12px 0px rgba(102, 102, 102, 0.08);
   font-family: serif;
   max-width: 500px;
   text-align: center;

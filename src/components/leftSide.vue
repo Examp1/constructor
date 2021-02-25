@@ -165,21 +165,9 @@ export default {
     },
   },
   methods: {
-    // toCanvas() {
-    //   let scale1 = 2048 / document.querySelector(".mCanvas").offsetWidth;
-    //   html2canvas(document.querySelector(".mCanvas"), { scale: scale1 }).then(
-    //     function (canvas) {
-    //       // document.body.appendChild(canvas);
-    //       const image = canvas
-    //         .toDataURL("image/png")
-    //         .replace("image/png", "image/octet-stream");
-    //         console.log(image);
-    //       const t = document.querySelector(".download");
-    //       t.setAttribute("download", "your picture.png");
-    //       t.setAttribute("href", image);
-    //     }
-    //   );
-    // },
+    toCanvas(){
+      Bus.$emit('toCanvas');
+    },
     onUndoClick() {
       Bus.$emit("canvasUndo", {});
     },
@@ -469,7 +457,7 @@ export default {
 <style scoped lang="scss">
 .left {
   width: calc(500px - 10px);
-  height: calc(100vh - 88px);
+  height: calc(100vh - 78px);
   background-color: #fff;
   display: flex;
   position: relative;
@@ -493,6 +481,7 @@ export default {
   overflow-y: auto;
   overflow-x: hidden;
   @media (max-width: 1024px) and (orientation: portrait) {
+    overflow: unset;
     flex-direction: row;
     width: 100%;
     &.mobnotclicked{

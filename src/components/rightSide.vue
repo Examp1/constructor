@@ -719,7 +719,7 @@ export default {
     .right  {
         // width: calc(100% - 490px);
         flex-grow: 1;
-        height: calc(100vh - 88px);
+        height: calc(100vh - 76px);
         background-color: #f0f0f0;
         position: relative;
         user-select: none;
