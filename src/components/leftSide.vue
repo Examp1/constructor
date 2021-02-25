@@ -113,7 +113,7 @@ export default {
           icon: "ic-icon_2",
         },
         {
-          name: "Цвет",
+          name: "Колір",
           active: false,
           icon: "ic-icon_3",
         },
@@ -473,7 +473,10 @@ export default {
   background-color: #fff;
   display: flex;
   position: relative;
-  @media (max-width: 1024px) {
+  @media (orientation: landscape) and (max-width: 1024px) {
+    width: calc(40%);
+  }
+  @media (max-width: 1024px) and (orientation: portrait) {
     width: 100%;
     height: calc(50vh);
     order: 3;
@@ -487,7 +490,9 @@ export default {
   flex-direction: column;
   margin: 0px;
   background-color: #e7e7e7;
-  @media (max-width: 1024px) {
+  overflow-y: auto;
+  overflow-x: hidden;
+  @media (max-width: 1024px) and (orientation: portrait) {
     flex-direction: row;
     width: 100%;
     &.mobnotclicked{
@@ -518,7 +523,7 @@ export default {
     margin-bottom: 6px;
     font-size: 40px;
   }
-  @media (max-width: 1024px) {
+  @media (max-width: 1024px) and (orientation: portrait) {
     height: 32px;
     i{
       display: none;
@@ -535,7 +540,7 @@ export default {
       width: 10px;
       border-radius: 5px 0 0 5px;
       background-color: #75ae26;
-      @media (max-width: 1024px) {
+      @media (max-width: 1024px) and (orientation: portrait) {
         height: 5px;
         width: 100%;
         transform: translate(0, -100%);
@@ -546,13 +551,14 @@ export default {
   }
 }
 .tab__content {
-  width: 100%;
+  // width: 100%;
+  flex-grow: 1;
   margin-top: 0px;
   padding: 20px 20px 40px 20px;
   overflow-y: overlay;
   height: 100%;
   position: relative;
-  @media (max-width: 1024px) {
+  @media (max-width: 1024px) and (orientation: portrait) {
     display: flex;
     align-items: flex-start;
     flex-wrap: wrap;
@@ -604,7 +610,7 @@ export default {
   flex-grow: 1;
   background-color: #fff;
   display: none;
-  @media (max-width: 1024px) {
+  @media (max-width: 1024px) and (orientation: portrait) {
     &.mobnotclicked{
       display: flex !important;
       flex-wrap: wrap;
@@ -635,7 +641,7 @@ export default {
   padding: 10px;
   pointer-events: none;
   background-color: #f1f1f1;
-  @media (max-width: 1024px) {
+  @media (max-width: 1024px) and (orientation: portrait) {
     position: relative;
     width: calc(33% - 10px);
     margin: 0 5px;
@@ -644,7 +650,7 @@ export default {
 }
 .tab__content li:not(:last-of-type) {
   margin-bottom: 20px;
-  @media (max-width: 1024px) {
+  @media (max-width: 1024px) and (orientation: portrait) {
     margin-bottom: 5px;
   }
 }
@@ -691,7 +697,7 @@ export default {
   padding: 10px 0;
   display: none;
   position: relative;
-  @media (max-width: 1024px) {
+  @media (max-width: 1024px) and (orientation: portrait) {
     display: flex;
   }
   span{
@@ -740,7 +746,7 @@ export default {
   text-align: center;
   padding: 0 20px;
   display: none;
-  @media (max-width: 1024px) {
+  @media (max-width: 1024px) and (orientation: portrait) {
     display: flex;
   }
 }

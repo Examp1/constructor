@@ -39,55 +39,49 @@
     <left-side></left-side>
     <right-side></right-side>
 
-    <div class="modal_wrap" v-if="$store.state.modalPhotoCropper">
-      <photo-cropper></photo-cropper>
+    <div class="modal_wrap" v-if="isModal">
+      <photo-cropper v-if="$store.state.modalPhotoCropper"></photo-cropper>
+
+      <div class="modal__content" v-if="$store.state.orientAlert">
+        <p class="title">
+          Увага!
+        </p>
+        <p class="descr">
+          При зміні формату на даному етапі роботи положення всіх елементів зміниться.
+        </p>
+        <a href="#" class="btn" @click.prevent="onAcceptOrientAlert">Добре</a>
+      </div>
+
+      <div class="modal__content" v-if="false">
+        <p class="title">
+          Увага!
+        </p>
+        <p class="descr">
+          Перевір, як твій дизайн буде відображатись  у “Faceboo
+        </p>
+        <a href="#" class="btn">Добре</a>
+      </div>
+
+      <div class="modal__content" v-if="$store.state.firstStepModal">
+        <p class="title green">
+          #ДаруюВесну на раз-два-три!
+        </p>
+        <div class="text">
+          <p class="descr">
+          1. Створи унікальну листівку. 
+        </p>
+        <p class="descr">
+          2. Поділися нею у соцмережах. 
+        </p>
+        <p class="descr">
+          3. Розмісти у тексті публікації хештег 
+          #ДаруюВесну та відмічай трьох 
+          друзів, кому ти передаєш естафету весни!
+        </p>
+        </div>
+        <a href="#" class="btn" @click.prevent="$store.commit('SET_FIRSTSTEPMODAL', {val: false})">Добре</a>
+      </div>
     </div>
-    <!-- ориентация  -->
-    <!-- <div class="modal_wrap">
-        <div class="modal__content">
-         <p class="title">
-            Увага!
-         </p>
-          <p class="descr">
-            При зміні формату на даному етапі роботи положення всі
-          </p>
-          <a href="#" class="btn">Добре</a>
-        </div>
-    </div> -->
-    <!-- предупреждение фб -->
-    <!-- <div class="modal_wrap">
-        <div class="modal__content">
-         <p class="title">
-            Увага!
-         </p>
-          <p class="descr">
-            Перевір, як твій дизайн буде відображатись  у “Faceboo
-          </p>
-          <a href="#" class="btn">Добре</a>
-        </div>
-    </div> -->
-    <!-- step -->
-    <!-- <div class="modal_wrap">
-        <div class="modal__content">
-         <p class="title green">
-            #ДаруюВесну на раз-два-три!
-         </p>
-         <div class="text">
-            <p class="descr">
-           1. Створи унікальну листівку. 
-          </p>
-          <p class="descr">
-            2. Поділися нею у соцмережах. 
-          </p>
-          <p class="descr">
-            3. Розмісти у тексті публікації хештег 
-            #ДаруюВесну та відмічай трьох 
-            друзів, кому ти передаєш естафету весни!
-          </p>
-         </div>
-          <a href="#" class="btn">Добре</a>
-        </div>
-    </div> -->
   </div>
 </template>
 
@@ -97,6 +91,7 @@ import leftSide from "./leftSide.vue";
 import rightSide from "./rightSide.vue";
 import photoCropper from "./photoCropper.vue";
 import Bus from "../main";
+import canvg from "canvg";
 
 export default {
   name: "constructor",
@@ -104,6 +99,17 @@ export default {
     leftSide,
     rightSide,
     photoCropper,
+  },
+  computed: {
+    isModal() {
+      if(this.$store.state.firstStepModal || this.$store.state.orientAlert || this.$store.state.modalPhotoCropper)
+        return true
+      else
+        return false
+    }
+  },
+  mounted () {
+    this.$store.commit('SET_FIRSTSTEPMODAL', {val: true});
   },
   methods: {
     burgerSwitch(){
@@ -118,20 +124,48 @@ export default {
     onDeleteClick(){
       Bus.$emit("canvasDelete", {});
     },
-    toCanvas() {
-      this.$store.commit('SET_ISRENDER', {
-        val: true
+    onAcceptOrientAlert(){
+      Bus.$emit("acceptOrientAlert", {});
+       this.$store.commit('SET_ORIENTALERT', {val: false});
+    },
+    toCanvas(){
+      // this.$store.commit('SET_ISRENDER', {
+      //   val: true
+      // });
+      let canvClone = document.querySelector('.mCanvas').cloneNode(true);
+      canvClone.classList.add('prerender');
+      document.querySelector('.right').append(canvClone);
+      let imgs = canvClone.querySelectorAll('img');
+      let svgImgs = [];
+      imgs.forEach(item => {
+        if(item.getAttribute('src').indexOf('.svg') != -1)
+          svgImgs.push(item)
       });
+      svgImgs.forEach(item => {
+        let canvas = document.createElement('canvas');
+        canvas.style = item.getAttribute('style');
+        let ctx = canvas.getContext('2d');
+        canvas.width = item.offsetWidth;
+        canvas.height = item.offsetHeight;
+        ctx.drawImage(item, 0, 0, item.width, item.height,
+                      0,0, canvas.width, canvas.height);
+        item.src = canvas.toDataURL("image/png");
+      });
+      
       setTimeout(() => {
-        let scale1 = 2048 / document.querySelector(".mCanvas").offsetWidth;
-        html2canvas(document.querySelector(".mCanvas"), { scale: scale1 }).then(
+        let scale1 = 1200 / document.querySelector(".prerender").offsetWidth;
+        html2canvas(document.querySelector(".prerender"), {
+            logging: true,
+            profile: true,
+            useCORS: true,
+            scale: scale1}).then(
           (canvas) => {
             const image = canvas
               .toDataURL("image/png")
               .replace("image/png", "image/octet-stream");
             let el = document.createElement("a");
             el.setAttribute("href", image);
-            el.setAttribute("download", "your picture.png");
+            el.setAttribute("download", "DaruiuVesnu.jpg");
             document.body.appendChild(el);
             el.click();
             document.body.removeChild(el);
@@ -155,18 +189,18 @@ export default {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  @media (max-width: 1024px) {
+  @media (max-width: 1024px) and (orientation: portrait) {
     flex-direction: column;
   }
 }
 header {
   background: #80bb30;
   width: 100%;
-  padding: 15px 120px;
+  padding: 10px 120px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media (max-width: 1024px) {
+  @media (max-width: 1024px){
     padding: 0px 0px;
   }
   ul {
@@ -175,15 +209,15 @@ header {
   }
   a:not(.logo, .download) {
     color: #fff;
-    font-size: 43px;
+    font-size: 34px;
     text-decoration: none;
     font-weight: 600;
-    @media (max-width: 1024px) {
+    @media (max-width: 1024px){
       font-size: 18px;
     }
   }
   nav{
-    @media (max-width: 1024px) {
+    @media (max-width: 1024px){
       display: none;
     }
   }
@@ -223,6 +257,9 @@ header {
     }
     a:first-of-type {
       margin-right: 200px;
+      @media (max-width: 1210px) {
+        margin-right: 80px;
+      }
     }
     .burger{
       width: 26px;
@@ -284,7 +321,7 @@ header {
 }
 .nav__menu li i{
   font-size: 23px;
-  margin-right: 45px;
+  margin-right: 15px;
 }
 .nav__menu li:not(:last-of-type){
   margin-right: 45px;

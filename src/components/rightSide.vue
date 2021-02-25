@@ -46,14 +46,18 @@
             <button @click="changeOrder(1, selectedItemIndex)">На задний план</button>
         </div>
         <div class="orientBtn">
-            <button :disabled="orient == 'h'" @click="changeOrient('h')">
-                <span>Горизонт</span>
+            <button :disabled="orient == 'h'" @click="onChangeOrient('h')">
+                <span>Горизонталь</span>
                 <svg id="Слой_1" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 21"><defs></defs><path class="cls-1" d="M14.75,3.57l2.78.69A.44.44,0,0,0,18,4a.3.3,0,0,0,0-.1.44.44,0,0,0-.32-.53L15.91,3a4.08,4.08,0,0,1,4.3-.38A3.91,3.91,0,0,1,22.32,6.8a.44.44,0,0,0,.36.51h.08a.45.45,0,0,0,.4-.24.56.56,0,0,0,0-.12,4.88,4.88,0,0,0-5.65-5.63A5,5,0,0,0,15.84,2L16.39.7a.44.44,0,0,0-.23-.58.45.45,0,0,0-.58.23L14.44,2.94a.4.4,0,0,0,0,.37A.42.42,0,0,0,14.75,3.57Zm.05-.21Z"/><path class="cls-1" d="M13.1,8.1V0H0V21H25V8.1ZM11.8,1.28V19.72H1.3V1.28Zm1.3,8.1H23.67V19.72H13.1Z"/></svg>
             </button>
-            <button :disabled="orient == 'v'" @click="changeOrient('v')">
+            <button :disabled="orient == 'v'" @click="onChangeOrient('v')">
                 <span>Вертикаль</span>
                 <svg id="Слой_1" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 21"><defs></defs><path class="cls-1" d="M14.7,2.28A.46.46,0,0,0,15,2.19,4,4,0,0,1,19.8,2a4,4,0,0,1,1.71,3.9L20.23,4.54a.41.41,0,0,0-.31-.14.42.42,0,0,0-.32.11l-.07.08a.42.42,0,0,0,0,.54l1.94,2.08a.46.46,0,0,0,.31.14h0a.51.51,0,0,0,.36-.17L24,5a.43.43,0,0,0-.07-.61.45.45,0,0,0-.63.07l-.85,1.07a4.64,4.64,0,0,0-.26-1.77h0A4.78,4.78,0,0,0,20.3,1.28a5,5,0,0,0-5.84.23.24.24,0,0,0-.08.09.42.42,0,0,0,0,.52A.43.43,0,0,0,14.7,2.28Z"/><path class="cls-1" d="M13.1,8.1V0H0V21H25V8.1ZM3.68,19.72H1.3V1.28H11.8V8.1H3.68Zm1.3,0V9.38H23.7V19.72Z"/></svg>
             </button>
+        </div>
+
+        <div class="license">
+            АТ КБ «ПриватБанк». Ліцензія НБУ № 22 від 05.10.2011 р.<br>Реєстраційний № 92 в Державному реєстрі банків
         </div>
     </div>
 </template>
@@ -76,6 +80,8 @@ export default {
             selectedItemIndex: null,
             isContext: false,
             sceneLastScale: '',
+
+            desiredOrient: 'h',
 
             cx: 0,
             cy: 0,
@@ -181,8 +187,8 @@ export default {
         Bus.$on('canvasCopy', () => {
             if(this.selectedItemType == 'item' && this.selectedItemIndex > -1){
                 let newItem = JSON.parse(JSON.stringify(this.imgItems[this.selectedItemIndex]));
-                newItem.left = this.$store.state.origWidth/2 - newItem.viewportWidth / 2;
-                newItem.top  = this.$store.state.origHeight/2 - newItem.viewportHeight / 2;
+                newItem.left = this.$store.state.origWidth/2 - newItem.viewportWidth / 2 + Math.random()*50;
+                newItem.top  = this.$store.state.origHeight/2 - newItem.viewportHeight / 2 + Math.random()*50;
                 this.imgItems.push(newItem);
                 this.pushState();
             }
@@ -198,6 +204,9 @@ export default {
                     val: false
                 });
             }
+        });
+        Bus.$on('acceptOrientAlert', () => {
+            this.changeOrient(this.desiredOrient);
         });
         
         this.$refs.rootDiv.addEventListener('wheel', (e) => {
@@ -431,6 +440,14 @@ export default {
         gizmoDownMove(ev){
             this.imgVm.bodyMouseDown(ev)
         },
+        onChangeOrient(orient){
+            if(this.imgItems.length >= 2){
+                this.desiredOrient = orient;
+                this.$store.commit('SET_ORIENTALERT', {val: true});
+            }
+            else
+                this.changeOrient(orient)
+        },
         changeOrient(orient, save = true){
             switch (orient) {
                 case 'v':
@@ -450,7 +467,6 @@ export default {
                                 this.calculateMaxSize();
                                 Bus.$emit('recalcSize', {});
                                 this.pushState();
-                                
                             }, 100);
                         }
                     }
@@ -472,7 +488,6 @@ export default {
                                 this.calculateMaxSize();
                                 Bus.$emit('recalcSize', {});
                                 this.pushState();
-                                
                             }, 100);
                         }
                     }
@@ -480,7 +495,6 @@ export default {
             }
         },
         onItemContext(e){
-            debugger
             if(this.imgItems.length > 1){
                 e.preventDefault();
                 let rootOffset = this.getOffset(this.$refs.rootDiv);
@@ -703,14 +717,15 @@ export default {
 
 <style    scoped lang="scss">
     .right  {
-        width: calc(100% - 490px);
+        // width: calc(100% - 490px);
+        flex-grow: 1;
         height: calc(100vh - 88px);
         background-color: #f0f0f0;
         position: relative;
         user-select: none;
         overflow: auto;
         overflow: hidden;
-        @media (max-width: 1024px) {
+        @media (max-width: 1024px) and (orientation: portrait) {
             width: 100%;
             height: calc(50vh - 66px);
             order: 2;
@@ -758,7 +773,7 @@ export default {
         right: 20px;
         width: 60px;
         z-index: 1000;
-        opacity: 0.5;
+        // opacity: 0.5;
         pointer-events: none;
     }
     .hoverGizmo{
@@ -836,7 +851,7 @@ export default {
         left: 50%;
         transform: translate(-50%, 0);
         display: flex;
-        @media (max-width: 1024px) {
+        @media (max-width: 1024px) and (orientation: portrait) {
             bottom: 10px;
         }
         button{ 
@@ -847,21 +862,21 @@ export default {
             outline: none;
             color: #fff;
             background-color: #80bb30;
-            @media (max-width: 1024px) {
+            @media (max-width: 1024px) and (orientation: portrait) {
                 padding: 10px;
             }
             & + button{
                 margin-left: 15px;
             }
             &>span{
-                @media (max-width: 1024px) {
+                @media (max-width: 1024px) and (orientation: portrait) {
                     display: none;
                 }
             }
             svg{
                 display: none;
                 width: 22px;
-                @media (max-width: 1024px) {
+                @media (max-width: 1024px) and (orientation: portrait) {
                     display: block;
                 }
                 *{
@@ -898,6 +913,20 @@ export default {
                 color: #fff;
                 background-color: #80bb30;
             }
+        }
+    }
+    .license{
+        position: absolute;
+        bottom: 20px;
+        right: 25px;
+        
+        font-size: 10px;
+        font-family: "Geometria";
+        color: rgb(175, 175, 175);
+        line-height: 1.2;
+        text-align: right;
+        @media (max-width: 1024px) {
+            display: none;
         }
     }
 </style>

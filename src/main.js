@@ -43,6 +43,10 @@ const store = new Vuex.Store({
     isSelectedItem: false,
     modalPhotoCropper: false,
     canCrop: false,
+    orientAlert: false,
+    firstStepModal: false,
+
+    
   },
   mutations: {
     SET_ORIG_SIZE (state, paylpad) {
@@ -99,6 +103,16 @@ const store = new Vuex.Store({
     SET_ISRENDER(state, payload){
       state.isRender = payload.val;
     },
+
+    SET_FIRSTSTEPMODAL(state, payload){
+      state.firstStepModal = payload.val;
+    },
+    SET_ORIENTALERT(state, payload){
+      state.orientAlert = payload.val;
+    },
+    // SET_FIRSTSTEPMODAL(state, payload){
+    //   state.firstStepModal = payload.val;
+    // },
   },
   actions: {
     CANSEL_CROP ({ commit, state}) {
