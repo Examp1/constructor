@@ -173,6 +173,7 @@ export default {
             this.$store.commit('SET_ISRENDER', {
               val: false
             });
+            document.querySelector('.prerender').remove();
           }
         );
       }, 500);
