@@ -276,8 +276,13 @@ export default {
                   }
 
                   let data = new FormData();
-                  data.append('file',dataURLtoFile(pictureBase64,'temp.png'));
+                  data.append('file',dataURLtoFile(image,'temp.png'));
                   data.append('orient',orient);
+
+                  this.$store.commit('SET_ISRENDER', {
+                    val: false
+                  });
+                  document.querySelector('.prerender').remove();
 
                   axios.post('/share-fb', data)
                     .then(response => {
