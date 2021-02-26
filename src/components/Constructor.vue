@@ -217,11 +217,57 @@ export default {
         return new File([u8arr], filename, {type:mime});
       }
 
+      this.$store.commit('SET_ISRENDER', {
+        val: true
+      });
+      let canvClone = document.querySelector('.mCanvas').cloneNode(true);
+      canvClone.classList.add('prerender');
+      document.querySelector('.right').append(canvClone);
+      let scale1 = 1200 / document.querySelector(".prerender").offsetWidth;
+
+      canvClone.style.width = `${+canvClone.style.width.replace('px','') * scale1}px`;
+      canvClone.style.height = `${+canvClone.style.height.replace('px','') * scale1}px`;
+      let wt = canvClone.querySelector('.waterm');
+      wt.style.width = `${+wt.style.width.replace('px','') * scale1}px`;
+      wt.style.height = `${+wt.style.height.replace('px','') * scale1}px`;
+      wt.style.top = `${+wt.style.top.replace('px','') * scale1}px`;
+      wt.style.right = `${+wt.style.right.replace('px','') * scale1}px`;
+
+      canvClone.querySelectorAll('.drr').forEach(item => {
+        item.style.width = `${+item.style.width.replace('px','') * scale1}px`;
+        item.style.height = `${+item.style.height.replace('px','') * scale1}px`;
+        item.style.top = `${+item.style.top.replace('px','') * scale1}px`;
+        item.style.left = `${+item.style.left.replace('px','') * scale1}px`;
+      });
+
+      let imgs = canvClone.querySelectorAll('img');
+      let svgImgs = [];
+      imgs.forEach(item => {
+        if(item.getAttribute('src').indexOf('.svg') != -1)
+          svgImgs.push(item)
+      });
+      svgImgs.forEach(item => {
+        let canvas = document.createElement('canvas');
+        canvas.style = item.getAttribute('style');
+        let ctx = canvas.getContext('2d');
+        canvas.width = item.offsetWidth;
+        canvas.height = item.offsetHeight;
+        ctx.drawImage(item, 0, 0, item.width, item.height,
+                0,0, canvas.width, canvas.height);
+        item.src = canvas.toDataURL("image/png");
+      });
+      canvClone.style.transform = '';
+      canvClone.style.top = '';
+      canvClone.style.left = '';
+
       setTimeout(() => {
-        let scale1 = 2048 / document.querySelector(".mCanvas").offsetWidth;
-        html2canvas(document.querySelector(".mCanvas"), { scale: scale1 }).then(
+        html2canvas(document.querySelector(".prerender"), {
+          logging: true,
+          profile: true,
+          useCORS: true,
+          scale: 1}).then(
                 (canvas) => {
-                  const pictureBase64 = canvas
+                  const image = canvas
                           .toDataURL("image/png");
 
                   let orient = 'h';
