@@ -2,6 +2,9 @@
     <div class="right" ref="rootDiv"
         v-hammer:pinch="onPinch"
         v-hammer:pinchstart="onPinchStart">
+        <div class="loader" v-if="$store.state.isRender">
+            <div class="lds-dual-ring"></div>
+        </div>
         <div class="rootClickHandler" @click.stop="rootClick" ref="rootClickHandler"></div>
         <div class="mCanvas" :style="mCanvasStyle"  ref="mCan" :class="{dropOver: isDropOver}" @mouseleave="hoverItemType = ''" @drop="onDrop" @dragover="allowDrop" @dragleave="onDragLeave">
             <div :style="bgStyle" @mouseover="onBgOver" @click="onBgClick"></div>
@@ -236,6 +239,7 @@ export default {
                 top: `${this.$store.state.origWidth * 0.02}px`,
                 right: `${this.$store.state.origWidth * 0.02}px`,
                 width: `${this.$store.state.origWidth * 0.05}px`,
+                height: `${this.$store.state.origWidth * 0.05}px`,
                 zIndex: '1000',
                 opacity: '0.5',
                 pointerEvents: 'none',
@@ -719,7 +723,7 @@ export default {
     .right  {
         // width: calc(100% - 490px);
         flex-grow: 1;
-        height: calc(100vh - 77px);
+        height: calc(100vh - 78px);
         background-color: #f0f0f0;
         position: relative;
         user-select: none;
@@ -772,6 +776,7 @@ export default {
         top: 20px;
         right: 20px;
         width: 60px;
+        // height: 60px;
         z-index: 1000;
         // opacity: 0.5;
         pointer-events: none;
@@ -928,5 +933,43 @@ export default {
         @media (max-width: 1024px) {
             display: none;
         }
+    }
+
+    .loader{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #f0f0f0;
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .lds-dual-ring {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+        }
+        .lds-dual-ring:after {
+            content: " ";
+            display: block;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border-radius: 50%;
+            border: 6px solid #80bb30;
+            border-color: #80bb30 transparent #80bb30 transparent;
+            animation: lds-dual-ring 1.2s linear infinite;
+        }
+        @keyframes lds-dual-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
     }
 </style>

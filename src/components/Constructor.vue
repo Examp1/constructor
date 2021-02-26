@@ -130,12 +130,29 @@ export default {
        this.$store.commit('SET_ORIENTALERT', {val: false});
     },
     toCanvas(){
-      // this.$store.commit('SET_ISRENDER', {
-      //   val: true
-      // });
+      this.$store.commit('SET_ISRENDER', {
+          val: true
+      });
       let canvClone = document.querySelector('.mCanvas').cloneNode(true);
       canvClone.classList.add('prerender');
       document.querySelector('.right').append(canvClone);
+      let scale1 = 1200 / document.querySelector(".prerender").offsetWidth;
+
+      canvClone.style.width = `${+canvClone.style.width.replace('px','') * scale1}px`;
+      canvClone.style.height = `${+canvClone.style.height.replace('px','') * scale1}px`;
+      let wt = canvClone.querySelector('.waterm');
+      wt.style.width = `${+wt.style.width.replace('px','') * scale1}px`;
+      wt.style.height = `${+wt.style.height.replace('px','') * scale1}px`;
+      wt.style.top = `${+wt.style.top.replace('px','') * scale1}px`;
+      wt.style.right = `${+wt.style.right.replace('px','') * scale1}px`;
+
+      canvClone.querySelectorAll('.drr').forEach(item => {
+        item.style.width = `${+item.style.width.replace('px','') * scale1}px`;
+        item.style.height = `${+item.style.height.replace('px','') * scale1}px`;
+        item.style.top = `${+item.style.top.replace('px','') * scale1}px`;
+        item.style.left = `${+item.style.left.replace('px','') * scale1}px`;
+      });
+
       let imgs = canvClone.querySelectorAll('img');
       let svgImgs = [];
       imgs.forEach(item => {
@@ -152,14 +169,16 @@ export default {
                       0,0, canvas.width, canvas.height);
         item.src = canvas.toDataURL("image/png");
       });
+      canvClone.style.transform = '';
+      canvClone.style.top = '';
+      canvClone.style.left = '';
       
       setTimeout(() => {
-        let scale1 = 1200 / document.querySelector(".prerender").offsetWidth;
         html2canvas(document.querySelector(".prerender"), {
             logging: true,
             profile: true,
             useCORS: true,
-            scale: scale1}).then(
+            scale: 1}).then(
           (canvas) => {
             const image = canvas
               .toDataURL("image/png")

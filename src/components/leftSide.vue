@@ -457,7 +457,7 @@ export default {
 <style scoped lang="scss">
 .left {
   width: calc(500px - 10px);
-  height: calc(100vh - 77px);
+  height: calc(100vh - 78px);
   background-color: #fff;
   display: flex;
   position: relative;
