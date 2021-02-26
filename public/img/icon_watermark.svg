@@ -1,1 +1,7 @@
-<svg id="Слой_1" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 51"><defs><style>.cls-1{fill:#fff;}</style></defs><path class="cls-1" d="M38.81,14.74V36.39h-3c-1.27-10.71-8-17.44-18.71-18.71V14.74ZM9.52,7.11v18h3.82c10,0,15.13,5.1,15.13,15.14V44h18V7.11Z"/><rect class="cls-1" x="9.5" y="29.58" width="14.44" height="14.44"/></svg>
+<svg id="Слой_1" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 51">
+	<defs>
+		<style>.cls-1{fill:rgba(255,255,255,0.5);}</style>
+	</defs>
+	<path class="cls-1" d="M38.81,14.74V36.39h-3c-1.27-10.71-8-17.44-18.71-18.71V14.74ZM9.52,7.11v18h3.82c10,0,15.13,5.1,15.13,15.14V44h18V7.11Z"/>
+	<rect class="cls-1" x="9.5" y="29.58" width="14.44" height="14.44"/>
+</svg>

@@ -20,8 +20,10 @@ const store = new Vuex.Store({
     origWidth: 0,
     origHeight: 0,
     canvasZoom: 1,
-    maxSize: 100,
-    minSize: 100,
+    maxWSize: 100,
+    minWSize: 100,
+    maxHSize: 100,
+    minHSize: 100,
 
     isRender: false,
 
@@ -41,6 +43,10 @@ const store = new Vuex.Store({
     isSelectedItem: false,
     modalPhotoCropper: false,
     canCrop: false,
+    orientAlert: false,
+    firstStepModal: false,
+
+    
   },
   mutations: {
     SET_ORIG_SIZE (state, paylpad) {
@@ -69,8 +75,10 @@ const store = new Vuex.Store({
       }
     },
     SET_MAXSIZE(state, payload){
-      state.maxSize = payload.val;
-      state.minSize = payload.val * 0.1;
+      state.maxWSize = payload.w;
+      state.minWSize = payload.w * 0.1;
+      state.maxHSize = payload.h;
+      state.minHSize = payload.h * 0.1;
     },
 
     SER_ORIG_PHOTO(state, payload){
@@ -95,6 +103,16 @@ const store = new Vuex.Store({
     SET_ISRENDER(state, payload){
       state.isRender = payload.val;
     },
+
+    SET_FIRSTSTEPMODAL(state, payload){
+      state.firstStepModal = payload.val;
+    },
+    SET_ORIENTALERT(state, payload){
+      state.orientAlert = payload.val;
+    },
+    // SET_FIRSTSTEPMODAL(state, payload){
+    //   state.firstStepModal = payload.val;
+    // },
   },
   actions: {
     CANSEL_CROP ({ commit, state}) {
