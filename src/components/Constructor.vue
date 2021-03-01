@@ -1,6 +1,6 @@
 <template>
   <div class="constructor">
-    <header :class="{ bluur: isModal }">
+    <header :class="{bluur: isModal}">
       <div class="l">
         <a href="#" class="logo desk"><img src="/img/logo.png" alt="" /></a>
         <a href="#" class="logo mob"><img src="/img/pb_logo.svg" alt="" /></a>
@@ -15,16 +15,12 @@
           >
             <i class="ic-icon_5"></i>
           </li>
-          <li
-            :class="{ disabled: !$store.state.isSelectedItem }"
-            @click="onCopyClick"
-          >
+          <li :class="{ disabled: !$store.state.isSelectedItem}"
+              @click="onCopyClick">
             <i class="ic-icon_7"></i>
           </li>
-          <li
-            :class="{ disabled: !$store.state.isSelectedItem }"
-            @click="onDeleteClick"
-          >
+          <li :class="{ disabled: !$store.state.isSelectedItem}"
+              @click="onDeleteClick">
             <i class="ic-icon_9"></i>
           </li>
           <li v-if="$store.state.canCrop">
@@ -33,100 +29,58 @@
               @click.prevent="toCanvas"
               class="download"
               download="your picture.png"
-              >завантажити
-            </a>
+              >завантажити </a
+            >
           </li>
-          <li v-if="$store.state.canCrop">
-            поділитися <i class="ic-icon_fb"></i>
-          </li>
+          <li v-if="$store.state.canCrop">поділитися <i class="ic-icon_fb"></i></li>
         </ul>
       </nav>
     </header>
-    <left-side :class="{ bluur: isModal }"></left-side>
-    <right-side :class="{ bluur: isModal }"></right-side>
+    <left-side :class="{bluur: isModal}"></left-side>
+    <right-side :class="{bluur: isModal}"></right-side>
 
-    <!-- <div class="modal_wrap" v-if="isModal">
+    <div class="modal_wrap" v-if="isModal">
       <photo-cropper v-if="$store.state.modalPhotoCropper"></photo-cropper>
 
       <div class="modal__content" v-if="$store.state.orientAlert">
-        <p class="title">Увага!</p>
+        <p class="title">
+          Увага!
+        </p>
         <p class="descr">
-          При зміні формату на даному етапі роботи положення всіх елементів
-          зміниться.
+          При зміні формату на даному етапі роботи положення всіх елементів зміниться.
         </p>
         <a href="#" class="btn" @click.prevent="onAcceptOrientAlert">Добре</a>
       </div>
 
       <div class="modal__content" v-if="false">
-        <p class="title">Увага!</p>
+        <p class="title">
+          Увага!
+        </p>
         <p class="descr">
-          Перевір, як твій дизайн буде відображатись у “Faceboo
+          Перевір, як твій дизайн буде відображатись  у “Faceboo
         </p>
         <a href="#" class="btn">Добре</a>
       </div>
 
       <div class="modal__content" v-if="$store.state.firstStepModal">
-        <p class="title green">#ДаруюВесну на раз-два-три!</p>
-        <div class="text">
-          <div class="text-wrap">
-            <img src="img/ico/ico-1.png" alt="" />
-            <p class="descr">1. Створи унікальну листівку.</p>
-          </div>
-          <div class="text-wrap">
-            <img src="img/ico/ico-2.png" alt="" />
-            <p class="descr">2. Поділися нею у соцмережах.</p>
-          </div>
-          <div class="text-wrap">
-            <img src="img/ico/ico-3.png" alt="" />
-            <p class="descr">
-              3. Розмісти у тексті публікації хештег
-              <a href="#">#ДаруюВесну</a> та відмічай трьох друзів, кому ти
-              передаєш естафету весни!
-            </p>
-          </div>
-        </div>
-        <a
-          href="#"
-          class="btn"
-          @click.prevent="$store.commit('SET_FIRSTSTEPMODAL', { val: false })"
-          >Добре</a
-        >
-      </div>
-    </div> -->
-    <div class="modal-landscape">
-      <div class="modal__content">
-        <p class="title">Увага!</p>
-        <p class="descr">
-          Вибачте але конструктор не підтримує режим пейзажу
+        <p class="title green">
+          #ДаруюВесну на раз-два-три!
         </p>
-        <a href="#" class="btn">Добре</a>
+        <div class="text">
+          <p class="descr">
+          1. Створи унікальну листівку. 
+        </p>
+        <p class="descr">
+          2. Поділися нею у соцмережах. 
+        </p>
+        <p class="descr">
+          3. Розмісти у тексті публікації хештег 
+          #ДаруюВесну та відмічай трьох 
+          друзів, кому ти передаєш естафету весни!
+        </p>
+        </div>
+        <a href="#" class="btn" @click.prevent="$store.commit('SET_FIRSTSTEPMODAL', {val: false})">Добре</a>
       </div>
-    </div>
-    <div class="overlay">
-      <div class="step1 step">
-        <p>Обери листівку із запропонованих шаблонів АБО</p>
-        <p>Створи унікальну листівку</p>
-      </div>
-      <div class="step2 step">
-        <p>Обери дизайн: горизонтальна чи вертикальна</p>
-      </div>
-      <div class="step3 step">
-        <p>Обери колір фону</p>
-      </div>
-      <div class="step4 step">
-        <p>Додай святкових елементів</p>
-      </div>
-      <div class="step5 step">
-        <p>Напиши текст (із запропонованих написів)</p>
-      </div>
-      <div class="step6 step">
-        <p>Можеш помістити своє фото</p>
-      </div>
-      <div class="step7 step">
-        <p>Тут ти можеш повернутися до старого дизайну</p>
-      </div>
-      <a href="#" class="btn-next btn">далі</a>
-      <a href="#" class="btn-skip btn">Пропустити</a>
     </div>
   </div>
 </template>
@@ -148,115 +102,99 @@ export default {
   },
   computed: {
     isModal() {
-      if (
-        this.$store.state.firstStepModal ||
-        this.$store.state.orientAlert ||
-        this.$store.state.modalPhotoCropper
-      )
-        return true;
-      else return false;
-    },
+      if(this.$store.state.firstStepModal || this.$store.state.orientAlert || this.$store.state.modalPhotoCropper)
+        return true
+      else
+        return false
+    }
   },
-  mounted() {
-    this.$store.commit("SET_FIRSTSTEPMODAL", { val: true });
-    Bus.$on("toCanvas", this.toCanvas);
+  mounted () {
+    this.$store.commit('SET_FIRSTSTEPMODAL', {val: true});
+    Bus.$on('toCanvas', this.toCanvas);
   },
   methods: {
-    burgerSwitch() {
-      Bus.$emit("burgerSwitch", {});
+    burgerSwitch(){
+      Bus.$emit('burgerSwitch', {});
     },
     onUndoClick() {
       Bus.$emit("canvasUndo", {});
     },
-    onCopyClick() {
+    onCopyClick(){
       Bus.$emit("canvasCopy", {});
     },
-    onDeleteClick() {
+    onDeleteClick(){
       Bus.$emit("canvasDelete", {});
     },
-    onAcceptOrientAlert() {
+    onAcceptOrientAlert(){
       Bus.$emit("acceptOrientAlert", {});
-      this.$store.commit("SET_ORIENTALERT", { val: false });
+       this.$store.commit('SET_ORIENTALERT', {val: false});
     },
-    toCanvas() {
-      this.$store.commit("SET_ISRENDER", {
-        val: true,
+    toCanvas(){
+      this.$store.commit('SET_ISRENDER', {
+          val: true
       });
-      let canvClone = document.querySelector(".mCanvas").cloneNode(true);
-      canvClone.classList.add("prerender");
-      document.querySelector(".right").append(canvClone);
+      let canvClone = document.querySelector('.mCanvas').cloneNode(true);
+      canvClone.classList.add('prerender');
+      document.querySelector('.right').append(canvClone);
       let scale1 = 1200 / document.querySelector(".prerender").offsetWidth;
 
-      canvClone.style.width = `${
-        +canvClone.style.width.replace("px", "") * scale1
-      }px`;
-      canvClone.style.height = `${
-        +canvClone.style.height.replace("px", "") * scale1
-      }px`;
-      let wt = canvClone.querySelector(".waterm");
-      wt.style.width = `${+wt.style.width.replace("px", "") * scale1}px`;
-      wt.style.height = `${+wt.style.height.replace("px", "") * scale1}px`;
-      wt.style.top = `${+wt.style.top.replace("px", "") * scale1}px`;
-      wt.style.right = `${+wt.style.right.replace("px", "") * scale1}px`;
+      canvClone.style.width = `${+canvClone.style.width.replace('px','') * scale1}px`;
+      canvClone.style.height = `${+canvClone.style.height.replace('px','') * scale1}px`;
+      let wt = canvClone.querySelector('.waterm');
+      wt.style.width = `${+wt.style.width.replace('px','') * scale1}px`;
+      wt.style.height = `${+wt.style.height.replace('px','') * scale1}px`;
+      wt.style.top = `${+wt.style.top.replace('px','') * scale1}px`;
+      wt.style.right = `${+wt.style.right.replace('px','') * scale1}px`;
 
-      canvClone.querySelectorAll(".drr").forEach((item) => {
-        item.style.width = `${+item.style.width.replace("px", "") * scale1}px`;
-        item.style.height = `${
-          +item.style.height.replace("px", "") * scale1
-        }px`;
-        item.style.top = `${+item.style.top.replace("px", "") * scale1}px`;
-        item.style.left = `${+item.style.left.replace("px", "") * scale1}px`;
+      canvClone.querySelectorAll('.drr').forEach(item => {
+        item.style.width = `${+item.style.width.replace('px','') * scale1}px`;
+        item.style.height = `${+item.style.height.replace('px','') * scale1}px`;
+        item.style.top = `${+item.style.top.replace('px','') * scale1}px`;
+        item.style.left = `${+item.style.left.replace('px','') * scale1}px`;
       });
 
-      let imgs = canvClone.querySelectorAll("img");
+      let imgs = canvClone.querySelectorAll('img');
       let svgImgs = [];
-      imgs.forEach((item) => {
-        if (item.getAttribute("src").indexOf(".svg") != -1) svgImgs.push(item);
+      imgs.forEach(item => {
+        if(item.getAttribute('src').indexOf('.svg') != -1)
+          svgImgs.push(item)
       });
-      svgImgs.forEach((item) => {
-        let canvas = document.createElement("canvas");
-        canvas.style = item.getAttribute("style");
-        let ctx = canvas.getContext("2d");
+      svgImgs.forEach(item => {
+        let canvas = document.createElement('canvas');
+        canvas.style = item.getAttribute('style');
+        let ctx = canvas.getContext('2d');
         canvas.width = item.offsetWidth;
         canvas.height = item.offsetHeight;
-        ctx.drawImage(
-          item,
-          0,
-          0,
-          item.width,
-          item.height,
-          0,
-          0,
-          canvas.width,
-          canvas.height
-        );
+        ctx.drawImage(item, 0, 0, item.width, item.height,
+                      0,0, canvas.width, canvas.height);
         item.src = canvas.toDataURL("image/png");
       });
-      canvClone.style.transform = "";
-      canvClone.style.top = "";
-      canvClone.style.left = "";
-
+      canvClone.style.transform = '';
+      canvClone.style.top = '';
+      canvClone.style.left = '';
+      
       setTimeout(() => {
         html2canvas(document.querySelector(".prerender"), {
-          logging: true,
-          profile: true,
-          useCORS: true,
-          scale: 1,
-        }).then((canvas) => {
-          const image = canvas
-            .toDataURL("image/png")
-            .replace("image/png", "image/octet-stream");
-          let el = document.createElement("a");
-          el.setAttribute("href", image);
-          el.setAttribute("download", "DaruiuVesnu.jpg");
-          document.body.appendChild(el);
-          el.click();
-          document.body.removeChild(el);
-          this.$store.commit("SET_ISRENDER", {
-            val: false,
-          });
-          document.querySelector(".prerender").remove();
-        });
+            logging: true,
+            profile: true,
+            useCORS: true,
+            scale: 1}).then(
+          (canvas) => {
+            const image = canvas
+              .toDataURL("image/png")
+              .replace("image/png", "image/octet-stream");
+            let el = document.createElement("a");
+            el.setAttribute("href", image);
+            el.setAttribute("download", "DaruiuVesnu.jpg");
+            document.body.appendChild(el);
+            el.click();
+            document.body.removeChild(el);
+            this.$store.commit('SET_ISRENDER', {
+              val: false
+            });
+            document.querySelector('.prerender').remove();
+          }
+        );
       }, 500);
     },
   },
@@ -268,7 +206,7 @@ export default {
 * {
   box-sizing: border-box;
 }
-.bluur {
+.bluur{
   filter: blur(3px);
 }
 .constructor {
@@ -286,24 +224,24 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media (max-width: 1024px) {
+  @media (max-width: 1024px){
     padding: 0px 0px;
   }
   ul {
     display: flex;
-    align-items: center;
+    align-items: center
   }
   a:not(.logo, .download) {
     color: #fff;
     font-size: 34px;
     text-decoration: none;
     font-weight: 600;
-    @media (max-width: 1024px) {
+    @media (max-width: 1024px){
       font-size: 18px;
     }
   }
-  nav {
-    @media (max-width: 1024px) {
+  nav{
+    @media (max-width: 1024px){
       display: none;
     }
   }
@@ -327,16 +265,16 @@ header {
     @media (max-width: 1024px) {
       width: 100%;
     }
-    .mob {
+    .mob{
       display: none;
-      img {
+      img{
         width: 67px;
       }
       @media (max-width: 1024px) {
         display: block;
       }
     }
-    .desk {
+    .desk{
       @media (max-width: 1024px) {
         display: none;
       }
@@ -347,7 +285,7 @@ header {
         margin-right: 80px;
       }
     }
-    .burger {
+    .burger{
       width: 26px;
       height: 20px;
       margin-right: 20px;
@@ -356,8 +294,8 @@ header {
       @media (max-width: 1024px) {
         display: block;
       }
-      &:before {
-        content: "";
+      &:before{
+        content: '';
         width: 26px;
         height: 3px;
         border-radius: 2px;
@@ -366,8 +304,8 @@ header {
         left: 0;
         background-color: #fff;
       }
-      &:after {
-        content: "";
+      &:after{
+        content: '';
         width: 26px;
         height: 3px;
         border-radius: 2px;
@@ -376,7 +314,7 @@ header {
         left: 0;
         background-color: #fff;
       }
-      div {
+      div{
         width: 26px;
         height: 3px;
         background: #fff;
@@ -405,30 +343,26 @@ header {
   justify-content: center;
   align-items: center;
 }
-.nav__menu li i {
+.nav__menu li i{
   font-size: 23px;
   margin-right: 15px;
 }
-.nav__menu li:not(:last-of-type) {
+.nav__menu li:not(:last-of-type){
   margin-right: 45px;
 }
-.nav__menu li:last-of-type {
+.nav__menu li:last-of-type{
   display: flex;
   align-items: center;
-  i {
+  i{
     margin-right: 0px;
     margin-left: 10px;
   }
 }
-.download {
+.download{
   color: #fff;
   text-decoration: none;
 }
-.text-wrap {
-  display: flex;
-  align-items: center;
-}
-.modal__content {
+.modal__content{
   background-color: #fff;
   display: flex;
   align-items: center;
@@ -437,340 +371,31 @@ header {
   border-radius: 10px;
   box-shadow: 0px 0px 12px 0px rgba(102, 102, 102, 0.08);
   font-family: serif;
-  max-width: 700px;
+  max-width: 500px;
   text-align: center;
-  .title {
-    font-family: "Geometria-Bold";
+  .title{
+    font-family: 'Geometria-Bold';
     font-size: 26px;
     margin-bottom: 10px;
-    &.green {
+    &.green{
       color: #74ae26;
     }
   }
-  .descr {
-    font-family: "Geometria";
+  .descr{
+    font-family: 'Geometria';
     font-size: 22px;
     margin-top: 0px;
-    margin-bottom: 30px;
-    color: #4a4a4a;
-    &:first-of-type {
-      margin-top: 20px;
-    }
-    a {
-      color: #74ae26;
-      text-decoration: none;
-    }
   }
-  img {
-    width: 50px;
-    height: 55px;
-    object-fit: contain;
-    margin-right: 20px;
-  }
-  .btn {
+  .btn{
     background-color: #74ae26;
     color: #fff;
     padding: 10px 25px;
     border-radius: 5px;
     text-decoration: none;
-    font-family: "Geometria";
+    font-family: 'Geometria';
   }
-  .text {
+  .text{
     text-align: left;
-  }
-}
-.overlay {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  background-color: rgba(#000, 0.4);
-  z-index: 1000;
-  color: #fff;
-  font-family: "Geometria";
-  font-size: 18px;
-  .step {
-    opacity: 0;
-    p::before {
-      position: absolute;
-      content: "";
-      background-repeat: no-repeat;
-      background-size: contain;
-    }
-  }
-  .step1 {
-    position: absolute;
-    top: 10%;
-    left: 170px;
-    p:first-of-type::before {
-      width: 60px;
-      height: 60px;
-      background-image: url(/img/ico/arrow-1.svg);
-      left: -70px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    p:last-of-type::before {
-      width: 200px;
-      height: 200px;
-      background-image: url(/img/ico/arrow-2.svg);
-      right: 20px;
-      top: 90px;
-    }
-    @media (max-width: 1536px){
-      left: 15%;
-    }
-    @media (max-width: 768px){
-      top: 40%;
-      left: 0%;
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-      font-size: 14px;
-      p{
-        max-width: 180px;
-        &::before{
-           background-image: url(/img/ico/arrow-1.svg) !important;
-           width: 60px !important;
-           height: 60px !important;
-           
-           transform: rotate(-90deg) !important;
-        }
-        &:last-of-type::before{
-          transform: rotate(90deg) !important;
-          right: unset;
-          top: -50px;
-        }
-        &:first-of-type::before{
-          left: 20% !important;
-          top: 70px;
-        }
-      }
-    }
-  }
-  .step2 {
-    position: absolute;
-    bottom: 2%;
-    left: 30%;
-    p::before {
-      background-image: url(/img/ico/arrow-3.svg);
-      width: 200px;
-      height: 60px;
-      right: -200px;
-      top: -10px;
-    }
-    @media (max-width: 1536px){
-      left: 15%;
-    }
-    @media (max-width: 768px){
-      left: 10%;
-      top: 20%;
-      width: 100%;
-      p::before{
-          background-image: url(/img/ico/arrow-1.svg);
-          transform: rotate(-90deg);
-          width: 60px;
-          height: 60px;
-          left: 40%;
-          top: 80px;
-      }
-    }
-  }
-  .step3 {
-    position: absolute;
-    left: 10%;
-    top: 35%;
-    p{
-      text-align: center;
-    }
-    p::before {
-      width: 60px;
-      height: 60px;
-      background-image: url(/img/ico/arrow-1.svg);
-      left: -70px;
-      top: 40%;
-      // transform: translateY(-50%);
-    }
-    @media (max-width: 1536px){
-      left: 15%;
-      top: 40%;
-    }
-    @media (max-width: 768px){
-      left: 0%;
-      top: 41%;
-      width: 100%;
-      p::before{
-          background-image: url(/img/ico/arrow-1.svg);
-          transform: rotate(-90deg);
-          width: 60px;
-          height: 60px;
-          left: 50%;
-          top: 40px;
-      }
-    }
-  }
-  .step4 {
-    position: absolute;
-    left: 10%;
-    top: 25%;
-    p::before {
-      width: 60px;
-      height: 60px;
-      background-image: url(/img/ico/arrow-1.svg);
-      left: -70px;
-      top: 40%;
-      // transform: translateY(-50%);
-    }
-    @media (max-width: 1536px){
-      left: 35%;
-      top: 30%;
-    }
-    @media (max-width: 768px){
-      left: 0%;
-      top: 41%;
-      width: 100%;
-      p{
-        text-align: right;
-      }
-      p::before{
-          background-image: url(/img/ico/arrow-1.svg);
-          transform: rotate(-90deg);
-          width: 60px;
-          height: 60px;
-          left: 75%;
-          top: 40px;
-      }
-    }
-  }
-  .step5 {
-    position: absolute;
-    left: 10%;
-    top: 50%;
-    p::before {
-      width: 60px;
-      height: 60px;
-      background-image: url(/img/ico/arrow-1.svg);
-      left: -70px;
-      top: 40%;
-      // transform: translateY(-50%);
-    }
-    @media (max-width: 1536px){
-      left: 15%;
-      top: 55%;
-    }
-    @media (max-width: 768px){
-      left: 0%;
-      top: 60%;
-      width: 100%;
-      p::before{
-          background-image: url(/img/ico/arrow-1.svg);
-          transform: rotate(-90deg);
-          width: 60px;
-          height: 60px;
-          left: 40%;
-          top: 40px;
-      }
-    }
-  }
-  .step6 {
-    position: absolute;
-    left: 10%;
-    top: 60%;
-    p::before {
-      width: 60px;
-      height: 60px;
-      background-image: url(/img/ico/arrow-1.svg);
-      left: -70px;
-      top: 40%;
-      // transform: translateY(-50%);
-    }
-    @media (max-width: 1536px){
-      left: 15%;
-      top: 70%;
-    }
-    @media (max-width: 768px){
-      left: 20%;
-      top: 60%;
-      width: 100%;
-      p::before{
-          background-image: url(/img/ico/arrow-1.svg);
-          transform: rotate(-90deg);
-          width: 60px;
-          height: 60px;
-          left: 40%;
-          top: 40px;
-      }
-    }
-  }
-  .step7 {
-    position: absolute;
-    left: 55%;
-    top: 12%;
-    p::before {
-      width: 200px;
-      height: 200px;
-      background-image: url(/img/ico/arrow-4.svg);
-      right: -200px;
-      top: -60px;
-      // transform: translateY(-50%);
-    }
-    @media (max-width: 1600px){
-      left: 45%;
-    }
-    @media (max-width: 1536px){
-      left: 40%;
-    }
-    @media (max-width: 1280px){
-      left: 32%;
-    }
-    @media (max-width: 768px){
-      left: 0%;
-      top: 75%;
-      width: 100%;
-      p::before{
-          background-image: url(/img/ico/arrow-1.svg);
-          transform: rotate(-90deg);
-          width: 60px;
-          height: 60px;
-          left: 40%;
-          top: 40px;
-      }
-    }
-  }
-  .btn{
-    position: absolute;
-    bottom: 40px;
-    right: 40px;
-    color: #fff;
-    border: 2px solid #fff;
-    border-radius: 4px;
-    padding: 15px 30px;
-    text-decoration: none;
-    &:first-of-type{
-      right: 220px;
-    }
-    @media (max-width: 768px){
-      top: 30px;
-      bottom: unset;
-    }
-  }
-}
-.modal-landscape{
-  display: none;
-  position: fixed;
-  width: 100%;
-  z-index: 1001;
-  top: 0px;
-  left: 0px;
-  height: 100%;
-  background-color: rgba(#000, 0.4);
-  @media (max-width: 812px) and (orientation: landscape) {
-    display: block;
-  }
-  .modal__content{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
 }
 </style>
