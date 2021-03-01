@@ -92,26 +92,26 @@
       </div>
     </div>
     <div class="overlay" v-if="hints">
-      <div class="step1 step active">
+      <div class="step1 step" :class="{active: hintCounter == 0}">
         <p>Обери листівку із запропонованих шаблонів АБО</p>
         <p>Створи унікальну листівку</p>
       </div>
-      <div class="step2 step">
+      <div class="step2 step" :class="{active: hintCounter == 1}">
         <p>Обери дизайн: горизонтальна чи вертикальна</p>
       </div>
-      <div class="step3 step">
+      <div class="step3 step" :class="{active: hintCounter == 2}">
         <p>Обери колір фону</p>
       </div>
-      <div class="step4 step">
+      <div class="step4 step" :class="{active: hintCounter == 3}">
         <p>Додай святкових елементів</p>
       </div>
-      <div class="step5 step">
+      <div class="step5 step" :class="{active: hintCounter == 4}">
         <p>Напиши текст (із запропонованих написів)</p>
       </div>
-      <div class="step6 step">
+      <div class="step6 step" :class="{active: hintCounter == 5}">
         <p>Можеш помістити своє фото</p>
       </div>
-      <div class="step7 step">
+      <div class="step7 step" :class="{active: hintCounter == 6}">
         <p>Тут ти можеш повернутися до старого дизайну</p>
       </div>
       <button class="btn-next btn" @click="nextHints">далі</button>
@@ -138,7 +138,8 @@ export default {
   data() {
     return {
       hints: true,
-      hintCounter: 0
+      hintCounter: 0,
+      hintLength: 6
     }
   },
   computed: {
@@ -155,7 +156,12 @@ export default {
   },
   methods: {
     nextHints(){
-      this.hintCounter++;
+      if (this.hintLength == this.hintCounter){
+        this.hints = false;
+      } else {
+        this.hintCounter++;
+      }
+      
     },
     closeHints() {
       this.hints = false
