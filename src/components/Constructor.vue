@@ -67,17 +67,26 @@
           #ДаруюВесну на раз-два-три!
         </p>
         <div class="text">
+          <div class="text-wrap">
+            <img src="/img/ico/icon-3.svg" alt="">
           <p class="descr">
           1. Створи унікальну листівку. 
         </p>
-        <p class="descr">
+          </div>
+        <div class="text-wrap">
+          <img src="/img/ico/icon-2.svg" alt="">
+          <p class="descr">
           2. Поділися нею у соцмережах. 
         </p>
-        <p class="descr">
+        </div>
+        <div class="text-wrap">
+          <img src="/img/ico/icon-1.svg" alt="">
+          <p class="descr">
           3. Розмісти у тексті публікації хештег 
           #ДаруюВесну та відмічай трьох 
           друзів, кому ти передаєш естафету весни!
         </p>
+        </div>
         </div>
         <a href="#" class="btn" @click.prevent="$store.commit('SET_FIRSTSTEPMODAL', {val: false})">Добре</a>
       </div>
@@ -151,6 +160,11 @@ export default {
     }
   },
   mounted () {
+    if (window.localStorage.getItem('hints') == null){
+      this.hints = true
+    } else {
+      this.hints = false
+    }
     this.$store.commit('SET_FIRSTSTEPMODAL', {val: true});
     Bus.$on('toCanvas', this.toCanvas);
   },
@@ -158,6 +172,7 @@ export default {
     nextHints(){
       if (this.hintLength == this.hintCounter){
         this.hints = false;
+        window.localStorage.setItem('hints', true) 
       } else {
         this.hintCounter++;
       }
@@ -165,6 +180,7 @@ export default {
     },
     closeHints() {
       this.hints = false
+      window.localStorage.setItem('hints', true) 
     },
     burgerSwitch(){
       Bus.$emit('burgerSwitch', {});
