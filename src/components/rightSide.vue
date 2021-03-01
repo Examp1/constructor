@@ -167,7 +167,7 @@ export default {
                 obj.src = txtItem.src;
                 obj.width = txtItem.orWidth;
                 obj.height = txtItem.orHeight;
-                obj.angle = txtItem.angle ? txtItem.angle : 0;
+                obj.angle = 0;
                 obj.viewportWidth =  this.$store.state.origWidth * txtItem.width / 100;
                 obj.viewportHeight = txtItem.orHeight * obj.viewportWidth / txtItem.orWidth;
                 obj.left = (this.$store.state.origWidth * txtItem.pos.x / 100) - obj.viewportWidth/2;
@@ -615,7 +615,7 @@ export default {
                         obj.src = txtItem.src;
                         obj.width = txtItem.orWidth;
                         obj.height = txtItem.orHeight;
-                        obj.angle = txtItem.angle ? txtItem.angle : 0;
+                        obj.angle = 0;
                         obj.viewportWidth =  this.$store.state.origWidth * txtItem.width / 100;
                         obj.viewportHeight = txtItem.orHeight * obj.viewportWidth / txtItem.orWidth;
                         obj.left = (this.$store.state.origWidth * txtItem.pos.x / 100) - obj.viewportWidth/2;
