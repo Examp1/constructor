@@ -45,7 +45,7 @@
     <left-side :class="{ bluur: isModal }"></left-side>
     <right-side :class="{ bluur: isModal }"></right-side>
 
-    <!-- <div class="modal_wrap" v-if="isModal">
+    <div class="modal_wrap" v-if="isModal">
       <photo-cropper v-if="$store.state.modalPhotoCropper"></photo-cropper>
 
       <div class="modal__content" v-if="$store.state.orientAlert">
@@ -92,7 +92,7 @@
           >Добре</a
         >
       </div>
-    </div> -->
+    </div>
     <div class="modal-landscape">
       <div class="modal__content">
         <p class="title">Увага!</p>
@@ -102,8 +102,8 @@
         <a href="#" class="btn">Добре</a>
       </div>
     </div>
-    <div class="overlay">
-      <div class="step1 step">
+    <div class="overlay" v-if="hints">
+      <div class="step1 step active">
         <p>Обери листівку із запропонованих шаблонів АБО</p>
         <p>Створи унікальну листівку</p>
       </div>
@@ -125,8 +125,8 @@
       <div class="step7 step">
         <p>Тут ти можеш повернутися до старого дизайну</p>
       </div>
-      <a href="#" class="btn-next btn">далі</a>
-      <a href="#" class="btn-skip btn">Пропустити</a>
+      <a href="#" class="btn-next btn" @click="nextHints">далі</a>
+      <a href="#" class="btn-skip btn" @click="closeHints">Пропустити</a>
     </div>
   </div>
 </template>
@@ -141,12 +141,18 @@ import canvg from "canvg";
 
 export default {
   name: "constructor",
+  data() {
+    return {
+      hints: true,
+      hintCounter: 0
+    }
+  },
   components: {
     leftSide,
     rightSide,
     photoCropper,
   },
-  computed: {
+  computed: { 
     isModal() {
       if (
         this.$store.state.firstStepModal ||
@@ -162,6 +168,17 @@ export default {
     Bus.$on("toCanvas", this.toCanvas);
   },
   methods: {
+    closeHints() {
+      this.hints = false;
+    },
+    nextHints() {
+      // this.hintCounter += 1; 
+    //  this.hintCounter++;
+    //  console.log('123');
+    //  this.$set(this, this.hintCounter, this.hintCounter = this.hintCounter + 1)
+      console.log(this.hintCounter);
+      this.hintCounter = this.hintCounter +1;
+    },
     burgerSwitch() {
       Bus.$emit("burgerSwitch", {});
     },
@@ -489,12 +506,16 @@ header {
   font-family: "Geometria";
   font-size: 18px;
   .step {
+    transition: .3s;
     opacity: 0;
     p::before {
       position: absolute;
       content: "";
       background-repeat: no-repeat;
       background-size: contain;
+    }
+    &.active{
+      opacity: 1;
     }
   }
   .step1 {
