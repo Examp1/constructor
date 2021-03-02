@@ -49,7 +49,10 @@
         <p class="descr">
           При зміні формату на даному етапі роботи положення всіх елементів зміниться.
         </p>
-        <a href="#" class="btn" @click.prevent="onAcceptOrientAlert">Добре</a>
+        <div class="btnwrp">
+          <a href="#" class="back" @click.prevent="onCancelOrientAlert">Назад</a>
+          <a href="#" class="btn" @click.prevent="onAcceptOrientAlert">Добре</a>
+        </div>
       </div>
 
       <div class="modal__content" v-if="false">
@@ -196,7 +199,10 @@ export default {
     },
     onAcceptOrientAlert(){
       Bus.$emit("acceptOrientAlert", {});
-       this.$store.commit('SET_ORIENTALERT', {val: false});
+      this.$store.commit('SET_ORIENTALERT', {val: false});
+    },
+    onCancelOrientAlert(){
+      this.$store.commit('SET_ORIENTALERT', {val: false});
     },
     toCanvas(){
       this.$store.commit('SET_ISRENDER', {
@@ -474,6 +480,18 @@ header {
     object-fit: contain;
     margin-right: 20px;
   }
+  .btnwrp{
+    display: flex;
+  }
+  .back{
+    background-color: rgb(208, 208, 208);
+    color: rgb(36, 36, 36);
+    padding: 10px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-family: "Geometria";
+    margin-right: 15px;
+  }
   .btn {
     background-color: #74ae26;
     color: #fff;
@@ -491,7 +509,7 @@ header {
   height: 100%;
   position: fixed;
   background-color: rgba(#000, 0.4);
-  z-index: 1000;
+  z-index: 90;
   color: #fff;
   font-family: "Geometria";
   font-size: 18px;
