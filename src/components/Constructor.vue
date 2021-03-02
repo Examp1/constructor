@@ -139,7 +139,6 @@ import rightSide from "./rightSide.vue";
 import photoCropper from "./photoCropper.vue";
 import Bus from "../main";
 import axios from "axios";
-import canvg from "canvg";
 
 export default {
   name: "constructor",
