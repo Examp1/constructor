@@ -49,7 +49,10 @@
         <p class="descr">
           При зміні формату на даному етапі роботи положення всіх елементів зміниться.
         </p>
-        <a href="#" class="btn" @click.prevent="onAcceptOrientAlert">Добре</a>
+        <div class="btnwrp">
+          <a href="#" class="back" @click.prevent="onCancelOrientAlert">Назад</a>
+          <a href="#" class="btn" @click.prevent="onAcceptOrientAlert">Добре</a>
+        </div>
       </div>
 
       <div class="modal__content" v-if="false">
@@ -67,20 +70,64 @@
           #ДаруюВесну на раз-два-три!
         </p>
         <div class="text">
+          <div class="text-wrap">
+            <img src="/img/ico/icon-3.svg" alt="">
           <p class="descr">
           1. Створи унікальну листівку.
         </p>
-        <p class="descr">
-          2. Поділися нею у соцмережах.
+          </div>
+        <div class="text-wrap">
+          <img src="/img/ico/icon-2.svg" alt="">
+          <p class="descr">
+          2. Поділися нею у соцмережах. 
         </p>
-        <p class="descr">
-          3. Розмісти у тексті публікації хештег
-          #ДаруюВесну та відмічай трьох
+        </div>
+        <div class="text-wrap">
+          <img src="/img/ico/icon-1.svg" alt="">
+          <p class="descr">
+          3. Розмісти у тексті публікації хештег 
+          #ДаруюВесну та відмічай трьох 
           друзів, кому ти передаєш естафету весни!
         </p>
         </div>
+        </div>
         <a href="#" class="btn" @click.prevent="$store.commit('SET_FIRSTSTEPMODAL', {val: false})">Добре</a>
       </div>
+    </div>
+    <div class="modal-landscape">
+      <div class="modal__content">
+        <p class="title">Увага!</p>
+        <p class="descr">
+          Вибачте але конструктор не підтримує режим пейзажу
+        </p>
+        <a href="#" class="btn">Добре</a>
+      </div>
+    </div>
+    <div class="overlay" v-if="hints">
+      <div class="step1 step" :class="{active: hintCounter == 0}">
+        <p>Обери листівку із запропонованих шаблонів АБО</p>
+        <p>Створи унікальну листівку</p>
+      </div>
+      <div class="step2 step" :class="{active: hintCounter == 1}">
+        <p>Обери дизайн: горизонтальна чи вертикальна</p>
+      </div>
+      <div class="step3 step" :class="{active: hintCounter == 2}">
+        <p>Обери колір фону</p>
+      </div>
+      <div class="step4 step" :class="{active: hintCounter == 3}">
+        <p>Додай святкових елементів</p>
+      </div>
+      <div class="step5 step" :class="{active: hintCounter == 4}">
+        <p>Напиши текст (із запропонованих написів)</p>
+      </div>
+      <div class="step6 step" :class="{active: hintCounter == 5}">
+        <p>Можеш помістити своє фото</p>
+      </div>
+      <div class="step7 step" :class="{active: hintCounter == 6}">
+        <p>Тут ти можеш повернутися до старого дизайну</p>
+      </div>
+      <button class="btn-next btn" @click="nextHints">далі</button>
+      <button class="btn-skip btn" @click="closeHints">Пропустити</button>
     </div>
   </div>
 </template>
@@ -101,6 +148,13 @@ export default {
     rightSide,
     photoCropper,
   },
+  data() {
+    return {
+      hints: true,
+      hintCounter: 0,
+      hintLength: 6
+    }
+  },
   computed: {
     isModal() {
       if(this.$store.state.firstStepModal || this.$store.state.orientAlert || this.$store.state.modalPhotoCropper)
@@ -110,10 +164,28 @@ export default {
     }
   },
   mounted () {
+    if (window.localStorage.getItem('hints') == null){
+      this.hints = true
+    } else {
+      this.hints = false
+    }
     this.$store.commit('SET_FIRSTSTEPMODAL', {val: true});
     Bus.$on('toCanvas', this.toCanvas);
   },
   methods: {
+    nextHints(){
+      if (this.hintLength == this.hintCounter){
+        this.hints = false;
+        window.localStorage.setItem('hints', true)
+      } else {
+        this.hintCounter++;
+      }
+
+    },
+    closeHints() {
+      this.hints = false
+      window.localStorage.setItem('hints', true)
+    },
     burgerSwitch(){
       Bus.$emit('burgerSwitch', {});
     },
@@ -128,7 +200,10 @@ export default {
     },
     onAcceptOrientAlert(){
       Bus.$emit("acceptOrientAlert", {});
-       this.$store.commit('SET_ORIENTALERT', {val: false});
+      this.$store.commit('SET_ORIENTALERT', {val: false});
+    },
+    onCancelOrientAlert(){
+      this.$store.commit('SET_ORIENTALERT', {val: false});
     },
     toCanvas(){
       this.$store.commit('SET_ISRENDER', {
@@ -307,7 +382,7 @@ export default {
 * {
   box-sizing: border-box;
 }
-.bluur{
+.bluur {
   filter: blur(3px);
 }
 .constructor {
@@ -325,24 +400,24 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media (max-width: 1024px){
+  @media (max-width: 1024px) {
     padding: 0px 0px;
   }
   ul {
     display: flex;
-    align-items: center
+    align-items: center;
   }
   a:not(.logo, .download) {
     color: #fff;
     font-size: 34px;
     text-decoration: none;
     font-weight: 600;
-    @media (max-width: 1024px){
+    @media (max-width: 1024px) {
       font-size: 18px;
     }
   }
-  nav{
-    @media (max-width: 1024px){
+  nav {
+    @media (max-width: 1024px) {
       display: none;
     }
   }
@@ -366,16 +441,16 @@ header {
     @media (max-width: 1024px) {
       width: 100%;
     }
-    .mob{
+    .mob {
       display: none;
-      img{
+      img {
         width: 67px;
       }
       @media (max-width: 1024px) {
         display: block;
       }
     }
-    .desk{
+    .desk {
       @media (max-width: 1024px) {
         display: none;
       }
@@ -386,7 +461,7 @@ header {
         margin-right: 80px;
       }
     }
-    .burger{
+    .burger {
       width: 26px;
       height: 20px;
       margin-right: 20px;
@@ -395,8 +470,8 @@ header {
       @media (max-width: 1024px) {
         display: block;
       }
-      &:before{
-        content: '';
+      &:before {
+        content: "";
         width: 26px;
         height: 3px;
         border-radius: 2px;
@@ -405,8 +480,8 @@ header {
         left: 0;
         background-color: #fff;
       }
-      &:after{
-        content: '';
+      &:after {
+        content: "";
         width: 26px;
         height: 3px;
         border-radius: 2px;
@@ -415,7 +490,7 @@ header {
         left: 0;
         background-color: #fff;
       }
-      div{
+      div {
         width: 26px;
         height: 3px;
         background: #fff;
@@ -444,26 +519,30 @@ header {
   justify-content: center;
   align-items: center;
 }
-.nav__menu li i{
+.nav__menu li i {
   font-size: 23px;
   margin-right: 15px;
 }
-.nav__menu li:not(:last-of-type){
+.nav__menu li:not(:last-of-type) {
   margin-right: 45px;
 }
-.nav__menu li:last-of-type{
+.nav__menu li:last-of-type {
   display: flex;
   align-items: center;
-  i{
+  i {
     margin-right: 0px;
     margin-left: 10px;
   }
 }
-.download{
+.download {
   color: #fff;
   text-decoration: none;
 }
-.modal__content{
+.text-wrap {
+  display: flex;
+  align-items: center;
+}
+.modal__content {
   background-color: #fff;
   display: flex;
   align-items: center;
@@ -472,31 +551,358 @@ header {
   border-radius: 10px;
   box-shadow: 0px 0px 12px 0px rgba(102, 102, 102, 0.08);
   font-family: serif;
-  max-width: 500px;
+  max-width: 700px;
   text-align: center;
-  .title{
-    font-family: 'Geometria-Bold';
+  .title {
+    font-family: "Geometria-Bold";
     font-size: 26px;
     margin-bottom: 10px;
-    &.green{
+    &.green {
       color: #74ae26;
     }
   }
-  .descr{
-    font-family: 'Geometria';
+  .descr {
+    font-family: "Geometria";
     font-size: 22px;
     margin-top: 0px;
+    margin-bottom: 30px;
+    color: #4a4a4a;
+    &:first-of-type {
+      margin-top: 20px;
+    }
+    a {
+      color: #74ae26;
+      text-decoration: none;
+    }
   }
-  .btn{
+  img {
+    width: 50px;
+    height: 55px;
+    object-fit: contain;
+    margin-right: 20px;
+  }
+  .btnwrp{
+    display: flex;
+  }
+  .back{
+    background-color: rgb(208, 208, 208);
+    color: rgb(36, 36, 36);
+    padding: 10px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-family: "Geometria";
+    margin-right: 15px;
+  }
+  .btn {
     background-color: #74ae26;
     color: #fff;
     padding: 10px 25px;
     border-radius: 5px;
     text-decoration: none;
-    font-family: 'Geometria';
+    font-family: "Geometria";
   }
-  .text{
+  .text {
     text-align: left;
+  }
+}
+.overlay {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: rgba(#000, 0.4);
+  z-index: 90;
+  color: #fff;
+  font-family: "Geometria";
+  font-size: 18px;
+  .step {
+    transition: .3s;
+    opacity: 0;
+    p::before {
+      position: absolute;
+      content: "";
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+    &.active{
+      opacity: 1;
+    }
+  }
+  .step1 {
+    position: absolute;
+    top: 10%;
+    left: 170px;
+    p:first-of-type::before {
+      width: 60px;
+      height: 60px;
+      background-image: url(/img/ico/arrow-1.svg);
+      left: -70px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    p:last-of-type::before {
+      width: 200px;
+      height: 200px;
+      background-image: url(/img/ico/arrow-2.svg);
+      right: 20px;
+      top: 90px;
+    }
+    @media (max-width: 1536px){
+      left: 15%;
+    }
+    @media (max-width: 768px){
+      top: 40%;
+      left: 0%;
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      font-size: 14px;
+      p{
+        max-width: 180px;
+        &::before{
+           background-image: url(/img/ico/arrow-1.svg) !important;
+           width: 60px !important;
+           height: 60px !important;
+
+           transform: rotate(-90deg) !important;
+        }
+        &:last-of-type::before{
+          transform: rotate(90deg) !important;
+          right: unset;
+          top: -50px;
+        }
+        &:first-of-type::before{
+          left: 20% !important;
+          top: 70px;
+        }
+      }
+    }
+  }
+  .step2 {
+    position: absolute;
+    bottom: 2%;
+    left: 30%;
+    p::before {
+      background-image: url(/img/ico/arrow-3.svg);
+      width: 200px;
+      height: 60px;
+      right: -200px;
+      top: -10px;
+    }
+    @media (max-width: 1536px){
+      left: 15%;
+    }
+    @media (max-width: 768px){
+      left: 10%;
+      top: 20%;
+      width: 100%;
+      p::before{
+          background-image: url(/img/ico/arrow-1.svg);
+          transform: rotate(-90deg);
+          width: 60px;
+          height: 60px;
+          left: 40%;
+          top: 80px;
+      }
+    }
+  }
+  .step3 {
+    position: absolute;
+    left: 10%;
+    top: 35%;
+    p{
+      text-align: center;
+    }
+    p::before {
+      width: 60px;
+      height: 60px;
+      background-image: url(/img/ico/arrow-1.svg);
+      left: -70px;
+      top: 40%;
+      // transform: translateY(-50%);
+    }
+    @media (max-width: 1536px){
+      left: 15%;
+      top: 40%;
+    }
+    @media (max-width: 768px){
+      left: 0%;
+      top: 41%;
+      width: 100%;
+      p::before{
+          background-image: url(/img/ico/arrow-1.svg);
+          transform: rotate(-90deg);
+          width: 60px;
+          height: 60px;
+          left: 50%;
+          top: 40px;
+      }
+    }
+  }
+  .step4 {
+    position: absolute;
+    left: 10%;
+    top: 25%;
+    p::before {
+      width: 60px;
+      height: 60px;
+      background-image: url(/img/ico/arrow-1.svg);
+      left: -70px;
+      top: 40%;
+      // transform: translateY(-50%);
+    }
+    @media (max-width: 1536px){
+      left: 35%;
+      top: 30%;
+    }
+    @media (max-width: 768px){
+      left: 0%;
+      top: 41%;
+      width: 100%;
+      p{
+        text-align: right;
+      }
+      p::before{
+          background-image: url(/img/ico/arrow-1.svg);
+          transform: rotate(-90deg);
+          width: 60px;
+          height: 60px;
+          left: 75%;
+          top: 40px;
+      }
+    }
+  }
+  .step5 {
+    position: absolute;
+    left: 10%;
+    top: 50%;
+    p::before {
+      width: 60px;
+      height: 60px;
+      background-image: url(/img/ico/arrow-1.svg);
+      left: -70px;
+      top: 40%;
+      // transform: translateY(-50%);
+    }
+    @media (max-width: 1536px){
+      left: 15%;
+      top: 55%;
+    }
+    @media (max-width: 768px){
+      left: 0%;
+      top: 60%;
+      width: 100%;
+      p::before{
+          background-image: url(/img/ico/arrow-1.svg);
+          transform: rotate(-90deg);
+          width: 60px;
+          height: 60px;
+          left: 40%;
+          top: 40px;
+      }
+    }
+  }
+  .step6 {
+    position: absolute;
+    left: 10%;
+    top: 60%;
+    p::before {
+      width: 60px;
+      height: 60px;
+      background-image: url(/img/ico/arrow-1.svg);
+      left: -70px;
+      top: 40%;
+      // transform: translateY(-50%);
+    }
+    @media (max-width: 1536px){
+      left: 15%;
+      top: 70%;
+    }
+    @media (max-width: 768px){
+      left: 20%;
+      top: 60%;
+      width: 100%;
+      p::before{
+          background-image: url(/img/ico/arrow-1.svg);
+          transform: rotate(-90deg);
+          width: 60px;
+          height: 60px;
+          left: 40%;
+          top: 40px;
+      }
+    }
+  }
+  .step7 {
+    position: absolute;
+    left: 55%;
+    top: 12%;
+    p::before {
+      width: 200px;
+      height: 200px;
+      background-image: url(/img/ico/arrow-4.svg);
+      right: -200px;
+      top: -60px;
+      // transform: translateY(-50%);
+    }
+    @media (max-width: 1600px){
+      left: 45%;
+    }
+    @media (max-width: 1536px){
+      left: 40%;
+    }
+    @media (max-width: 1280px){
+      left: 32%;
+    }
+    @media (max-width: 768px){
+      left: 0%;
+      top: 75%;
+      width: 100%;
+      p::before{
+          background-image: url(/img/ico/arrow-1.svg);
+          transform: rotate(-90deg);
+          width: 60px;
+          height: 60px;
+          left: 40%;
+          top: 40px;
+      }
+    }
+  }
+  .btn{
+    position: absolute;
+    bottom: 40px;
+    background: transparent;
+    outline: none;
+    right: 40px;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    padding: 15px 30px;
+    text-decoration: none;
+    &:first-of-type{
+      right: 220px;
+    }
+    @media (max-width: 768px){
+      top: 30px;
+      bottom: unset;
+    }
+  }
+}
+.modal-landscape{
+  display: none;
+  position: fixed;
+  width: 100%;
+  z-index: 1001;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  background-color: rgba(#000, 0.4);
+  @media (max-width: 812px) and (orientation: landscape) {
+    display: block;
+  }
+  .modal__content{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 </style>

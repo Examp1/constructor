@@ -628,7 +628,7 @@ export default {
   flex-direction: column;
   padding: 10px;
   pointer-events: none;
-  background-color: #f1f1f1;
+  background-color: #ccc;
   @media (max-width: 1024px) and (orientation: portrait) {
     position: relative;
     width: calc(33% - 10px);
