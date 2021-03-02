@@ -547,6 +547,7 @@ header {
     }
     @media (max-width: 1536px){
       left: 15%;
+      top: 13%;
     }
     @media (max-width: 768px){
       top: 40%;
@@ -555,6 +556,7 @@ header {
       justify-content: space-around;
       width: 100%;
       font-size: 14px;
+      text-align: center;
       p{
         max-width: 180px;
         &::before{
@@ -570,7 +572,7 @@ header {
           top: -50px;
         }
         &:first-of-type::before{
-          left: 20% !important;
+          left: 22% !important;
           top: 70px;
         }
       }
@@ -588,7 +590,7 @@ header {
       top: -10px;
     }
     @media (max-width: 1536px){
-      left: 15%;
+      left: 18%;
     }
     @media (max-width: 768px){
       left: 10%;
@@ -623,6 +625,9 @@ header {
       left: 15%;
       top: 40%;
     }
+    @media (max-width: 1280px){
+      top: 47%;
+    }
     @media (max-width: 768px){
       left: 0%;
       top: 41%;
@@ -632,9 +637,12 @@ header {
           transform: rotate(-90deg);
           width: 60px;
           height: 60px;
-          left: 50%;
+          left: 65%;
           top: 40px;
       }
+    }
+    @media (max-width: 425px){
+      left: 13%;
     }
   }
   .step4 {
@@ -658,14 +666,14 @@ header {
       top: 41%;
       width: 100%;
       p{
-        text-align: right;
+        text-align: center;
       }
       p::before{
           background-image: url(/img/ico/arrow-1.svg);
           transform: rotate(-90deg);
           width: 60px;
           height: 60px;
-          left: 75%;
+          left: 50%;
           top: 40px;
       }
     }
@@ -686,6 +694,9 @@ header {
       left: 15%;
       top: 55%;
     }
+     @media (max-width: 1280px){
+      top: 64%;
+    }
     @media (max-width: 768px){
       left: 0%;
       top: 60%;
@@ -698,6 +709,11 @@ header {
           left: 40%;
           top: 40px;
       }
+    }
+     @media (max-width: 425px){
+       p::before{
+         left: 36%;
+       }
     }
   }
   .step6 {
@@ -715,6 +731,9 @@ header {
     @media (max-width: 1536px){
       left: 15%;
       top: 70%;
+    }
+     @media (max-width: 1280px){
+      top: 81%;
     }
     @media (max-width: 768px){
       left: 20%;
@@ -753,7 +772,7 @@ header {
     }
     @media (max-width: 768px){
       left: 0%;
-      top: 75%;
+      top: 79%;
       width: 100%;
       p::before{
           background-image: url(/img/ico/arrow-1.svg);
@@ -763,6 +782,9 @@ header {
           left: 40%;
           top: 40px;
       }
+    }
+    @media (max-width: 425px){
+      top: 75%;
     }
   }
   .btn{
