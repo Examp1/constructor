@@ -2,9 +2,9 @@
   <div class="constructor">
     <header :class="{bluur: isModal}">
       <div class="l">
-        <a href="#" class="logo desk"><img src="/img/logo.png" alt="" /></a>
-        <a href="#" class="logo mob"><img src="/img/pb_logo.svg" alt="" /></a>
-        <a href="#">#ДаруюВесну</a>
+        <a href="/" class="logo desk"><img src="/img/logo.png" alt="" /></a>
+        <a href="/" class="logo mob"><img src="/img/pb_logo.svg" alt="" /></a>
+        <a href="#" class="dv">#ДаруюВесну</a>
         <div class="burger" @click="burgerSwitch"><div></div></div>
       </div>
       <nav>
@@ -306,7 +306,7 @@ header {
     display: flex;
     align-items: center;
   }
-  a:not(.logo, .download) {
+  a.dv {
     color: #fff;
     font-size: 34px;
     text-decoration: none;
