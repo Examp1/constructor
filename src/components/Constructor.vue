@@ -4,7 +4,7 @@
       <div class="l">
         <a href="/" class="logo desk"><img src="/img/logo.png" alt="" /></a>
         <a href="/" class="logo mob"><img src="/img/pb_logo.svg" alt="" /></a>
-        <a href="#" class="dv">#ДаруюВесну</a>
+        <a href="#" class="dv">#ОбираєшТи</a>
         <div class="burger" @click="burgerSwitch"><div></div></div>
       </div>
       <nav>
