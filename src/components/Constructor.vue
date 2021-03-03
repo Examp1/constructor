@@ -92,7 +92,7 @@
         <a
           href="#"
           class="btn"
-          @click.prevent="$store.commit('SET_FIRSTSTEPMODAL', { val: false })"
+          @click.prevent="firstModalAccept"
           >Добре</a
         >
       </div>
@@ -138,7 +138,7 @@
         <div class="step5 step" :class="{ active: hintCounter == 4 }">
           <picture>
             <source media="(max-width: 1023px)" srcset="gif/mobile/м.-текст.gif">
-            <img src="gif/desktop/Элемент.gif" alt="">
+            <img src="gif/desktop/Текст.gif" alt="">
           </picture>
           <p>Напиши текст (із запропонованих написів)</p>
         </div>
@@ -182,7 +182,7 @@ export default {
   },
   data() {
     return {
-      hints: true,
+      hints: false,
       hintCounter: 0,
       hintLength: 6,
     };
@@ -199,15 +199,18 @@ export default {
     },
   },
   mounted() {
-    if (window.localStorage.getItem("hints") == null) {
-      this.hints = true;
-    } else {
-      this.hints = false;
-    }
     this.$store.commit("SET_FIRSTSTEPMODAL", { val: true });
     Bus.$on("toCanvas", this.toCanvas);
   },
   methods: {
+    firstModalAccept() {
+      this.$store.commit('SET_FIRSTSTEPMODAL', { val: false })
+      if (window.localStorage.getItem("hints") == null) {
+        this.hints = true;
+      } else {
+        this.hints = false;
+      }
+    },
     nextHints() {
       if (this.hintLength == this.hintCounter) {
         this.hints = false;
@@ -309,7 +312,7 @@ export default {
             .replace("image/png", "image/octet-stream");
           let el = document.createElement("a");
           el.setAttribute("href", image);
-          el.setAttribute("download", "DaruiuVesnu.jpg");
+          el.setAttribute("download", "Obyraiesh_Ty.jpg");
           document.body.appendChild(el);
           el.click();
           document.body.removeChild(el);
