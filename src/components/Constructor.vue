@@ -100,7 +100,7 @@
     <div class="modal-landscape">
       <div class="modal__content">
         <p class="title">Увага!</p>
-        <p class="descr">Вибачте але конструктор не підтримує режим пейзажу</p>
+        <p class="descr">Вибачте, але конструктор не підтримує режим пейзажу</p>
         <a href="#" class="btn">Добре</a>
       </div>
     </div>
