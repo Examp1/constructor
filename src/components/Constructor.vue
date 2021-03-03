@@ -108,51 +108,51 @@
       <div class="modal__content">
         <div class="step1 step" :class="{ active: hintCounter == 0 }">
           <picture>
-            <source media="(max-width: 1023px)" srcset="gif/mobile/м.-Шаблон.gif">
-            <img src="gif/desktop/Шаблон.gif" alt="">
+            <source media="(max-width: 1023px)" srcset="gif/mobile/step_1.gif">
+            <img src="gif/desktop/step_1.gif" alt="">
           </picture>
           <p>Обери листівку із запропонованих шаблонів АБО</p>
           <p>Створи унікальну листівку</p>
         </div>
         <div class="step2 step" :class="{ active: hintCounter == 1 }">
           <picture>
-            <source media="(max-width: 1023px)" srcset="gif/mobile/м.-ориентация.gif">
-            <img src="gif/desktop/Ориентация.gif" alt="">
+            <source media="(max-width: 1023px)" srcset="gif/mobile/step_2.gif">
+            <img src="gif/desktop/step_2.gif" alt="">
           </picture>
           <p>Обери дизайн: горизонтальна чи вертикальна</p>
         </div>
         <div class="step3 step" :class="{ active: hintCounter == 2 }">
           <picture>
-            <source media="(max-width: 1023px)" srcset="gif/mobile/м.-смена-цвета.gif">
-            <img src="gif/desktop/Цвет.gif" alt="">
+            <source media="(max-width: 1023px)" srcset="gif/mobile/step_3.gif">
+            <img src="gif/desktop/step_3.gif" alt="">
           </picture>
           <p>Обери колір фону</p>
         </div>
         <div class="step4 step" :class="{ active: hintCounter == 3 }">
           <picture>
-            <source media="(max-width: 1023px)" srcset="gif/mobile/м.-Элемент.gif">
-            <img src="gif/desktop/Элемент.gif" alt="">
+            <source media="(max-width: 1023px)" srcset="gif/mobile/step_4.gif">
+            <img src="gif/desktop/step_4.gif" alt="">
           </picture>
           <p>Додай святкових елементів</p>
         </div>
         <div class="step5 step" :class="{ active: hintCounter == 4 }">
           <picture>
-            <source media="(max-width: 1023px)" srcset="gif/mobile/м.-текст.gif">
-            <img src="gif/desktop/Текст.gif" alt="">
+            <source media="(max-width: 1023px)" srcset="gif/mobile/step_5.gif">
+            <img src="gif/desktop/step_5.gif" alt="">
           </picture>
           <p>Напиши текст (із запропонованих написів)</p>
         </div>
         <div class="step6 step" :class="{ active: hintCounter == 5 }">
            <picture>
-            <source media="(max-width: 1023px)" srcset="gif/mobile/м.-Фото.gif">
-            <img src="gif/desktop/Фото.gif" alt="">
+            <source media="(max-width: 1023px)" srcset="gif/mobile/step_6.gif">
+            <img src="gif/desktop/step_6.gif" alt="">
           </picture>
           <p>Можеш помістити своє фото</p>
         </div>
         <div class="step7 step" :class="{ active: hintCounter == 6 }">
           <picture>
-            <source media="(max-width: 1023px)" srcset="gif/mobile/М.-Назад.gif">
-            <img src="gif/desktop/Отмена.gif" alt="">
+            <source media="(max-width: 1023px)" srcset="gif/mobile/step_7.gif">
+            <img src="gif/desktop/step_7.gif" alt="">
           </picture>
           <p>Тут ти можеш повернутися до старого дизайну</p>
         </div>
