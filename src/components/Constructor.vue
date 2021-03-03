@@ -530,6 +530,9 @@ header {
     height: 55px;
     object-fit: contain;
     margin-right: 20px;
+    @media (max-width: 375px) {
+      width: 30px;
+    }
   }
   .btnwrp {
     display: flex;
