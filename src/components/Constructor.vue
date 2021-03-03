@@ -67,7 +67,7 @@
 
       <div class="modal__content" v-if="$store.state.firstStepModal">
         <p class="title green">
-          #ДаруюВесну на раз-два-три!
+          #ОбираєшТи на раз-два-три!
         </p>
         <div class="text">
           <div class="text-wrap">
@@ -86,7 +86,7 @@
           <img src="/img/ico/icon-1.svg" alt="">
           <p class="descr">
           3. Розмісти у тексті публікації хештег 
-          #ДаруюВесну та відмічай трьох 
+          #ОбираєшТи та відмічай трьох 
           друзів, кому ти передаєш естафету весни!
         </p>
         </div>
