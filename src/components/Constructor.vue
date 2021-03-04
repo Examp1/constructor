@@ -916,7 +916,7 @@ header {
     width: 100%;
     height: unset;
     @media (max-width: 576px){
-      height: 380px;
+      height: auto;
       object-fit: cover;
     }
   }
