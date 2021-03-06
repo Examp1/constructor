@@ -4,7 +4,7 @@
       <div class="l">
         <a href="/" class="logo desk"><img src="/img/logo.svg" alt="" /></a>
         <a href="/" class="logo mob"><img src="/img/logo.svg" alt="" /></a>
-        <a href="#" class="dv">8-OwlWeb-69 ❤️</a>
+        <a href="https://owlweb.com.ua/" target="_blank" class="dv">#8-OwlWeb-69 ❤️</a>
         <div class="burger" @click="burgerSwitch"><div></div></div>
       </div>
       <nav>
@@ -346,12 +346,12 @@ export default {
 header {
   background: #b953aa;
   width: 100%;
-  padding: 10px 120px;
+  padding: 10px 20px 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   @media (max-width: 1024px) {
-    padding: 0px 0px;
+    padding: 10px 0px;
   }
   ul {
     display: flex;
@@ -408,11 +408,10 @@ header {
     .logo{
       img{
         width: 81px;
-        margin-right: 90px;
       }
     }
     a:first-of-type {
-      margin-right: 200px;
+      margin-right: 390px;
       @media (max-width: 1210px) {
         margin-right: 80px;
       }
