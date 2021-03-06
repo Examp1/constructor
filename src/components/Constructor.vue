@@ -4,7 +4,7 @@
       <div class="l">
         <a href="/" class="logo desk"><img src="/img/logo.png" alt="" /></a>
         <a href="/" class="logo mob"><img src="/img/pb_logo.svg" alt="" /></a>
-        <a href="#" class="dv">#ОбираєшТи</a>
+        <a href="#" class="dv">8-OwlWeb-69 ❤️</a>
         <div class="burger" @click="burgerSwitch"><div></div></div>
       </div>
       <nav>
@@ -257,11 +257,11 @@ export default {
       canvClone.style.height = `${
         +canvClone.style.height.replace("px", "") * scale1
       }px`;
-      let wt = canvClone.querySelector(".waterm");
-      wt.style.width = `${+wt.style.width.replace("px", "") * scale1}px`;
-      wt.style.height = `${+wt.style.height.replace("px", "") * scale1}px`;
-      wt.style.top = `${+wt.style.top.replace("px", "") * scale1}px`;
-      wt.style.right = `${+wt.style.right.replace("px", "") * scale1}px`;
+      // let wt = canvClone.querySelector(".waterm");
+      // wt.style.width = `${+wt.style.width.replace("px", "") * scale1}px`;
+      // wt.style.height = `${+wt.style.height.replace("px", "") * scale1}px`;
+      // wt.style.top = `${+wt.style.top.replace("px", "") * scale1}px`;
+      // wt.style.right = `${+wt.style.right.replace("px", "") * scale1}px`;
 
       canvClone.querySelectorAll(".drr").forEach((item) => {
         item.style.width = `${+item.style.width.replace("px", "") * scale1}px`;
@@ -344,7 +344,7 @@ export default {
   }
 }
 header {
-  background: #80bb30;
+  background: #b953aa;
   width: 100%;
   padding: 10px 120px;
   display: flex;
@@ -508,7 +508,7 @@ header {
     font-size: 26px;
     margin-bottom: 10px;
     &.green {
-      color: #74ae26;
+      color: #b953aa;
     }
   }
   .descr {
@@ -521,7 +521,7 @@ header {
       margin-top: 20px;
     }
     a {
-      color: #74ae26;
+      color: #b953aa;
       text-decoration: none;
     }
   }
@@ -547,7 +547,7 @@ header {
     margin-right: 15px;
   }
   .btn {
-    background-color: #74ae26;
+    background-color: #b953aa;
     color: #fff;
     padding: 10px 25px;
     border-radius: 5px;
@@ -898,7 +898,7 @@ header {
   }
   .btn{
     position: static;
-    background-color: #74ae26;
+    background-color: #b953aa;
     color: #fff;
     padding: 10px 25px;
     border-radius: 5px;

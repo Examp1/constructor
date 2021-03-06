@@ -25,7 +25,7 @@
                 @mouseover="onItemOver(index)">
                 <img :src="item.src" alt="item" style="width:100%; height:100%">
             </drr>
-            <img src="/img/icon_watermark.svg" alt="wt" class="waterm" :style="watermStyle">
+            <!-- <img src="/img/icon_watermark.svg" alt="wt" class="waterm" :style="watermStyle"> -->
         </div>
         <div class="gizmoOverlay" :style="mCanvasStyle">
             <div class="hoverGizmo" :style="hoverGizmoStyle"></div>
@@ -59,9 +59,9 @@
             </button>
         </div>
 
-        <div class="license">
+        <!-- <div class="license">
             АТ КБ «ПриватБанк». Ліцензія НБУ № 22 від 05.10.2011 р.<br>Реєстраційний № 92 в Державному реєстрі банків
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -866,7 +866,7 @@ export default {
             cursor: pointer;
             outline: none;
             color: #fff;
-            background-color: #80bb30;
+            background-color: #b953aa;
             @media (max-width: 1024px) and (orientation: portrait) {
                 padding: 10px;
             }
@@ -893,7 +893,7 @@ export default {
                 color: #979797;
                 svg{
                     *{
-                        fill:#74ae26;
+                        fill:#b953aa;
                     }
                 }
             }
@@ -916,7 +916,7 @@ export default {
             }
             &:active{
                 color: #fff;
-                background-color: #80bb30;
+                background-color: #b953aa;
             }
         }
     }
@@ -958,8 +958,8 @@ export default {
             height: 64px;
             margin: 8px;
             border-radius: 50%;
-            border: 6px solid #80bb30;
-            border-color: #80bb30 transparent #80bb30 transparent;
+            border: 6px solid #b953aa;
+            border-color: #b953aa transparent #b953aa transparent;
             animation: lds-dual-ring 1.2s linear infinite;
         }
         @keyframes lds-dual-ring {

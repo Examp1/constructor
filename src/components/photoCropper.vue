@@ -272,7 +272,7 @@ export default {
                 cursor: pointer;
                 & + button{
                     margin-left: 15px;
-                    background-color: #74ae26;
+                    background-color: #b953aa;
                     color: #fff;
                 }
             }

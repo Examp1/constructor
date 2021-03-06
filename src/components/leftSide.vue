@@ -528,7 +528,7 @@ export default {
       height: 100%;
       width: 10px;
       border-radius: 5px 0 0 5px;
-      background-color: #75ae26;
+      background-color: #b953aa;
       @media (max-width: 1024px) and (orientation: portrait) {
         height: 5px;
         width: 100%;
@@ -580,14 +580,14 @@ export default {
       height: 100%;
     }
     &:hover {
-      box-shadow: 0px 0px 1px 1px #80bb30;
+      box-shadow: 0px 0px 1px 1px #b953aa;
     }
   }
   label{
     display: inline-block;
     padding: 10px 16px;
     color: #fff;
-    background-color: #74ae26;
+    background-color: #b953aa;
     font-size: 12px;
     border: none;
     outline: none;

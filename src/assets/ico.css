@@ -28,9 +28,11 @@ i {
 
 .ic-vert:before {
   content: "\e913";
+  color: #fff;
 }
 .ic-hriz:before {
   content: "\e914";
+  color: #74ae26;
 }
 .ic-minus:before {
   content: "\e911";
@@ -56,11 +58,11 @@ i {
 }
 .ic-icon_2:before {
   content: "\e904";
-  color: #5abb0c;
+  color: #b953aa;
 }
 .ic-icon_3:before {
   content: "\e905";
-  color: #5abb0c;
+  color: #b953aa;
 }
 .ic-icon_4 .path1:before {
   content: "\e906";
@@ -95,7 +97,7 @@ i {
 }
 .ic-icon_8:before {
   content: "\e90d";
-  color: #5abb0c;
+  color: #b953aa;
 }
 .ic-icon_9:before {
   content: "\e90e";
@@ -103,9 +105,9 @@ i {
 }
 .ic-icon_10:before {
   content: "\e90f";
-  color: #5abb0c;
+  color: #b953aa;
 }
 .ic-icon_11:before {
   content: "\e910";
-  color: #5abb0c;
+  color: #b953aa;
 }
