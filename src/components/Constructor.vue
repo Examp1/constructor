@@ -2,8 +2,8 @@
   <div class="constructor">
     <header :class="{ bluur: isModal }">
       <div class="l">
-        <a href="/" class="logo desk"><img src="/img/logo.png" alt="" /></a>
-        <a href="/" class="logo mob"><img src="/img/pb_logo.svg" alt="" /></a>
+        <a href="/" class="logo desk"><img src="/img/logo.svg" alt="" /></a>
+        <a href="/" class="logo mob"><img src="/img/logo.svg" alt="" /></a>
         <a href="#" class="dv">8-OwlWeb-69 ❤️</a>
         <div class="burger" @click="burgerSwitch"><div></div></div>
       </div>
@@ -403,6 +403,12 @@ header {
     .desk {
       @media (max-width: 1024px) {
         display: none;
+      }
+    }
+    .logo{
+      img{
+        width: 81px;
+        margin-right: 90px;
       }
     }
     a:first-of-type {
