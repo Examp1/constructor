@@ -312,7 +312,7 @@ export default {
             .replace("image/png", "image/octet-stream");
           let el = document.createElement("a");
           el.setAttribute("href", image);
-          el.setAttribute("download", "Obyraiesh_Ty.jpg");
+          el.setAttribute("download", "8March-OwlWeb_Team-69.jpg");
           document.body.appendChild(el);
           el.click();
           document.body.removeChild(el);
