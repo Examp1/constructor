@@ -109,7 +109,7 @@
         <div class="step1 step" :class="{ active: hintCounter == 0 }">
           <picture>
             <source media="(max-width: 1023px)" srcset="gif/mobile/step_1.gif">
-            <img src="gif/desktop/step_1.gif" alt="">
+            <img src="gif/desktop/1.gif" alt="">
           </picture>
           <p>Обери листівку із запропонованих шаблонів АБО</p>
           <p>Створи унікальну листівку</p>
@@ -117,32 +117,32 @@
         <div class="step2 step" :class="{ active: hintCounter == 1 }">
           <picture>
             <source media="(max-width: 1023px)" srcset="gif/mobile/step_2.gif">
-            <img src="gif/desktop/step_2.gif" alt="">
+            <img src="gif/desktop/2.gif" alt="">
           </picture>
-          <p>Обери дизайн: горизонтальна чи вертикальна</p>
+          <p>Обери колір фону</p>
         </div>
         <div class="step3 step" :class="{ active: hintCounter == 2 }">
           <picture>
             <source media="(max-width: 1023px)" srcset="gif/mobile/step_3.gif">
-            <img src="gif/desktop/step_3.gif" alt="">
+            <img src="gif/desktop/3.gif" alt="">
           </picture>
-          <p>Обери колір фону</p>
+          <p>Додай святкових елементів</p>
         </div>
         <div class="step4 step" :class="{ active: hintCounter == 3 }">
           <picture>
             <source media="(max-width: 1023px)" srcset="gif/mobile/step_4.gif">
-            <img src="gif/desktop/step_4.gif" alt="">
+            <img src="gif/desktop/4.gif" alt="">
           </picture>
-          <p>Додай святкових елементів</p>
+          <p>Напиши текст (із запропонованих написів)</p>
         </div>
         <div class="step5 step" :class="{ active: hintCounter == 4 }">
           <picture>
             <source media="(max-width: 1023px)" srcset="gif/mobile/step_5.gif">
-            <img src="gif/desktop/step_5.gif" alt="">
+            <img src="gif/desktop/5.gif" alt="">
           </picture>
-          <p>Напиши текст (із запропонованих написів)</p>
+          <p>Завантаж свое найкраще фото та здивуй її</p>
         </div>
-        <div class="step6 step" :class="{ active: hintCounter == 5 }">
+        <!-- <div class="step6 step" :class="{ active: hintCounter == 5 }">
            <picture>
             <source media="(max-width: 1023px)" srcset="gif/mobile/step_6.gif">
             <img src="gif/desktop/step_6.gif" alt="">
@@ -155,7 +155,7 @@
             <img src="gif/desktop/step_7.gif" alt="">
           </picture>
           <p>Тут ти можеш повернутися до старого дизайну</p>
-        </div>
+        </div> -->
         <div class="btns">
           <button class="btn-skip btn" @click="closeHints">Пропустити</button>
           <button class="btn-next btn" @click="nextHints">Далі</button>
@@ -184,7 +184,7 @@ export default {
     return {
       hints: false,
       hintCounter: 0,
-      hintLength: 6,
+      hintLength: 4,
     };
   },
   computed: {
@@ -498,6 +498,7 @@ header {
   align-items: center;
 }
 .modal__content {
+  overflow: hidden;
   background-color: #fff;
   display: flex;
   align-items: center;
@@ -895,7 +896,7 @@ header {
     max-width: 700px;
     width: 100%;
     position: absolute;
-    top: 45%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 0px;
