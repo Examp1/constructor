@@ -102,11 +102,11 @@ export default {
       currentTabIndex: 0,
       tabs: [[]],
       tabsH: [
-        // {
-        //   name: "Шаблон",
-        //   active: false,
-        //   icon: "ic-icon_11",
-        // },
+        {
+          name: "Шаблон",
+          active: false,
+          icon: "ic-icon_11",
+        },
         {
           name: "Елементи",
           active: false,
