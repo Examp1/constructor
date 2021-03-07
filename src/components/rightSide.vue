@@ -25,7 +25,7 @@
                 @mouseover="onItemOver(index)">
                 <img :src="item.src" alt="item" style="width:100%; height:100%">
             </drr>
-            <!-- <img src="/img/icon_watermark.svg" alt="wt" class="waterm" :style="watermStyle"> -->
+            <img src="/img/icon_watermark.svg" alt="wt" class="waterm" :style="watermStyle">
         </div>
         <div class="gizmoOverlay" :style="mCanvasStyle">
             <div class="hoverGizmo" :style="hoverGizmoStyle"></div>

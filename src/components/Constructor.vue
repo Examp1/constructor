@@ -257,11 +257,11 @@ export default {
       canvClone.style.height = `${
         +canvClone.style.height.replace("px", "") * scale1
       }px`;
-      // let wt = canvClone.querySelector(".waterm");
-      // wt.style.width = `${+wt.style.width.replace("px", "") * scale1}px`;
-      // wt.style.height = `${+wt.style.height.replace("px", "") * scale1}px`;
-      // wt.style.top = `${+wt.style.top.replace("px", "") * scale1}px`;
-      // wt.style.right = `${+wt.style.right.replace("px", "") * scale1}px`;
+      let wt = canvClone.querySelector(".waterm");
+      wt.style.width = `${+wt.style.width.replace("px", "") * scale1}px`;
+      wt.style.height = `${+wt.style.height.replace("px", "") * scale1}px`;
+      wt.style.top = `${+wt.style.top.replace("px", "") * scale1}px`;
+      wt.style.right = `${+wt.style.right.replace("px", "") * scale1}px`;
 
       canvClone.querySelectorAll(".drr").forEach((item) => {
         item.style.width = `${+item.style.width.replace("px", "") * scale1}px`;
