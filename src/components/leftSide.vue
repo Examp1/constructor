@@ -85,8 +85,7 @@
         <i class="ic-icon_9"></i>
       </span>
     </div>
-    <p class="copyright">АТ КБ «ПриватБанк». Ліцензія НБУ № 22 від 05.10.2011 р.
-      Реєстраційний № 92 в Державному реєстрі банків
+    <p class="copyright"><br><br>
     </p>
   </div>
 </template>
@@ -681,7 +680,7 @@ export default {
   pointer-events: unset;
 }
 .mobcontrolbtns{
-  background-color: #77b128;
+  background-color: #b953aa;
   justify-content: center;
   padding: 10px 0;
   display: none;
@@ -704,7 +703,7 @@ export default {
     top: 0;
     left: 0;
     transform: translate(0, -100%);
-    background-color: #77b128;
+    background-color: #b953aa;
     width: 100%;
     border-radius: 10px 10px 0 0;
 
