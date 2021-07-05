@@ -1,0 +1,151 @@
+@font-face {
+  font-family: 'zellart';
+  src:  url('/icofonts/zellart.eot?1m7e5m');
+  src:  url('/icofonts/zellart.eot?1m7e5m#iefix') format('embedded-opentype'),
+    url('/icofonts/zellart.woff2?1m7e5m') format('woff2'),
+    url('/icofonts/zellart.ttf?1m7e5m') format('truetype'),
+    url('/icofonts/zellart.woff?1m7e5m') format('woff'),
+    url('/icofonts/zellart.svg?1m7e5m#zellart') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="ic-"], [class*=" ic-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'zellart' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ic-reg:before {
+  content: "\e925";
+}
+.ic-login:before {
+  content: "\e926";
+}
+.ic-owlweb:before {
+  content: "\e924";
+}
+.ic-interior:before {
+  content: "\e923";
+}
+.ic-newimgs:before {
+  content: "\e91a";
+}
+.ic-donwloadimgs:before {
+  content: "\e91b";
+}
+.ic-imgs:before {
+  content: "\e91c";
+}
+.ic-patterns2:before {
+  content: "\e91d";
+}
+.ic-logout:before {
+  content: "\e91e";
+}
+.ic-cropico:before {
+  content: "\e91f";
+}
+.ic-malbert:before {
+  content: "\e920";
+}
+.ic-basket:before {
+  content: "\e921";
+}
+.ic-arrowleft:before {
+  content: "\e922";
+}
+.ic-floppydisk:before {
+  content: "\e919";
+}
+.ic-arrowright:before {
+  content: "\e918";
+}
+.ic-remove-ico:before {
+  content: "\e911";
+}
+.ic-resize-ico:before {
+  content: "\e912";
+}
+.ic-plus:before {
+  content: "\e913";
+}
+.ic-pat_ico:before {
+  content: "\e914";
+}
+.ic-downarrow:before {
+  content: "\e915";
+}
+.ic-refresh:before {
+  content: "\e916";
+}
+.ic-link:before {
+  content: "\e917";
+}
+.ic-toleft:before {
+  content: "\e905";
+}
+.ic-toright:before {
+  content: "\e910";
+}
+.ic-sizes:before {
+  content: "\e904";
+}
+.ic-quote:before {
+  content: "\e90f";
+}
+.ic-pic2:before {
+  content: "\e90b";
+}
+.ic-plus-sqr:before {
+  content: "\e908";
+}
+.ic-pic:before {
+  content: "\e902";
+}
+.ic-dnd:before {
+  content: "\e9082";
+}
+.ic-pen:before {
+  content: "\e90d";
+}
+.ic-interier:before {
+  content: "\e903";
+}
+.ic-patt-set:before {
+  content: "\e90a2";
+}
+.ic-cross:before {
+  content: "\e90c";
+}
+.ic-cons-zoom:before {
+  content: "\e90a";
+}
+.ic-dis-addimage:before {
+  content: "\e909";
+}
+.ic-chevron:before {
+  content: "\e901";
+}
+.ic-check:before {
+  content: "\e90e";
+}
+.ic-check-round:before {
+  content: "\e907";
+}
+.ic-add-to-crt:before {
+  content: "\e906";
+}
+.ic-cart:before {
+  content: "\e900";
+}
